@@ -1,0 +1,15 @@
+{
+  "name": "ABC Playground",
+  "short_name": "ABC Play",
+  "description": "Talking phonics games for children learning letters and sounds.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#9fdcff",
+  "theme_color": "#9fdcff",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

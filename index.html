@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ABC Playground</title>
+  <meta name="description" content="Fun phonics games for children learning letters and sounds.">
+  <meta name="theme-color" content="#9fdcff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ABC Play">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎈</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main id="app">
+    <!-- Home: pick a game -->
+    <section id="home" class="screen active">
+      <header class="home-top">
+        <div class="star-count" aria-label="Stars earned">
+          <span class="emoji">⭐</span><span id="starTotal">0</span>
+        </div>
+        <div class="grownups-wrap">
+          <div id="holdTip" class="hold-tip" hidden>Grown-ups: press and hold</div>
+          <button id="grownups" class="grownups" aria-label="Grown-ups corner (press and hold)">
+            <span class="emoji">⚙️</span>
+            <svg class="hold-ring" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="27"/></svg>
+          </button>
+        </div>
+      </header>
+      <h1 id="title" class="title">ABC Playground</h1>
+      <div id="gameGrid" class="game-grid"></div>
+    </section>
+
+    <!-- A game in progress -->
+    <section id="game" class="screen">
+      <header class="game-top">
+        <button id="homeBtn" class="round-btn" aria-label="Back to all games"><span class="emoji">🏠</span></button>
+        <div id="progress" class="progress" aria-label="Progress"></div>
+        <button id="replayBtn" class="round-btn" aria-label="Hear it again"><span class="emoji">🔊</span></button>
+      </header>
+      <div id="stage" class="stage"></div>
+    </section>
+  </main>
+
+  <!-- Well done! -->
+  <div id="celebrate" class="overlay" hidden>
+    <div class="panel celebrate-panel" role="dialog" aria-labelledby="praise">
+      <div class="big-star emoji">🌟</div>
+      <p id="praise" class="praise">Great job!</p>
+      <div class="celebrate-stars"><span class="emoji">⭐</span> <span id="celebrateStars">0</span></div>
+      <div class="celebrate-actions">
+        <button id="againBtn" class="action-btn again" aria-label="Play again"><span class="emoji">🔁</span></button>
+        <button id="celebrateHome" class="action-btn go-home" aria-label="Choose another game"><span class="emoji">🏠</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grown-ups corner -->
+  <div id="settings" class="overlay" hidden>
+    <div id="settingsPanel" class="panel settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <button id="settingsClose" class="close-x" aria-label="Close">✕</button>
+      <h2 id="settingsTitle">Grown-ups corner</h2>
+
+      <section>
+        <h3>How to play together</h3>
+        <ul class="guide">
+          <li><b>Sound on!</b> The games talk, so no reading is needed. Tap <span class="emoji">🔊</span> to hear it again, <span class="emoji">🏠</span> to go back.</li>
+          <li><span class="emoji">🎈</span> <b>Balloon Pop</b>: listen for the letter and pop the balloons that show it. Say the sound together each time.</li>
+          <li><span class="emoji">🐶</span> <b>First Sounds</b>: say the picture's name slowly, stretching the first sound (“sssun”), then tap the letter it starts with.</li>
+          <li><span class="emoji">🃏</span> <b>Letter Match</b>: turn over two cards to find a capital letter and its small letter.</li>
+          <li><span class="emoji">🎵</span> <b>Rhyme Time</b>: say the words out loud. Which one sounds the same at the end?</li>
+          <li><span class="emoji">🧱</span> <b>Build a Word</b>: tap the letters in order as you hear each sound, then blend them: c‑a‑t → cat!</li>
+          <li><b>Tips:</b> 5–10 minutes is plenty. Let your child tap, and praise trying, not just right answers. Younger children: start with Balloon Pop, Letter Match and Rhyme Time.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Letters to practise</h3>
+        <div id="presets" class="presets"></div>
+        <div id="letterChips" class="chips"></div>
+        <p class="hint">Tap letters to switch them on or off. Balloon Pop, First Sounds, Letter Match and Build a Word use these letters.</p>
+      </section>
+
+      <section class="row">
+        <h3>Show letters as</h3>
+        <div id="caseSeg" class="seg"><button data-v="lower">abc</button><button data-v="upper">ABC</button></div>
+      </section>
+
+      <section class="row">
+        <h3>Letter Match cards</h3>
+        <div id="pairsSeg" class="seg"><button data-v="4">8 (easier)</button><button data-v="6">12</button></div>
+      </section>
+
+      <section>
+        <h3>Voice</h3>
+        <div id="accentSeg" class="seg accent-seg">
+          <button data-v="gb"><span class="emoji">🇬🇧</span> British</button><button data-v="us"><span class="emoji">🇺🇸</span> American</button><button data-v="au"><span class="emoji">🇦🇺</span> Australian</button>
+        </div>
+        <p id="voiceTip" class="tip" hidden><b>Tip:</b> for the most natural, child-friendly voices on a computer, open the games in <b>Microsoft Edge</b>. Phones and tablets already have good voices.</p>
+        <div class="voice-row">
+          <select id="voiceSelect" aria-label="Voice"></select>
+          <button id="voiceTest" class="soft-btn">▶ Test</button>
+        </div>
+        <div id="rateSeg" class="seg"><button data-v="slow">Slow</button><button data-v="normal">Normal</button></div>
+        <p class="hint">Computer voices can only roughly say letter sounds. If a sound isn't clear, say it yourself too. To use your own voice, record files named <code>a.mp3</code>, <code>b.mp3</code>… and put them in the <code>audio/sounds</code> folder.</p>
+      </section>
+
+      <section class="row">
+        <h3>Stars earned: <span id="settingsStars">0</span></h3>
+        <button id="resetStars" class="soft-btn danger">Reset stars</button>
+      </section>
+
+      <button id="settingsDone" class="done-btn">Done</button>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/games/balloon-pop.js"></script>
+  <script src="js/games/first-sounds.js"></script>
+  <script src="js/games/letter-match.js"></script>
+  <script src="js/games/rhyme-time.js"></script>
+  <script src="js/games/build-a-word.js"></script>
+</body>
+</html>
