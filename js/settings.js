@@ -1,4 +1,4 @@
-// Grown-up settings, remembered on this device.
+// Grown-up settings and progress, remembered on this device.
 const Settings = (() => {
   const KEY = 'abc-playground-v1';
   const lang = (navigator.language || '').toLowerCase();
@@ -8,7 +8,8 @@ const Settings = (() => {
     letterCase: 'lower',
     voice: '',
     rate: 'normal',
-    matchPairs: 4,
+    unlockAll: 0,
+    progress: {}, // game id -> highest level finished
     stars: 0,
   };
 
@@ -18,6 +19,7 @@ const Settings = (() => {
     if (saved && typeof saved === 'object') state = { ...defaults, ...saved };
   } catch (e) { /* storage unavailable: use defaults */ }
   if (!Array.isArray(state.letters) || !state.letters.length) state.letters = defaults.letters.slice();
+  if (!state.progress || typeof state.progress !== 'object') state.progress = {};
 
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }

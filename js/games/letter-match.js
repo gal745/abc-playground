@@ -4,9 +4,12 @@ App.register({
   name: 'Letter Match',
   emoji: '🃏',
   color: '#9b5de5',
+  levels: ['6 cards', '8 cards', '12 cards'],
 
   create(stage, api) {
-    const pairs = Settings.get('matchPairs') === 6 ? 6 : 4;
+    const pairs = [3, 4, 6][api.level - 1];
+    const cols = pairs === 3 ? 3 : 4;
+    const rows = Math.ceil((pairs * 2) / cols);
     const pool = UI.activeLetters();
     let chosen = UI.sample(pool, pairs);
     if (chosen.length < pairs) {
@@ -15,7 +18,7 @@ App.register({
     const cards = UI.shuffle(chosen.flatMap(l => [{ l, face: l.toUpperCase() }, { l, face: l }]));
     const inks = ['#e63946', '#1d70d6', '#7b2cbf', '#d6246e', '#e76f00', '#1f8a70'];
 
-    const grid = UI.el('div', { class: 'match-grid', style: `--rows:${pairs === 6 ? 3 : 2}` });
+    const grid = UI.el('div', { class: 'match-grid', style: `--rows:${rows};--cols:${cols}` });
     stage.append(grid);
 
     let open = [];

@@ -98,5 +98,11 @@ const DATA = (() => {
   // Letters that make the same first sound, so they are never offered as a wrong answer for each other.
   const soundAlikes = [['c', 'k', 'q']];
 
-  return { letters, names, sounds, words, rhymes, cvc, sets, soundAlikes };
+  // Letters that are easy to mix up by shape, used to make later levels trickier.
+  const lookAlikes = {
+    a: 'eo', b: 'dpq', c: 'eo', d: 'bpq', e: 'ca', f: 't', g: 'qy', h: 'nb', i: 'lj', j: 'ig', k: 'hx', l: 'it', m: 'nw',
+    n: 'mhu', o: 'ac', p: 'qbd', q: 'pdg', r: 'n', s: 'z', t: 'fl', u: 'nv', v: 'uwy', w: 'mv', x: 'k', y: 'vg', z: 's',
+  };
+
+  return { letters, names, sounds, words, rhymes, cvc, sets, soundAlikes, lookAlikes };
 })();

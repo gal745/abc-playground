@@ -4,9 +4,16 @@ App.register({
   name: 'Balloon Pop',
   emoji: '🎈',
   color: '#ff6b6b',
+  levels: ['Letters with pictures', 'Faster, tricky letters', 'Listen for the sound'],
 
   create(stage, api) {
-    const GOAL = 5;
+    const L = api.level;
+    const GOAL = [5, 6, 7][L - 1];
+    const CROSS = [[8, 11], [6, 8], [5.5, 7.5]][L - 1]; // seconds for a balloon to float up
+    const GAP = [1300, 1000, 900][L - 1];               // ms between new balloons
+    const MAX = [5, 7, 8][L - 1];
+    const listenOnly = L === 3;
+
     const letters = UI.activeLetters();
     const balloons = new Set();
     let target = null;
@@ -20,28 +27,46 @@ App.register({
     let recentLanes = [];
 
     const sky = UI.el('div', { class: 'balloon-sky' });
-    const card = UI.el('button', { class: 'target-card', 'aria-label': 'Hear the letter again', onclick: () => announce() });
+    const card = UI.el('button', { class: 'target-card', 'aria-label': 'Hear it again', onclick: () => announce() });
     stage.append(sky, card);
 
     const keyword = l => (DATA.words[l] || [])[0];
 
     function announce() {
       if (!target) return;
+      if (listenOnly) {
+        return Sound.say('Listen carefully!', 150, 'Pop the balloons that say', { sound: target }, 300, { sound: target });
+      }
       const kw = keyword(target);
-      return Sound.say(`Can you pop the letter ${Sound.letterName(target)}?`, 200, { sound: target }, kw ? `like ${kw.w}!` : null);
+      return Sound.say(`Can you pop the letter ${Sound.letterName(target)}?`, 200, { sound: target }, L === 1 && kw ? `like ${kw.w}!` : null);
+    }
+
+    function drawCard(reveal) {
+      const kw = keyword(target);
+      if (listenOnly && !reveal) {
+        card.replaceChildren(UI.el('span', { class: 'emoji keyword', text: '👂' }), UI.el('span', { class: 'emoji keyword', text: '🔊' }));
+      } else {
+        card.replaceChildren(
+          UI.el('span', { class: 'letter', text: UI.showLetter(target) }),
+          L === 1 && kw ? UI.el('span', { class: 'emoji keyword', text: kw.e }) : null
+        );
+      }
+      UI.replayClass(card, 'pop-in');
     }
 
     function newTarget() {
       const options = letters.length > 1 ? letters.filter(l => l !== target) : letters;
       target = UI.pick(options);
-      const kw = keyword(target);
-      card.replaceChildren(
-        UI.el('span', { class: 'letter', text: UI.showLetter(target) }),
-        kw ? UI.el('span', { class: 'emoji keyword', text: kw.e }) : null
-      );
-      UI.replayClass(card, 'pop-in');
+      drawCard(false);
       if (![...balloons].some(b => !b.popped && b.letter === target)) forceTarget = true;
       announce();
+    }
+
+    // later levels mix in letters that look alike (b / d / p ...)
+    function pickDistractor() {
+      const tricky = (DATA.lookAlikes[target] || '').split('');
+      if (L >= 2 && tricky.length && Math.random() < 0.5) return UI.pick(tricky);
+      return UI.pick(UI.distractors(target, 3, letters));
     }
 
     function spawn(startY, letter) {
@@ -58,8 +83,7 @@ App.register({
       if (!letter) {
         const showing = [...balloons].filter(b => !b.popped && b.letter === target).length;
         const chance = [0.6, 0.25, 0.08][Math.min(showing, 2)];
-        if (forceTarget || Math.random() < chance) letter = target;
-        else letter = UI.pick(UI.distractors(target, 3, letters));
+        letter = forceTarget || Math.random() < chance ? target : pickDistractor();
       }
       if (letter === target) forceTarget = false;
 
@@ -75,7 +99,7 @@ App.register({
         node, letter, color, size, height,
         x: lane * laneWidth + (laneWidth - size) / 2,
         y: startY != null ? startY : h + 10,
-        speed: h / (7 + Math.random() * 3),
+        speed: h / (CROSS[0] + Math.random() * (CROSS[1] - CROSS[0])),
         phase: Math.random() * Math.PI * 2,
         popped: false,
       };
@@ -95,9 +119,9 @@ App.register({
       const dt = lastTime ? Math.min(0.05, (t - lastTime) / 1000) : 0;
       lastTime = t;
       spawnTimer -= dt * 1000;
-      if (spawnTimer <= 0 && target && !finished && balloons.size < 7) {
+      if (spawnTimer <= 0 && target && !finished && balloons.size < MAX) {
         spawn();
-        spawnTimer = 1000 + Math.random() * 600;
+        spawnTimer = GAP + Math.random() * 500;
       }
       for (const b of balloons) {
         if (b.popped) continue;
@@ -139,6 +163,7 @@ App.register({
         found++;
         api.progress(found, GOAL);
         Sound.sfx('correct');
+        if (listenOnly) drawCard(true);
         const spoken = Sound.say(UI.pick(UI.PRAISE), 100, { sound: target });
         if (found >= GOAL) {
           finished = true;
@@ -149,7 +174,9 @@ App.register({
       } else {
         Sound.sfx('wrong');
         UI.replayClass(b.node.firstChild, 'wobble');
-        if (!busy) Sound.say(`Oops! That's ${Sound.letterName(b.letter)}.`, 150, `Can you find ${Sound.letterName(target)}?`);
+        if (busy) return;
+        if (listenOnly) Sound.say('Oops! That one says', { sound: b.letter }, 250, 'Listen...', { sound: target });
+        else Sound.say(`Oops! That's ${Sound.letterName(b.letter)}.`, 150, `Can you find ${Sound.letterName(target)}?`);
       }
     }
 
@@ -157,8 +184,8 @@ App.register({
     newTarget();
     const h = sky.clientHeight;
     spawn(h * 0.5, target);
-    spawn(h * 0.8, UI.pick(UI.distractors(target, 3, letters)));
-    spawn(h * 0.25, UI.pick(UI.distractors(target, 3, letters)));
+    spawn(h * 0.8, pickDistractor());
+    spawn(h * 0.25, pickDistractor());
     raf = requestAnimationFrame(frame);
 
     return {

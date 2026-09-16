@@ -4,9 +4,11 @@ App.register({
   name: 'First Sounds',
   emoji: '🐶',
   color: '#4d96ff',
+  levels: ['Choose from 2 letters', 'Choose from 3 letters', 'Choose from 4 letters'],
 
   create(stage, api) {
     const GOAL = 5;
+    const CHOICES = api.level + 1;
     const hasWords = l => (DATA.words[l] || []).length > 0;
     let letters = UI.activeLetters().filter(hasWords);
     if (!letters.length) letters = DATA.letters.filter(hasWords);
@@ -17,7 +19,7 @@ App.register({
     let locked = false;
 
     const pic = UI.el('button', { class: 'picture-card', 'aria-label': 'Hear the word again', onclick: () => replay() });
-    const choices = UI.el('div', { class: 'choices' });
+    const choices = UI.el('div', { class: `choices count-${CHOICES}` });
     stage.append(pic, choices);
 
     function next() {
@@ -32,7 +34,7 @@ App.register({
       );
       UI.replayClass(pic, 'pop-in');
 
-      const opts = UI.shuffle([answer, ...UI.distractors(answer, 2, UI.activeLetters())]);
+      const opts = UI.shuffle([answer, ...UI.distractors(answer, CHOICES - 1, UI.activeLetters())]);
       const colors = UI.shuffle(UI.COLORS);
       choices.replaceChildren(...opts.map((l, i) => {
         const btn = UI.el('button', {

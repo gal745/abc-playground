@@ -11,6 +11,10 @@ No reading is needed: every instruction is spoken.
 | 🎵 Rhyme Time | Hearing rhymes |
 | 🧱 Build a Word | Blending sounds into words (c‑a‑t → cat) |
 
+Every game has **3 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
+
+**Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
+
 ## Playing
 
 Open `index.html` and turn the sound on. On a computer, **Microsoft Edge** has the most natural voices (including the child voices Maisie and Ana); Chrome's voices sound more robotic. Phones and tablets have good voices built in.
@@ -25,7 +29,8 @@ Press and hold the ⚙️ button on the home screen for one second. There you ca
 - choose which letters to practise (for example just *s a t p i n*)
 - show letters as lowercase or capitals
 - choose a British, American or Australian accent, the voice and the speed
-- make Letter Match easier (8 cards) or harder (12 cards)
+- open all levels at once (handy for older children)
+- download the printable sheets
 
 Settings and stars are saved on the device being used.
 

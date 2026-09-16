@@ -4,9 +4,11 @@ App.register({
   name: 'Rhyme Time',
   emoji: '🎵',
   color: '#f15bb5',
+  levels: ['Choose from 2 pictures', 'Choose from 3 pictures', 'Choose from 4 pictures'],
 
   create(stage, api) {
     const GOAL = 5;
+    const WRONG = api.level; // wrong pictures per round
     let round = 0;
     let lastGroup = -1;
     let target = null;
@@ -16,7 +18,7 @@ App.register({
     let locked = false;
 
     const top = UI.el('button', { class: 'picture-card', 'aria-label': 'Hear it again', onclick: () => replay() });
-    const choices = UI.el('div', { class: 'choices' });
+    const choices = UI.el('div', { class: `choices count-${WRONG + 1}` });
     stage.append(top, choices);
 
     const highlight = node => nodes.forEach(n => n.classList.toggle('speaking', n === node));
@@ -28,7 +30,7 @@ App.register({
       lastGroup = gi;
       const group = DATA.rhymes[gi];
       [target, answer] = UI.sample(group.words, 2);
-      const others = UI.shuffle(DATA.rhymes.filter(g => g.vowel !== group.vowel)).slice(0, 2).map(g => UI.pick(g.words));
+      const others = UI.shuffle(DATA.rhymes.filter(g => g.vowel !== group.vowel)).slice(0, WRONG).map(g => UI.pick(g.words));
       options = UI.shuffle([answer, ...others]);
 
       top.replaceChildren(
