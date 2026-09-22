@@ -11,8 +11,11 @@ No reading is needed: every instruction is spoken.
 | 🎵 Rhyme Time | Hearing rhymes |
 | 🧱 Build a Word | Blending sounds into words (c‑a‑t → cat) |
 | 🔢 Number Words | Counting, and spelling number words (one to ten) from jumbled letters |
+| 🦖 Feed the Dino | Matching a sound to a picture that starts with it |
+| ✏️ Trace It | Forming letters by tracing them with a finger |
+| 🚂 Alphabet Train | Alphabet order and missing letters |
 
-Every game has **3 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
+Every game has **5 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 

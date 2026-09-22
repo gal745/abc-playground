@@ -86,6 +86,11 @@ const DATA = (() => {
     'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴'
   );
 
+  // Four-letter words with blends, for the later Build a Word levels.
+  const cvcc = parse(
+    'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 🪔, swim 🏊'
+  );
+
   // Letter groups in a common phonics teaching order.
   const sets = [
     { label: 'All letters', letters },
@@ -104,5 +109,5 @@ const DATA = (() => {
     n: 'mhu', o: 'ac', p: 'qbd', q: 'pdg', r: 'n', s: 'z', t: 'fl', u: 'nv', v: 'uwy', w: 'mv', x: 'k', y: 'vg', z: 's',
   };
 
-  return { letters, names, sounds, words, rhymes, cvc, sets, soundAlikes, lookAlikes };
+  return { letters, names, sounds, words, rhymes, cvc, cvcc, sets, soundAlikes, lookAlikes };
 })();

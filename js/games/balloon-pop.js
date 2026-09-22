@@ -4,15 +4,18 @@ App.register({
   name: 'Balloon Pop',
   emoji: '🎈',
   color: '#ff6b6b',
-  levels: ['Letters with pictures', 'Faster, tricky letters', 'Listen for the sound'],
+  levels: ['Letters with pictures', 'Tricky look-alike letters', 'Listen for the sound', 'Big & little letters', 'Listen: big & little'],
 
   create(stage, api) {
     const L = api.level;
-    const GOAL = [5, 6, 7][L - 1];
-    const CROSS = [[8, 11], [6, 8], [5.5, 7.5]][L - 1]; // seconds for a balloon to float up
-    const GAP = [1300, 1000, 900][L - 1];               // ms between new balloons
-    const MAX = [5, 7, 8][L - 1];
-    const listenOnly = L === 3;
+    const GOAL = [5, 6, 6, 7, 7][L - 1];
+    const CROSS = [[11, 14], [9, 11], [9, 11], [9, 11], [8, 10]][L - 1]; // seconds for a balloon to float up
+    const GAP = [1500, 1300, 1300, 1200, 1100][L - 1];                   // ms between new balloons
+    const MAX = [4, 5, 5, 6, 6][L - 1];
+    const withPicture = L === 1;
+    const lookAlikes = L === 2 || L === 5;
+    const listenOnly = L === 3 || L === 5;
+    const mixedCase = L >= 4; // balloons show capital and small letters
 
     const letters = UI.activeLetters();
     const balloons = new Set();
@@ -31,25 +34,32 @@ App.register({
     stage.append(sky, card);
 
     const keyword = l => (DATA.words[l] || [])[0];
+    const face = l => (mixedCase ? (Math.random() < 0.5 ? l.toUpperCase() : l) : UI.showLetter(l));
 
     function announce() {
       if (!target) return;
+      const name = Sound.letterName(target);
       if (listenOnly) {
-        return Sound.say('Listen carefully!', 150, 'Pop the balloons that say', { sound: target }, 300, { sound: target });
+        return Sound.say('Listen carefully!', 150,
+          mixedCase ? 'Pop every big and little letter that says' : 'Pop the balloons that say',
+          { sound: target }, 300, { sound: target });
       }
+      if (mixedCase) return Sound.say(`Pop every big ${name} and little ${name}!`, 200, { sound: target });
       const kw = keyword(target);
-      return Sound.say(`Can you pop the letter ${Sound.letterName(target)}?`, 200, { sound: target }, L === 1 && kw ? `like ${kw.w}!` : null);
+      return Sound.say(`Can you pop the letter ${name}?`, 200, { sound: target }, withPicture && kw ? `like ${kw.w}!` : null);
     }
 
     function drawCard(reveal) {
       const kw = keyword(target);
       if (listenOnly && !reveal) {
         card.replaceChildren(UI.el('span', { class: 'emoji keyword', text: '👂' }), UI.el('span', { class: 'emoji keyword', text: '🔊' }));
+      } else if (mixedCase) {
+        card.replaceChildren(UI.el('span', { class: 'letter', text: `${target.toUpperCase()} ${target}` }));
       } else {
-        card.replaceChildren(
+        card.replaceChildren(...[
           UI.el('span', { class: 'letter', text: UI.showLetter(target) }),
-          L === 1 && kw ? UI.el('span', { class: 'emoji keyword', text: kw.e }) : null
-        );
+          withPicture && kw ? UI.el('span', { class: 'emoji keyword', text: kw.e }) : null,
+        ].filter(Boolean));
       }
       UI.replayClass(card, 'pop-in');
     }
@@ -62,10 +72,10 @@ App.register({
       announce();
     }
 
-    // later levels mix in letters that look alike (b / d / p ...)
+    // some levels mix in letters that look alike (b / d / p ...)
     function pickDistractor() {
       const tricky = (DATA.lookAlikes[target] || '').split('');
-      if (L >= 2 && tricky.length && Math.random() < 0.5) return UI.pick(tricky);
+      if (lookAlikes && tricky.length && Math.random() < 0.5) return UI.pick(tricky);
       return UI.pick(UI.distractors(target, 3, letters));
     }
 
@@ -73,26 +83,27 @@ App.register({
       const w = sky.clientWidth;
       const h = sky.clientHeight;
       if (!w || !h) return;
-      const size = Math.round(Math.max(76, Math.min(124, w / 6)));
+      const size = Math.round(Math.max(96, Math.min(150, w / 4.5)));
       const height = Math.round(size * 1.2);
-      const laneCount = Math.max(3, Math.floor(w / (size * 1.2)));
+      const laneCount = Math.max(2, Math.floor(w / (size * 1.12)));
       const blocked = recentLanes.slice(-Math.min(2, laneCount - 1));
       const lane = UI.pick([...Array(laneCount).keys()].filter(i => !blocked.includes(i)));
       recentLanes = [...recentLanes, lane].slice(-3);
 
       if (!letter) {
         const showing = [...balloons].filter(b => !b.popped && b.letter === target).length;
-        const chance = [0.6, 0.25, 0.08][Math.min(showing, 2)];
+        const chance = [0.6, 0.3, 0.1][Math.min(showing, 2)];
         letter = forceTarget || Math.random() < chance ? target : pickDistractor();
       }
       if (letter === target) forceTarget = false;
 
       const color = UI.pick(UI.BALLOON_COLORS);
+      const shown = face(letter);
       const node = UI.el('button', {
         class: 'balloon',
         style: `--bc:${color};--size:${size}px;width:${size}px;height:${height}px`,
-        'aria-label': `Balloon, letter ${letter}`,
-      }, UI.el('span', { class: 'balloon-body' }, UI.el('span', { class: 'letter', text: UI.showLetter(letter) })));
+        'aria-label': `Balloon, letter ${shown}`,
+      }, UI.el('span', { class: 'balloon-body' }, UI.el('span', { class: 'letter', text: shown })));
 
       const laneWidth = w / laneCount;
       const b = {
@@ -183,9 +194,8 @@ App.register({
     api.progress(0, GOAL);
     newTarget();
     const h = sky.clientHeight;
-    spawn(h * 0.5, target);
+    spawn(h * 0.45, target);
     spawn(h * 0.8, pickDistractor());
-    spawn(h * 0.25, pickDistractor());
     raf = requestAnimationFrame(frame);
 
     return {

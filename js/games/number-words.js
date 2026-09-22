@@ -4,13 +4,15 @@ App.register({
   name: 'Number Words',
   emoji: '🔢',
   color: '#f77f00',
-  levels: ['1 to 5, with letter hints', '1 to 10', '1 to 10, extra letters'],
+  levels: ['1 to 5, with letter hints', '1 to 10', '1 to 10, extra letters', 'Count the pictures', 'Count carefully + extra letters'],
 
   create(stage, api) {
     const GOAL = 5;
     const L = api.level;
-    const ghosts = L === 1;            // faint letters show where each one goes
-    const DECOYS = L === 3 ? 2 : 0;    // extra letters that don't belong
+    const ghosts = L === 1;                   // faint letters show where each one goes
+    const DECOYS = [0, 0, 2, 0, 3][L - 1];    // extra letters that don't belong
+    const hideNumber = L >= 4;                // count the pictures to find the number
+    const scatter = L === 5;                  // pictures are spread out, not in neat rows
     const WORDS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
     const THINGS = ['🍎', '🐞', '⭐', '🎈', '🐟', '🍓', '🚗', '🐤', '🌸', '🧁'];
     const list = WORDS.slice(0, L === 1 ? 5 : 10).map((w, i) => ({ w, n: i + 1 }));
@@ -20,6 +22,8 @@ App.register({
     let item = null;
     let pos = 0;
     let locked = false;
+    let revealed = true; // has the number been said or shown yet?
+    let misses = 0;
     let slots = [];
     let tiles = [];
 
@@ -30,17 +34,30 @@ App.register({
 
     const name = l => Sound.letterName(l);
 
+    function drawThings(thing) {
+      if (!scatter) {
+        return UI.el('span', { class: 'things emoji', style: `grid-template-columns:repeat(${Math.min(item.n, 5)}, 1fr)` },
+          ...Array.from({ length: item.n }, () => UI.el('span', { text: thing })));
+      }
+      const cells = UI.shuffle([...Array(12).keys()]).slice(0, item.n);
+      return UI.el('span', { class: 'things scatter emoji' },
+        ...Array.from({ length: 12 }, (_, i) => UI.el('span', {
+          text: cells.includes(i) ? thing : '',
+          style: `transform:translate(${UI.rand(9) - 4}px, ${UI.rand(9) - 4}px) rotate(${UI.rand(31) - 15}deg)`,
+        })));
+    }
+
     function next() {
       if (!queue.length) queue = UI.shuffle(list);
       item = queue.pop();
       pos = 0;
+      misses = 0;
       locked = false;
+      revealed = !hideNumber;
 
-      const thing = UI.pick(THINGS);
       card.replaceChildren(
-        UI.el('span', { class: 'number-digit', text: String(item.n) }),
-        UI.el('span', { class: 'things emoji', style: `grid-template-columns:repeat(${Math.min(item.n, 5)}, 1fr)` },
-          ...Array.from({ length: item.n }, () => UI.el('span', { text: thing }))),
+        UI.el('span', { class: 'number-digit', text: revealed ? String(item.n) : '?' }),
+        drawThings(UI.pick(THINGS)),
         UI.el('span', { class: 'speaker emoji', text: '🔊' })
       );
       UI.replayClass(card, 'pop-in');
@@ -65,7 +82,14 @@ App.register({
       tileRow.replaceChildren(...tiles);
 
       markSlot();
-      Sound.say(`${item.w}!`, 250, `Let's spell ${item.w}.`, 250, `Find the letter ${name(item.w[0])}.`);
+      if (revealed) Sound.say(`${item.w}!`, 250, `Let's spell ${item.w}.`, 250, `Find the letter ${name(item.w[0])}.`);
+      else Sound.say('Count the pictures!', 250, 'How many can you see?', 300, 'Then spell the number.');
+    }
+
+    function reveal() {
+      revealed = true;
+      card.querySelector('.number-digit').textContent = String(item.n);
+      UI.replayClass(card, 'bounce');
     }
 
     function markSlot() {
@@ -74,7 +98,8 @@ App.register({
 
     function replay() {
       if (locked || !item) return;
-      Sound.say(`${item.w}.`, 250, `Find the letter ${name(item.w[pos])}.`);
+      if (!revealed) Sound.say('Count the pictures!', 250, 'How many are there?', 300, 'Find the first letter of the number.');
+      else Sound.say(`${item.w}.`, 250, `Find the letter ${name(item.w[pos])}.`);
     }
 
     function tapTile(tile, l) {
@@ -83,7 +108,15 @@ App.register({
       if (l !== need) {
         Sound.sfx('wrong');
         UI.replayClass(tile, 'shake');
-        Sound.say(`Oops! That's ${name(l)}.`, 200, `Can you find ${name(need)}?`);
+        misses++;
+        if (!revealed && misses >= 2) {
+          reveal();
+          Sound.say('Let me help!', 200, `There are ${item.w}!`, 250, `Find the letter ${name(need)}.`);
+        } else if (!revealed) {
+          Sound.say(`Oops! That's ${name(l)}.`, 200, 'Count again, and try another letter!');
+        } else {
+          Sound.say(`Oops! That's ${name(l)}.`, 200, `Can you find ${name(need)}?`);
+        }
         return;
       }
 
@@ -99,9 +132,10 @@ App.register({
       markSlot();
 
       if (pos < item.w.length) {
-        Sound.say(name(l), 250, `Now find ${name(item.w[pos])}.`);
+        Sound.say(name(l), 250, revealed ? `Now find ${name(item.w[pos])}.` : 'What comes next?');
       } else {
         locked = true;
+        if (!revealed) reveal();
         tiles.forEach(t => { if (!t.classList.contains('used')) { t.disabled = true; t.classList.add('wrong'); } });
         api.later(spellOut, 500);
       }

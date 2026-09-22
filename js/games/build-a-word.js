@@ -4,17 +4,18 @@ App.register({
   name: 'Build a Word',
   emoji: '🧱',
   color: '#2a9d8f',
-  levels: ['Match the letters', 'Build by sound', 'Extra tricky letters'],
+  levels: ['Match the letters', 'Build by sound', 'Extra tricky letters', 'Four-letter words', 'Four letters + extras'],
 
   create(stage, api) {
     const GOAL = 5;
     const L = api.level;
     const ghosts = L === 1; // faint letters show where each one goes
-    const DECOYS = L === 3 ? 2 : 0;
+    const DECOYS = L === 3 || L === 5 ? 2 : 0;
+    const source = L >= 4 ? DATA.cvcc : DATA.cvc;
     const active = UI.activeLetters();
-    let list = DATA.cvc.filter(x => [...x.w].every(l => active.includes(l)));
-    if (list.length < 3) list = DATA.cvc.filter(x => active.includes(x.w[0]));
-    if (list.length < 3) list = DATA.cvc.slice();
+    let list = source.filter(x => [...x.w].every(l => active.includes(l)));
+    if (list.length < 3) list = source.filter(x => active.includes(x.w[0]));
+    if (list.length < 3) list = source.slice();
 
     let queue = [];
     let round = 0;
@@ -50,7 +51,9 @@ App.register({
       );
       UI.replayClass(pic, 'pop-in');
 
-      slotRow.classList.remove('together');
+      const long = item.w.length >= 4 || item.w.length + DECOYS > 5;
+      slotRow.className = `slot-row${long ? ' long' : ''}`;
+      tileRow.className = `tile-row${long ? ' long' : ''}`;
       slots = [...item.w].map(l => UI.el('div', { class: 'slot' }, ghosts ? UI.el('span', { class: 'letter ghost', text: l }) : null));
       slotRow.replaceChildren(...slots);
 

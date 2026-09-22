@@ -1,6 +1,6 @@
 // Screens, navigation, players, levels, rewards and the grown-ups corner.
 const App = (() => {
-  const LEVELS = 3;
+  const levelsOf = g => g.levels.length;
   const games = [];
   let current = null;   // { g, level, token, inst }
   let levelGame = null; // game shown on the level screen
@@ -104,7 +104,7 @@ const App = (() => {
   }
 
   // ---- levels & progress ----
-  const completed = g => Math.max(0, Math.min(LEVELS, Number((Settings.get('progress') || {})[g.id]) || 0));
+  const completed = g => Math.max(0, Math.min(levelsOf(g), Number((Settings.get('progress') || {})[g.id]) || 0));
   const isOpen = (g, level) => !!Settings.get('unlockAll') || level <= completed(g) + 1;
 
   function renderHome() {
@@ -113,13 +113,13 @@ const App = (() => {
       return UI.el('button', {
         class: 'game-tile',
         style: `--c:${g.color};--d:${i * 0.07}s`,
-        'aria-label': `${g.name}, ${done} of ${LEVELS} levels finished`,
+        'aria-label': `${g.name}, ${done} of ${levelsOf(g)} levels finished`,
         onclick: () => { Sound.sfx('tap'); openLevels(g); },
       },
       UI.el('span', { class: 'tile-icon' }, UI.el('span', { class: 'emoji', text: g.emoji })),
       UI.el('span', { class: 'tile-name', text: g.name }),
       UI.el('span', { class: 'tile-pips', 'aria-hidden': 'true' },
-        ...Array.from({ length: LEVELS }, (_, n) => UI.el('span', { class: `pip${n < done ? ' on' : ''}` }))));
+        ...Array.from({ length: levelsOf(g) }, (_, n) => UI.el('span', { class: `pip${n < done ? ' on' : ''}` }))));
     }));
     renderPlayerChip();
   }
@@ -139,7 +139,7 @@ const App = (() => {
   function renderLevels() {
     const g = levelGame;
     const done = completed(g);
-    $('levelGrid').replaceChildren(...Array.from({ length: LEVELS }, (_, i) => {
+    $('levelGrid').replaceChildren(...Array.from({ length: levelsOf(g) }, (_, i) => {
       const n = i + 1;
       const open = isOpen(g, n);
       const finished = n <= done;
@@ -246,18 +246,18 @@ const App = (() => {
 
     const before = completed(g);
     if (level > before) Settings.set('progress', { ...(Settings.get('progress') || {}), [g.id]: level });
-    const unlockedNext = level < LEVELS && level > before && !Settings.get('unlockAll');
-    const allDone = level === LEVELS;
+    const unlockedNext = level < levelsOf(g) && level > before && !Settings.get('unlockAll');
+    const allDone = level === levelsOf(g);
 
     const praise = UI.pick(['Great job!', 'Amazing!', 'You did it!', 'Super star!', 'Fantastic!', 'Hooray!']);
     const p = Settings.player();
     $('praise').textContent = praise;
     $('bigStar').textContent = allDone ? '🏆' : '🌟';
-    const note = unlockedNext ? `🔓 Level ${level + 1} is open!` : allDone ? 'All 3 levels done!' : '';
+    const note = unlockedNext ? `🔓 Level ${level + 1} is open!` : allDone ? `All ${levelsOf(g)} levels done!` : '';
     $('celebrateNote').textContent = note;
     $('celebrateNote').hidden = !note;
     $('celebrateStars').textContent = stars;
-    $('nextBtn').hidden = level >= LEVELS;
+    $('nextBtn').hidden = level >= levelsOf(g);
     $('celebrate').hidden = false;
     Sound.sfx('win');
     UI.confetti();
@@ -446,7 +446,7 @@ const App = (() => {
       Sound.unlock();
       if (current && current.inst && current.inst.replay) current.inst.replay();
     };
-    $('nextBtn').onclick = () => { if (current && current.level < LEVELS) openGame(current.g, current.level + 1); };
+    $('nextBtn').onclick = () => { if (current && current.level < levelsOf(current.g)) openGame(current.g, current.level + 1); };
     $('againBtn').onclick = () => { if (current) openGame(current.g, current.level); };
     $('celebrateHome').onclick = goHome;
     $('settingsClose').onclick = closeSettings;
@@ -459,7 +459,7 @@ const App = (() => {
     $('voiceTest').onclick = testVoice;
     $('resetStars').onclick = () => {
       const p = Settings.player();
-      if (p && confirm(`Set ${p.name}'s stars back to 0 and lock levels 2 and 3 again?`)) {
+      if (p && confirm(`Set ${p.name}'s stars back to 0 and lock the levels again?`)) {
         Settings.set('stars', 0);
         Settings.set('progress', {});
         renderSettings();
