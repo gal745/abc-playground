@@ -1,32 +1,108 @@
-// Grown-up settings and progress, remembered on this device.
+// Players and settings, remembered on this device.
+// Voice settings are shared; stars, levels and letter settings belong to each player.
 const Settings = (() => {
-  const KEY = 'abc-playground-v1';
+  const KEY = 'abc-playground-v2';
+  const OLD_KEY = 'abc-playground-v1';
+  const AVATARS = ['🦁', '🐯', '🐼', '🦊', '🐸', '🐵', '🐰', '🐻', '🐨', '🦄', '🐙', '🐧'];
+  const COLORS = ['#ff6b6b', '#4d96ff', '#9b5de5', '#f15bb5', '#2a9d8f', '#f77f00'];
+  const PLAYER_KEYS = ['letters', 'letterCase', 'unlockAll', 'progress', 'stars'];
+
   const lang = (navigator.language || '').toLowerCase();
-  const defaults = {
+  const globalDefaults = {
     accent: lang.startsWith('en-us') ? 'us' : /^en-(au|nz)/.test(lang) ? 'au' : 'gb',
-    letters: DATA.letters.slice(),
-    letterCase: 'lower',
     voice: '',
     rate: 'normal',
+  };
+  const playerDefaults = () => ({
+    letters: DATA.letters.slice(),
+    letterCase: 'lower',
     unlockAll: 0,
     progress: {}, // game id -> highest level finished
     stars: 0,
-  };
+  });
 
-  let state = { ...defaults };
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY));
-    if (saved && typeof saved === 'object') state = { ...defaults, ...saved };
-  } catch (e) { /* storage unavailable: use defaults */ }
-  if (!Array.isArray(state.letters) || !state.letters.length) state.letters = defaults.letters.slice();
-  if (!state.progress || typeof state.progress !== 'object') state.progress = {};
+  let state = { global: { ...globalDefaults }, players: [], current: null };
+
+  function load() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY));
+      if (saved && typeof saved === 'object') {
+        state.global = { ...globalDefaults, ...(saved.global || {}) };
+        state.players = Array.isArray(saved.players) ? saved.players : [];
+        state.current = saved.current || null;
+        return;
+      }
+      // keep voice choices from the version before players existed
+      const old = JSON.parse(localStorage.getItem(OLD_KEY));
+      if (old && typeof old === 'object') {
+        for (const k of Object.keys(globalDefaults)) if (old[k] != null) state.global[k] = old[k];
+      }
+    } catch (e) { /* storage unavailable: use defaults */ }
+  }
+
+  function clean() {
+    state.players = state.players
+      .filter(p => p && typeof p === 'object' && p.id && typeof p.name === 'string')
+      .map((p, i) => {
+        const data = { ...playerDefaults(), ...(p.data || {}) };
+        if (!Array.isArray(data.letters) || !data.letters.length) data.letters = DATA.letters.slice();
+        if (!data.progress || typeof data.progress !== 'object') data.progress = {};
+        return { id: p.id, name: p.name.slice(0, 20), avatar: p.avatar || AVATARS[i % AVATARS.length], color: p.color || COLORS[i % COLORS.length], data };
+      });
+    if (!state.players.some(p => p.id === state.current)) state.current = null;
+  }
 
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
   }
 
+  load();
+  clean();
+
+  const player = () => state.players.find(p => p.id === state.current) || null;
+
   return {
-    get: key => state[key],
-    set(key, value) { state[key] = value; save(); },
+    AVATARS,
+    get(key) {
+      if (PLAYER_KEYS.includes(key)) {
+        const p = player();
+        return p ? p.data[key] : playerDefaults()[key];
+      }
+      return state.global[key];
+    },
+    set(key, value) {
+      if (PLAYER_KEYS.includes(key)) {
+        const p = player();
+        if (!p) return;
+        p.data[key] = value;
+      } else {
+        state.global[key] = value;
+      }
+      save();
+    },
+    players: () => state.players.slice(),
+    player,
+    select(id) {
+      state.current = state.players.some(p => p.id === id) ? id : null;
+      save();
+    },
+    addPlayer(name, avatar) {
+      const used = new Set(state.players.map(p => p.avatar));
+      const p = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        name: String(name).trim().slice(0, 20),
+        avatar: AVATARS.includes(avatar) ? avatar : (AVATARS.find(a => !used.has(a)) || AVATARS[0]),
+        color: COLORS[state.players.length % COLORS.length],
+        data: playerDefaults(),
+      };
+      state.players.push(p);
+      save();
+      return p;
+    },
+    removePlayer(id) {
+      state.players = state.players.filter(p => p.id !== id);
+      if (state.current === id) state.current = null;
+      save();
+    },
   };
 })();

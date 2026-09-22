@@ -10,10 +10,17 @@ No reading is needed: every instruction is spoken.
 | 🃏 Letter Match | Matching capital and small letters |
 | 🎵 Rhyme Time | Hearing rhymes |
 | 🧱 Build a Word | Blending sounds into words (c‑a‑t → cat) |
+| 🔢 Number Words | Counting, and spelling number words (one to ten) from jumbled letters |
 
 Every game has **3 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
+
+## Players
+
+The first screen asks **"Who's playing?"**. Each player has their own stars, levels and letter settings, saved on that device. Tap ➕ to add a player, or tap the player's name at the top of the home screen to switch.
+
+A **personal link** like `https://gal745.github.io/abc-playground/?player=Sam&avatar=🦁` sets up that child on whichever phone or computer opens it. Copy it from the 🔗 button in the Grown-ups corner. Children's names are never stored in this code or on a server.
 
 ## Playing
 

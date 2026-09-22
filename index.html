@@ -28,12 +28,16 @@
   </div>
 
   <main id="app">
+    <!-- Who's playing? -->
+    <section id="players" class="screen active">
+      <h1 class="players-title">Who's playing?</h1>
+      <div id="playerGrid" class="player-grid"></div>
+    </section>
+
     <!-- Home: pick a game -->
-    <section id="home" class="screen active">
+    <section id="home" class="screen">
       <header class="home-top">
-        <div class="star-count" aria-label="Stars earned">
-          <span class="emoji">⭐</span><span id="starTotal">0</span>
-        </div>
+        <button id="playerChip" class="player-chip" aria-label="Change player"></button>
         <div class="grownups-wrap">
           <div id="holdTip" class="hold-tip" hidden>Grown-ups: press and hold</div>
           <button id="grownups" class="grownups" aria-label="Grown-ups corner (press and hold)">
@@ -88,6 +92,21 @@
     </div>
   </div>
 
+  <!-- Add a player -->
+  <div id="addPlayer" class="overlay" hidden>
+    <form id="addPlayerForm" class="panel add-player-panel" role="dialog" aria-modal="true" aria-labelledby="addPlayerTitle">
+      <h2 id="addPlayerTitle">New player</h2>
+      <label class="field-label" for="playerName">Name</label>
+      <input id="playerName" class="name-input" type="text" maxlength="20" autocomplete="off" autocapitalize="words" spellcheck="false">
+      <p class="field-label">Choose a picture</p>
+      <div id="avatarChoices" class="avatar-choices"></div>
+      <div class="form-actions">
+        <button type="button" id="addPlayerCancel" class="soft-btn">Cancel</button>
+        <button type="submit" class="done-btn">Save</button>
+      </div>
+    </form>
+  </div>
+
   <!-- Grown-ups corner -->
   <div id="settings" class="overlay" hidden>
     <div id="settingsPanel" class="panel settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
@@ -104,8 +123,17 @@
           <li><span class="emoji">🃏</span> <b>Letter Match</b>: turn over two cards to find a capital letter and its small letter.</li>
           <li><span class="emoji">🎵</span> <b>Rhyme Time</b>: say the words out loud. Which one sounds the same at the end?</li>
           <li><span class="emoji">🧱</span> <b>Build a Word</b>: tap the letters in order as you hear each sound, then blend them: c‑a‑t → cat!</li>
+          <li><span class="emoji">🔢</span> <b>Number Words</b>: count the pictures, then spell the number word by tapping its letters in order. Say each letter name together.</li>
           <li><b>Tips:</b> 5–10 minutes is plenty. Let your child tap, and praise trying, not just right answers.</li>
         </ul>
+      </section>
+
+      <section>
+        <h3>Players</h3>
+        <div id="playerList" class="player-list"></div>
+        <button id="settingsAddPlayer" class="soft-btn"><span class="emoji">➕</span> Add player</button>
+        <p id="linkNote" class="tip" hidden></p>
+        <p class="hint">Each player has their own stars, levels and letter settings, saved on this device only. Tap <span class="emoji">🔗</span> to copy a child's personal link. Opening it on a family's phone or computer sets up just that child there.</p>
       </section>
 
       <section>
@@ -116,6 +144,9 @@
         </div>
         <p class="hint">One paper activity for each game: colour, circle, cut out and match. Print on A4, landscape.</p>
       </section>
+
+      <div id="playerSettings">
+      <p class="for-player">The settings below are for <b id="settingsFor"></b>.</p>
 
       <section>
         <h3>Letters to practise</h3>
@@ -137,6 +168,12 @@
         <p class="hint"><b>In order:</b> finish a level to unlock the next. <b>All open:</b> any level can be chosen, which is handy for older or more confident children.</p>
       </section>
 
+      <section class="row">
+        <h3>Stars earned: <span id="settingsStars">0</span></h3>
+        <button id="resetStars" class="soft-btn danger">Reset stars &amp; levels</button>
+      </section>
+      </div>
+
       <section>
         <h3>Voice</h3>
         <div id="accentSeg" class="seg accent-seg">
@@ -149,11 +186,6 @@
         </div>
         <div id="rateSeg" class="seg"><button data-v="slow">Slow</button><button data-v="normal">Normal</button></div>
         <p class="hint">Computer voices can only roughly say letter sounds. If a sound isn't clear, say it yourself too. To use your own voice, record files named <code>a.mp3</code>, <code>b.mp3</code>… and put them in the <code>audio/sounds</code> folder.</p>
-      </section>
-
-      <section class="row">
-        <h3>Stars earned: <span id="settingsStars">0</span></h3>
-        <button id="resetStars" class="soft-btn danger">Reset stars &amp; levels</button>
       </section>
 
       <button id="settingsDone" class="done-btn">Done</button>
@@ -172,5 +204,6 @@
   <script src="js/games/letter-match.js"></script>
   <script src="js/games/rhyme-time.js"></script>
   <script src="js/games/build-a-word.js"></script>
+  <script src="js/games/number-words.js"></script>
 </body>
 </html>
