@@ -1,6 +1,6 @@
 # ABC Playground
 
-Five short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Ten short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -14,6 +14,7 @@ No reading is needed: every instruction is spoken.
 | 🦖 Feed the Dino | Matching a sound to a picture that starts with it |
 | ✏️ Trace It | Forming letters by tracing them with a finger |
 | 🚂 Alphabet Train | Alphabet order and missing letters |
+| 📅 Days of the Week | Spelling the days (the *day* ending is filled in) and their order |
 
 Every game has **5 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 

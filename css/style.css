@@ -401,6 +401,40 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 .things.scatter { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); min-width: 4.4em; min-height: 3.3em; }
 .things.scatter span { display: inline-block; }
 
+/* ---------- Days of the Week ---------- */
+.week-card {
+  position: relative; flex: none; max-width: 100%;
+  padding: clamp(9px, 2vmin, 18px) clamp(14px, 3vmin, 28px); border-radius: 30px; background: #fff;
+  border: 6px solid var(--c); box-shadow: 0 10px 0 rgba(0, 0, 0, .1);
+}
+/* the days fill the card to its right edge, so the speaker sits on the left */
+.week-card .speaker { right: auto; left: -16px; }
+.week-pips { display: flex; gap: clamp(3px, 1vmin, 9px); }
+.day-pip {
+  width: clamp(28px, 7.6vmin, 62px); aspect-ratio: 3 / 4; border-radius: clamp(8px, 2vmin, 16px);
+  display: grid; place-items: center; background: #eef0f7; color: #9397ad;
+  font-weight: 700; font-size: clamp(.95rem, 3.2vmin, 1.8rem);
+}
+.day-pip.weekend { background: #fdeaf4; color: #cf86b3; }
+.day-pip.today { background: #e6f8ec; color: var(--mint); }
+.day-pip.on { background: var(--c); color: #fff; animation: pulse 1.2s ease-in-out infinite; }
+.day-pip.won { background: var(--mint); color: #fff; animation: none; }
+
+.day-word { justify-content: center; max-width: 100%; --sw: clamp(44px, 12.5vmin, 112px); gap: clamp(5px, 1.6vmin, 14px); }
+.day-word.mid { --sw: clamp(35px, 10vmin, 92px); gap: clamp(4px, 1.2vmin, 11px); }
+.day-word.tight { --sw: clamp(29px, 8.2vmin, 76px); gap: clamp(3px, 1vmin, 9px); }
+.day-word .slot {
+  width: var(--sw); height: var(--sw); aspect-ratio: auto;
+  font-size: calc(var(--sw) * .62); border-radius: calc(var(--sw) * .2);
+}
+/* the ending is already filled in, so it shows "day" as one piece */
+.day-word .slot.day-end {
+  width: calc(var(--sw) * 1.9); border-color: var(--c); color: var(--c); font-size: calc(var(--sw) * .5);
+}
+.day-word.together .slot { border-radius: 0; }
+.day-word.together .slot:first-child { border-radius: calc(var(--sw) * .2) 0 0 calc(var(--sw) * .2); }
+.day-word.together .slot:last-child { border-radius: 0 calc(var(--sw) * .2) calc(var(--sw) * .2) 0; }
+
 /* ---------- Feed the Dino ---------- */
 .dino { position: relative; display: flex; align-items: flex-end; gap: clamp(10px, 3vmin, 22px); }
 .dino-body { display: inline-block; font-size: clamp(5.5rem, 24vmin, 12rem); line-height: 1; }

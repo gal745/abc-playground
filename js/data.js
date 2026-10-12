@@ -91,6 +91,18 @@ const DATA = (() => {
     'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 🪔, swim 🏊'
   );
 
+  // Days of the week, in order. Every name ends in "day", so that part is filled in already
+  // and children only spell the beginning (`pre`).
+  const days = [
+    { w: 'Monday', pre: 'mon' },
+    { w: 'Tuesday', pre: 'tues' },
+    { w: 'Wednesday', pre: 'wednes' },
+    { w: 'Thursday', pre: 'thurs' },
+    { w: 'Friday', pre: 'fri' },
+    { w: 'Saturday', pre: 'satur' },
+    { w: 'Sunday', pre: 'sun' },
+  ];
+
   // Letter groups in a common phonics teaching order.
   const sets = [
     { label: 'All letters', letters },
@@ -109,5 +121,5 @@ const DATA = (() => {
     n: 'mhu', o: 'ac', p: 'qbd', q: 'pdg', r: 'n', s: 'z', t: 'fl', u: 'nv', v: 'uwy', w: 'mv', x: 'k', y: 'vg', z: 's',
   };
 
-  return { letters, names, sounds, words, rhymes, cvc, cvcc, sets, soundAlikes, lookAlikes };
+  return { letters, names, sounds, words, rhymes, cvc, cvcc, days, sets, soundAlikes, lookAlikes };
 })();
