@@ -20,6 +20,8 @@ Every game has **5 levels**. Finishing a level unlocks the next one, and the dot
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 
+`days.html` is a quiet page away from the games: the seven days of the week in order, each said aloud when tapped, plus a button that says them all. It is linked from the home screen.
+
 ## Players
 
 The first screen asks **"Who's playing?"**. Each player has their own stars, levels and letter settings, saved on that device. Tap ➕ to add a player, or tap the player's name at the top of the home screen to switch.

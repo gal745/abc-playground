@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Days of the Week · ABC Playground</title>
+  <meta name="description" content="The seven days of the week in English, said out loud.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page">
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main">
+    <header class="days-top">
+      <a class="round-btn" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title">Days of the Week</h1>
+      <span class="round-btn-spacer" aria-hidden="true"></span>
+    </header>
+
+    <p class="days-hint">Tap a day to hear it.</p>
+
+    <div id="dayList" class="day-list"></div>
+
+    <button id="sayAll" class="say-all"><span class="emoji">🔊</span> Say them all</button>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // A quiet page that simply says the seven days of the week.
+    (() => {
+      const list = document.getElementById('dayList');
+      const sayAll = document.getElementById('sayAll');
+      let rows = [];
+
+      const mark = i => rows.forEach((r, j) => r.classList.toggle('saying', i === j));
+
+      function speak(i) {
+        Sound.unlock();
+        Sound.sfx('tap');
+        mark(i);
+        Sound.say(DATA.days[i].w).then(() => mark(-1));
+      }
+
+      rows = DATA.days.map((d, i) => {
+        const row = UI.el('button', {
+          class: `day-row${i >= 5 ? ' weekend' : ''}`,
+          style: `--d:${i * 0.07}s`,
+          'aria-label': `Say ${d.w}`,
+          onclick: () => speak(i),
+        },
+        UI.el('span', { class: 'day-no', text: String(i + 1) }),
+        UI.el('span', { class: 'letter day-name' },
+          UI.el('span', { text: d.w.slice(0, d.pre.length) }),
+          UI.el('span', { class: 'ending', text: d.w.slice(d.pre.length) })),
+        UI.el('span', { class: 'day-speak emoji', text: '🔊' }));
+        return row;
+      });
+      list.replaceChildren(...rows);
+
+      sayAll.addEventListener('click', () => {
+        Sound.unlock();
+        Sound.sfx('tap');
+        const parts = [];
+        DATA.days.forEach((d, i) => parts.push(() => mark(i), d.w, 220));
+        parts.push(() => mark(-1));
+        Sound.say(...parts);
+      });
+
+      document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
+    })();
+  </script>
+</body>
+</html>
