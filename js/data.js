@@ -80,11 +80,38 @@ const DATA = (() => {
     rhyme('oo', 'shoe 👟, two 2️⃣'),
   ];
 
-  // Three-letter words for Build a Word.
+  // Three-letter words for Build a Word and Middle Sound.
   const cvc = parse(
     'cat 🐱, dog 🐶, pig 🐷, sun ☀️, bus 🚌, hat 🎩, bed 🛏️, box 📦, fox 🦊, ten 🔟, net 🥅, ' +
-    'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴'
+    'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴, ' +
+    'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️'
   );
+
+  // Rhyming word families for reading: the ending stays the same and the first letter changes.
+  const fam = (end, list) => ({ end, words: parse(list) });
+  const families = [
+    fam('at', 'cat 🐱, hat 🎩, bat 🦇, rat 🐀'),
+    fam('an', 'van 🚐, pan 🍳, man 👨'),
+    fam('ap', 'cap 🧢, map 🗺️, tap 🚰, nap 😴'),
+    fam('ug', 'bug 🐛, mug ☕, hug 🤗'),
+    fam('en', 'pen 🖊️, ten 🔟, hen 🐔'),
+    fam('og', 'dog 🐶, log 🪵, frog 🐸'),
+    fam('ox', 'box 📦, fox 🦊, ox 🐂'),
+    fam('in', 'pin 📌, bin 🗑️, tin 🥫, win 🏆'),
+    fam('et', 'net 🥅, jet ✈️, wet 💦'),
+    fam('ed', 'bed 🛏️, red 🔴, sled 🛷'),
+    fam('un', 'sun ☀️, run 🏃'),
+  ];
+
+  // Words that are the same apart from the middle vowel: pan, pin, pen.
+  const vowelSwaps = [
+    parse('pan 🍳, pin 📌, pen 🖊️'),
+    parse('cap 🧢, cup 🥤'),
+    parse('log 🪵, leg 🦵'),
+    parse('net 🥅, nut 🥜'),
+    parse('ten 🔟, tin 🥫'),
+    parse('bag 👜, bug 🐛'),
+  ];
 
   // Four-letter words with blends, for the later Build a Word levels.
   const cvcc = parse(
@@ -121,5 +148,5 @@ const DATA = (() => {
     n: 'mhu', o: 'ac', p: 'qbd', q: 'pdg', r: 'n', s: 'z', t: 'fl', u: 'nv', v: 'uwy', w: 'mv', x: 'k', y: 'vg', z: 's',
   };
 
-  return { letters, names, sounds, words, rhymes, cvc, cvcc, days, sets, soundAlikes, lookAlikes };
+  return { letters, names, sounds, words, rhymes, cvc, cvcc, families, vowelSwaps, days, sets, soundAlikes, lookAlikes };
 })();

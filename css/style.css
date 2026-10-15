@@ -437,6 +437,28 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 .day-word.together .slot:first-child { border-radius: calc(var(--sw) * .2) 0 0 calc(var(--sw) * .2); }
 .day-word.together .slot:last-child { border-radius: 0 calc(var(--sw) * .2) calc(var(--sw) * .2) 0; }
 
+/* ---------- Which Word? ---------- */
+.stage-which .picture-card { width: clamp(100px, 24vmin, 200px); }
+.stage-which .picture-card .picture { font-size: clamp(3.6rem, 15vmin, 7.5rem); }
+.word-row { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 3vw, 30px); width: 100%; }
+.word-btn {
+  min-width: clamp(110px, 26vmin, 230px); padding: clamp(10px, 2.4vmin, 20px) clamp(14px, 3vmin, 28px);
+  border-radius: 26px; background: #fff; color: var(--bc); border: 5px solid var(--bc); box-shadow: 0 8px 0 var(--bc);
+  font-size: clamp(2.1rem, 9vmin, 4.4rem);
+  transition: transform .12s, opacity .3s, filter .3s;
+}
+.word-btn:active { transform: translateY(5px); }
+.word-row.count-4 .word-btn { min-width: clamp(94px, 21vmin, 190px); font-size: clamp(1.7rem, 7.5vmin, 3.6rem); border-radius: 20px; }
+
+/* ---------- Middle Sound ---------- */
+.stage-middle .picture-card { width: clamp(110px, 26vmin, 220px); }
+.stage-middle .picture-card .picture { font-size: clamp(4rem, 16vmin, 8rem); }
+/* all five vowels fit on one line, like a little vowel strip */
+.choices.count-5 { gap: clamp(7px, 2vw, 22px); }
+.choices.count-5 .letter-btn {
+  width: clamp(52px, 15vmin, 140px); font-size: clamp(2.2rem, 9.5vmin, 5.4rem); border-radius: 22px;
+}
+
 /* ---------- Days in Order ---------- */
 .week-line {
   display: flex; justify-content: center; max-width: 100%; --ww: clamp(44px, 11.5vmin, 100px);

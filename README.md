@@ -16,6 +16,8 @@ No reading is needed: every instruction is spoken.
 | 🚂 Alphabet Train | Alphabet order and missing letters |
 | 📅 Days of the Week | Spelling the days (the *day* ending is filled in) |
 | 🗓️ Days in Order | Putting the seven days in order, from any starting day |
+| 🔎 Which Word? | Reading short rhyming words that look alike (cat, hat, bat; pan, pin, pen) |
+| 🎯 Middle Sound | Hearing the short vowel in the middle of a word (c**a**t, p**i**g) |
 
 Every game has **5 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
