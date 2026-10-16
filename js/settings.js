@@ -7,9 +7,9 @@ const Settings = (() => {
   const COLORS = ['#ff6b6b', '#4d96ff', '#9b5de5', '#f15bb5', '#2a9d8f', '#f77f00'];
   const PLAYER_KEYS = ['letters', 'letterCase', 'unlockAll', 'progress', 'stars'];
 
-  const lang = (navigator.language || '').toLowerCase();
   const globalDefaults = {
-    accent: lang.startsWith('en-us') ? 'us' : /^en-(au|nz)/.test(lang) ? 'au' : 'gb',
+    accent: 'gb',       // British everywhere, whatever language the device is set to
+    accentChosen: false, // ...until a grown-up picks a different one
     voice: '',
     rate: 'normal',
     spellings: {}, // letter -> how a grown-up wants the voice to say its sound
@@ -42,6 +42,9 @@ const Settings = (() => {
   }
 
   function clean() {
+    // Devices used before the games settled on British had an accent picked from the device's
+    // own language. Put those back to British; a deliberate choice is kept.
+    if (!state.global.accentChosen) state.global.accent = globalDefaults.accent;
     state.players = state.players
       .filter(p => p && typeof p === 'object' && p.id && typeof p.name === 'string')
       .map((p, i) => {
@@ -78,6 +81,7 @@ const Settings = (() => {
         p.data[key] = value;
       } else {
         state.global[key] = value;
+        if (key === 'accent') state.global.accentChosen = true;
       }
       save();
     },
