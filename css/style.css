@@ -520,6 +520,33 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .day-row.weekend .day-name .ending { color: #f3aed0; }
 .day-row.saying { animation: bounce .6s; background: #fff; box-shadow: 0 5px 0 rgba(94, 96, 206, .35), 0 0 0 5px rgba(94, 96, 206, .3); }
 .day-speak { flex: none; font-size: clamp(1.1rem, 4vw, 1.6rem); opacity: .55; }
+/* ---------- the sound check page (sounds.html) ---------- */
+.check-main { max-width: 760px; }
+.check-title { color: #2a9d8f; }
+.check-sub { margin: 10px 0 0; font-size: 1.3rem; color: var(--ink); }
+.check-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
+.check-bar .seg, .check-bar .voice-row { margin: 0; }
+.sound-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: clamp(7px, 1.6vw, 12px); width: 100%;
+}
+.sound-tile {
+  padding: 10px 4px 7px; border-radius: 18px; background: rgba(255, 255, 255, .92); box-shadow: 0 5px 0 rgba(0, 0, 0, .1);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.sound-tile .letter { font-size: clamp(1.6rem, 6vw, 2.2rem); color: #2a9d8f; }
+.sound-spell { font-size: .8rem; font-weight: 600; color: var(--soft-ink); }
+.sound-tile.on { background: #fff1a8; animation: bounce .6s; }
+.sound-tile:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
+.fx-row, .phrase-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
+.fx-btn, .phrase-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px;
+  background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(0, 0, 0, .1); font-weight: 600; text-align: left;
+}
+.fx-btn:active, .phrase-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0, 0, 0, .1); }
+.fx-what { font-size: .95rem; }
+.days-hint.note { max-width: 56ch; text-align: center; font-weight: 500; }
+.days-hint.note code { background: rgba(255, 255, 255, .8); border-radius: 6px; padding: 1px 5px; }
+
 .say-all {
   display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px;
   background: #5e60ce; color: #fff; font-weight: 700; font-size: clamp(1.05rem, 4vw, 1.4rem);

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sound check · ABC Playground</title>
+  <meta name="description" content="Hear every sound the games use, and check they are right.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔊</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page">
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main check-main">
+    <header class="days-top">
+      <a class="round-btn" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title check-title">Sound check</h1>
+      <span class="round-btn-spacer" aria-hidden="true"></span>
+    </header>
+
+    <p class="days-hint">For grown-ups. Tap a letter to hear exactly what the games play.
+      The small grey word underneath is the spelling the computer voice is given.</p>
+
+    <div class="check-bar">
+      <div id="accentSeg" class="seg accent-seg">
+        <button data-v="gb"><span class="emoji">🇬🇧</span> British</button><button data-v="us"><span class="emoji">🇺🇸</span> American</button><button data-v="au"><span class="emoji">🇦🇺</span> Australian</button>
+      </div>
+      <div class="voice-row">
+        <select id="voiceSelect" aria-label="Voice"></select>
+        <div id="rateSeg" class="seg"><button data-v="slow">Slow</button><button data-v="normal">Normal</button></div>
+      </div>
+      <div id="modeSeg" class="seg"><button data-v="sound">Letter sounds</button><button data-v="name">Letter names</button></div>
+    </div>
+
+    <div id="soundGrid" class="sound-grid"></div>
+    <button id="playAll" class="say-all"><span class="emoji">🔊</span> Play them all</button>
+
+    <h2 class="check-sub">Little noises</h2>
+    <p class="days-hint">These are not spoken: the games make them with beeps and bells.</p>
+    <div id="fxRow" class="fx-row"></div>
+
+    <h2 class="check-sub">Things the games say</h2>
+    <div id="phrases" class="phrase-list"></div>
+
+    <p class="days-hint note">If one of these sounds wrong, write the letter down — the spelling the voice
+      is given can be changed. Better still, replace any computer sound with your own voice: record a file named
+      <code>a.mp3</code>, <code>b.mp3</code>… and put it in the <code>audio/sounds</code> folder.</p>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // A grown-up page for checking, by ear, every sound the games use.
+    (() => {
+      const $ = id => document.getElementById(id);
+      let mode = 'sound';
+      let tiles = [];
+
+      const speaks = l => (mode === 'sound' ? { sound: l } : Sound.letterName(l));
+      const spelling = l => (mode === 'sound' ? Sound.soundText(l) : Sound.letterName(l));
+
+      function render() {
+        tiles = DATA.letters.map(l => {
+          const tile = UI.el('button', { class: 'sound-tile', 'aria-label': `Letter ${l}` },
+            UI.el('span', { class: 'letter', text: l }),
+            UI.el('span', { class: 'sound-spell', text: spelling(l) }));
+          tile.addEventListener('click', () => play(l, tile));
+          return tile;
+        });
+        $('soundGrid').replaceChildren(...tiles);
+      }
+
+      function mark(tile) {
+        tiles.forEach(t => t.classList.toggle('on', t === tile));
+      }
+
+      function play(l, tile) {
+        Sound.unlock();
+        mark(tile);
+        Sound.say(speaks(l)).then(() => mark(null));
+      }
+
+      $('playAll').addEventListener('click', () => {
+        Sound.unlock();
+        const parts = [];
+        DATA.letters.forEach((l, i) => parts.push(() => mark(tiles[i]), speaks(l), 320));
+        parts.push(() => mark(null));
+        Sound.say(...parts);
+      });
+
+      const EFFECTS = [
+        ['tap', '👆', 'Tapping a game or a card'],
+        ['pop', '🎈', 'Popping a balloon'],
+        ['correct', '✅', 'A right answer'],
+        ['wrong', '❌', 'A wrong answer'],
+        ['flip', '🃏', 'Turning a card over'],
+        ['win', '🏆', 'Finishing a level'],
+      ];
+      $('fxRow').replaceChildren(...EFFECTS.map(([name, emoji, what]) => {
+        const btn = UI.el('button', { class: 'fx-btn' },
+          UI.el('span', { class: 'emoji', text: emoji }),
+          UI.el('span', { class: 'fx-what', text: what }));
+        btn.addEventListener('click', () => { Sound.unlock(); Sound.stop(); Sound.sfx(name); });
+        return btn;
+      }));
+
+      const PHRASES = [
+        ["Can you pop the letter bee?", ['Can you pop the letter bee?', 200, { sound: 'b' }, 'like balloon!']],
+        ['Sounding a word out: c-a-t, cat!', [{ sound: 'c' }, 150, { sound: 'a' }, 150, { sound: 't' }, 200, 'cat!']],
+        ['Which word says cat?', ['cat.', 250, 'Which word says cat?']],
+        ['Spelling out loud: t-e-n, ten!', ['tee', 150, 'ee', 150, 'en', 200, 'ten!']],
+        ['The days of the week', ['Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.']],
+        ['Well done!', ['Well done! You got a shiny star!']],
+      ];
+      $('phrases').replaceChildren(...PHRASES.map(([label, parts]) => {
+        const btn = UI.el('button', { class: 'phrase-btn' },
+          UI.el('span', { class: 'emoji', text: '🔊' }),
+          UI.el('span', { text: label }));
+        btn.addEventListener('click', () => { Sound.unlock(); Sound.say(...parts); });
+        return btn;
+      }));
+
+      function segment(id, onPick, current) {
+        $(id).querySelectorAll('button').forEach(b => {
+          b.classList.toggle('on', b.dataset.v === current());
+          b.onclick = () => { onPick(b.dataset.v); refresh(); };
+        });
+      }
+
+      function fillVoices() {
+        const list = Sound.voicesFor();
+        const chosen = Settings.get('voice');
+        const label = v => v.name.replace(/^Microsoft\s+/, '').replace(/\s+Online \(Natural\)/, ' (natural)').replace(/\s*-\s*English.*$/, '');
+        $('voiceSelect').replaceChildren(
+          UI.el('option', { value: '' }, 'Best voice (automatic)'),
+          ...list.map(v => UI.el('option', { value: v.voiceURI }, label(v)))
+        );
+        $('voiceSelect').value = list.some(v => v.voiceURI === chosen) ? chosen : '';
+      }
+
+      function refresh() {
+        segment('accentSeg', v => { Settings.set('accent', v); Settings.set('voice', ''); }, () => Settings.get('accent'));
+        segment('rateSeg', v => Settings.set('rate', v), () => Settings.get('rate'));
+        segment('modeSeg', v => { mode = v; }, () => mode);
+        fillVoices();
+        render();
+      }
+
+      $('voiceSelect').onchange = e => { Settings.set('voice', e.target.value); Sound.say('Hello!'); };
+      Sound.onVoices(fillVoices);
+      document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
+      refresh();
+    })();
+  </script>
+</body>
+</html>

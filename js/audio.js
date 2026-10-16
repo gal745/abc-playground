@@ -81,9 +81,10 @@ const Sound = (() => {
       const v = bestVoice();
       if (v) { u.voice = v; u.lang = v.lang; } else u.lang = ACCENT_DEFAULT_LANG[accent()];
       u.rate = rate();
-      // a slightly higher, brighter voice sounds friendlier (child voices are already bright)
+      // A slightly brighter voice sounds friendlier, but shifting the pitch far makes a
+      // synthetic voice sound more synthetic still, so keep the change small.
       const q = v ? quality(v) : 0;
-      u.pitch = q >= 120 ? 1 : q >= 80 ? 1.1 : 1.2;
+      u.pitch = q >= 120 ? 1 : q >= 80 ? 1.05 : 1.1;
       let finished = false;
       const finish = () => {
         if (finished) return;
@@ -106,16 +107,25 @@ const Sound = (() => {
     return new Promise(resolve => {
       const a = recordings[l] || new Audio(`audio/sounds/${l}.mp3`);
       let finished = false;
+      let started = false;
+      let startGuard = null;
+      let guard = null;
       const end = played => {
         if (finished) return;
         finished = true;
+        clearTimeout(startGuard);
         clearTimeout(guard);
-        a.onended = a.onerror = null;
+        a.onended = a.onerror = a.onplaying = null;
         if (stopCurrent === stop) stopCurrent = null;
         resolve(played);
       };
-      const stop = () => { a.pause(); end(true); };
-      const guard = setTimeout(stop, 5000);
+      // interrupted: it only counts as played if it had actually started
+      const stop = () => { a.pause(); end(started); };
+      // A missing or stalled recording must not leave the child in silence: if nothing is
+      // playing after a moment, give up and let the computer voice say the sound instead.
+      startGuard = setTimeout(() => { if (!started) { a.pause(); end(false); } }, 900);
+      guard = setTimeout(stop, 5000);
+      a.onplaying = () => { started = true; };
       a.onended = () => end(true);
       a.onerror = () => { recordings[l] = false; end(false); };
       stopCurrent = stop;
@@ -244,5 +254,5 @@ const Sound = (() => {
   }
   if (synth) synth.getVoices();
 
-  return { say, stop, sfx, unlock, voicesFor, hasNaturalVoice, onVoices, letterName };
+  return { say, stop, sfx, unlock, voicesFor, hasNaturalVoice, onVoices, letterName, soundText };
 })();
