@@ -70,6 +70,8 @@ const Sound = (() => {
   }
 
   function soundText(l) {
+    const mine = (Settings.get('spellings') || {})[l];
+    if (mine) return mine;
     if (l === 'o' && accent() === 'us') return 'ah';
     return DATA.sounds[l];
   }

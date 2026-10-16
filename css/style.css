@@ -537,6 +537,23 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .sound-spell { font-size: .8rem; font-weight: 600; color: var(--soft-ink); }
 .sound-tile.on { background: #fff1a8; animation: bounce .6s; }
 .sound-tile:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
+.sound-tile.changed { box-shadow: 0 5px 0 rgba(67, 170, 139, .55); }
+.sound-tile.changed .sound-spell { color: var(--mint); }
+.fix-panel {
+  width: 100%; padding: 16px; border-radius: 24px; background: rgba(255, 255, 255, .92);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .08); display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.fix-title { margin: 0; font-size: 1.15rem; font-weight: 600; }
+.fix-title b { font-family: var(--font-letter); font-size: 1.7rem; color: #2a9d8f; }
+.fix-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.fix-input { width: clamp(120px, 34vw, 190px); margin: 0; text-align: center; font-family: var(--font-letter); }
+.fix-save { margin: 0; padding: 12px 22px; font-size: 1rem; }
+.fix-chips { justify-content: center; }
+/* the settings chips are letter-sized squares; these hold whole spellings */
+.fix-chips .chip { width: auto; height: auto; min-width: 54px; padding: 9px 16px; font-size: 1.3rem; }
+.fix-row .fix-save { width: auto; }
+.fix-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.link-btn { color: var(--soft-ink); font-weight: 600; text-decoration: underline; font-size: .95rem; }
 .fx-row, .phrase-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
 .fx-btn, .phrase-btn {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px;

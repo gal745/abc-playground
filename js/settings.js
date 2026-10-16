@@ -12,6 +12,7 @@ const Settings = (() => {
     accent: lang.startsWith('en-us') ? 'us' : /^en-(au|nz)/.test(lang) ? 'au' : 'gb',
     voice: '',
     rate: 'normal',
+    spellings: {}, // letter -> how a grown-up wants the voice to say its sound
   };
   const playerDefaults = () => ({
     letters: DATA.letters.slice(),

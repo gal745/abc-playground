@@ -15,11 +15,18 @@ const DATA = (() => {
     s: 'ess', t: 'tee', u: 'you', v: 'vee', w: 'double you', x: 'ex', y: 'why', z: 'zee',
   };
 
-  // Approximate letter SOUNDS for text-to-speech. Recordings in audio/sounds/ replace these.
+  // Approximate letter SOUNDS for text-to-speech. Recordings in audio/sounds/ replace these,
+  // and a grown-up can change any of them on the Sound check page.
+  //
+  // These are spellings a voice has to read, so they must be words it cannot misread. The
+  // old "-uh" endings were invented words: British voices turned "puh" into "poo" and "buh"
+  // into "boo". An "-ah" ending is read the same way by every voice (bah, nah, rah, wah are
+  // real words), so the consonant at the front comes out clearly. The sounds that can be
+  // held on their own - mmm, sss - are written as they are hummed or hissed.
   const sounds = {
-    a: 'ah', b: 'buh', c: 'kuh', d: 'duh', e: 'eh', f: 'fuh', g: 'guh', h: 'huh', i: 'ih',
-    j: 'juh', k: 'kuh', l: 'luh', m: 'mmm', n: 'nuh', o: 'aw', p: 'puh', q: 'kwuh', r: 'ruh',
-    s: 'sss', t: 'tuh', u: 'uh', v: 'vuh', w: 'wuh', x: 'ks', y: 'yuh', z: 'zzz',
+    a: 'ah', b: 'bah', c: 'kah', d: 'dah', e: 'eh', f: 'fah', g: 'gah', h: 'hah', i: 'ih',
+    j: 'jah', k: 'kah', l: 'lah', m: 'mmm', n: 'nah', o: 'aw', p: 'pah', q: 'kwah', r: 'rah',
+    s: 'sss', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'kss', y: 'yah', z: 'zah',
   };
 
   // Pictures that START with each letter sound. The first word is the letter's "keyword".

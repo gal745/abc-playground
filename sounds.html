@@ -43,6 +43,24 @@
     </div>
 
     <div id="soundGrid" class="sound-grid"></div>
+
+    <div id="fixPanel" class="fix-panel" hidden>
+      <p class="fix-title">How should <b id="fixLetter">p</b> sound?</p>
+      <div class="fix-row">
+        <input id="fixInput" class="name-input fix-input" type="text" maxlength="12" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="What the voice should say">
+        <button id="fixPlay" class="soft-btn">▶ Hear it</button>
+        <button id="fixSave" class="done-btn fix-save">Use this</button>
+      </div>
+      <div id="fixChips" class="chips fix-chips"></div>
+      <p class="hint">Tap a suggestion to hear it, or type your own spelling — whatever makes the voice
+        say it properly. Saved on this device only.</p>
+      <div class="fix-actions">
+        <button id="fixCopy" class="link-btn">Copy my changes to send on</button>
+        <button id="fixReset" class="link-btn">Put this letter back</button>
+      </div>
+      <p id="fixNote" class="tip" hidden></p>
+    </div>
+
     <button id="playAll" class="say-all"><span class="emoji">🔊</span> Play them all</button>
 
     <h2 class="check-sub">Little noises</h2>
@@ -70,10 +88,12 @@
 
       const speaks = l => (mode === 'sound' ? { sound: l } : Sound.letterName(l));
       const spelling = l => (mode === 'sound' ? Sound.soundText(l) : Sound.letterName(l));
+      const mine = () => Settings.get('spellings') || {};
 
       function render() {
+        const changed = mine();
         tiles = DATA.letters.map(l => {
-          const tile = UI.el('button', { class: 'sound-tile', 'aria-label': `Letter ${l}` },
+          const tile = UI.el('button', { class: `sound-tile${changed[l] ? ' changed' : ''}`, 'aria-label': `Letter ${l}` },
             UI.el('span', { class: 'letter', text: l }),
             UI.el('span', { class: 'sound-spell', text: spelling(l) }));
           tile.addEventListener('click', () => play(l, tile));
@@ -89,8 +109,80 @@
       function play(l, tile) {
         Sound.unlock();
         mark(tile);
+        if (mode === 'sound') openFix(l);
         Sound.say(speaks(l)).then(() => mark(null));
       }
+
+      // ---- changing how a sound is said ----
+      // The sound of each letter is a spelling handed to the voice. If a voice reads one
+      // badly, a grown-up can hear the alternatives and pick the one that sounds right.
+      const STEM = { a: 'a', b: 'b', c: 'k', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h', i: 'i', j: 'j', k: 'k', l: 'l', m: 'm', n: 'n', o: 'o', p: 'p', q: 'kw', r: 'r', s: 's', t: 't', u: 'u', v: 'v', w: 'w', x: 'ks', y: 'y', z: 'z' };
+      const VOWEL_IDEAS = { a: ['ah', 'aa', 'a'], e: ['eh', 'e'], i: ['ih', 'i'], o: ['aw', 'o', 'oh'], u: ['uh', 'u'] };
+      let fixing = null;
+
+      // sounds you can hold on and hum or hiss, so "sss" is worth offering for them
+      const HELD = ['f', 'l', 'm', 'n', 'r', 's', 'v', 'z'];
+
+      function ideas(l) {
+        const s = STEM[l];
+        const list = VOWEL_IDEAS[l]
+          || [`${s}ah`, `${s}uh`, `${s}er`, ...(HELD.includes(l) ? [`${s}${s}${s}`] : [])];
+        return [...new Set([DATA.sounds[l], ...list])].slice(0, 5);
+      }
+
+      function openFix(l) {
+        fixing = l;
+        $('fixLetter').textContent = l;
+        $('fixInput').value = Sound.soundText(l);
+        $('fixNote').hidden = true;
+        $('fixChips').replaceChildren(...ideas(l).map(text => {
+          const chip = UI.el('button', { class: `chip${text === Sound.soundText(l) ? ' on' : ''}`, type: 'button' }, text);
+          chip.addEventListener('click', () => { $('fixInput').value = text; Sound.unlock(); Sound.say(text); });
+          return chip;
+        }));
+        $('fixPanel').hidden = false;
+      }
+
+      function saveFix() {
+        if (!fixing) return;
+        const text = $('fixInput').value.trim().slice(0, 12);
+        const all = { ...mine() };
+        if (!text || text === DATA.sounds[fixing]) delete all[fixing]; else all[fixing] = text;
+        Settings.set('spellings', all);
+        const letter = fixing;
+        render();
+        openFix(letter);
+        Sound.unlock();
+        Sound.say({ sound: letter });
+      }
+
+      function resetFix() {
+        if (!fixing) return;
+        const all = { ...mine() };
+        delete all[fixing];
+        Settings.set('spellings', all);
+        const letter = fixing;
+        render();
+        openFix(letter);
+      }
+
+      function copyChanges() {
+        const all = mine();
+        const keys = DATA.letters.filter(l => all[l]);
+        const text = keys.length ? keys.map(l => `${l} = ${all[l]}`).join(', ') : 'No changes yet.';
+        const done = () => { $('fixNote').textContent = `Copied: ${text}`; $('fixNote').hidden = false; };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, () => prompt('Copy this:', text));
+        } else {
+          prompt('Copy this:', text);
+        }
+      }
+
+      $('fixPlay').addEventListener('click', () => { Sound.unlock(); Sound.say($('fixInput').value.trim()); });
+      $('fixSave').addEventListener('click', saveFix);
+      $('fixReset').addEventListener('click', resetFix);
+      $('fixCopy').addEventListener('click', copyChanges);
+      $('fixInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveFix(); } });
 
       $('playAll').addEventListener('click', () => {
         Sound.unlock();
