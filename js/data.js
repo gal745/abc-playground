@@ -94,6 +94,15 @@ const DATA = (() => {
     'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️'
   );
 
+  // Two letters that make a word on their own: the first joining-up step, before c-a-t.
+  // No pictures: these are little words you hear in a sentence, not things you can draw.
+  const joins = 'am an at if in it on up us'.split(' ');
+
+  // Short vowels with the word they are usually taught with.
+  const shortVowels = parse('a 🍎, e 🥚, i 🐛, o 🐙, u ☂️').map((x, i) => ({
+    ...x, word: ['apple', 'egg', 'insect', 'octopus', 'umbrella'][i],
+  }));
+
   // Rhyming word families for reading: the ending stays the same and the first letter changes.
   const fam = (end, list) => ({ end, words: parse(list) });
   const families = [
@@ -155,5 +164,8 @@ const DATA = (() => {
     n: 'mhu', o: 'ac', p: 'qbd', q: 'pdg', r: 'n', s: 'z', t: 'fl', u: 'nv', v: 'uwy', w: 'mv', x: 'k', y: 'vg', z: 's',
   };
 
-  return { letters, names, sounds, words, rhymes, cvc, cvcc, families, vowelSwaps, days, sets, soundAlikes, lookAlikes };
+  return {
+    letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels,
+    families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
+  };
 })();

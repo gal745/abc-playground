@@ -437,6 +437,31 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 .day-word.together .slot:first-child { border-radius: calc(var(--sw) * .2) 0 0 calc(var(--sw) * .2); }
 .day-word.together .slot:last-child { border-radius: 0 calc(var(--sw) * .2) calc(var(--sw) * .2) 0; }
 
+/* ---------- Join the Sounds ---------- */
+.stage-join .join-pic { width: clamp(90px, 20vmin, 170px); }
+.stage-join .join-pic .picture { font-size: clamp(3.2rem, 13vmin, 6.5rem); }
+.join-row { display: flex; gap: clamp(14px, 5vmin, 54px); transition: gap .5s cubic-bezier(.3, 1.2, .5, 1); }
+.join-row.together { gap: 0; }
+.letter-card {
+  width: clamp(66px, 17vmin, 140px); aspect-ratio: 1; border-radius: 24px; background: #fff; color: var(--bc);
+  border: 5px solid var(--bc); box-shadow: 0 8px 0 var(--bc);
+  display: grid; place-items: center; font-size: clamp(2.8rem, 11vmin, 6rem);
+  transition: border-radius .5s, background .25s, border-color .25s, box-shadow .25s, transform .2s;
+}
+.letter-card:active { transform: translateY(5px); }
+.letter-card.current { animation: pulse 1.2s ease-in-out infinite; }
+.letter-card.done { background: #f2fbf7; border-color: var(--mint); box-shadow: 0 8px 0 var(--mint); color: var(--mint); }
+.letter-card.glow { background: #fff1a8; }
+.join-row.together .letter-card { border-radius: 0; animation: none; }
+.join-row.together .letter-card:first-child { border-radius: 24px 0 0 24px; }
+.join-row.together .letter-card:last-child { border-radius: 0 24px 24px 0; }
+.join-btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px; border-radius: 999px;
+  background: var(--c); color: #fff; font-weight: 700; font-size: clamp(1.05rem, 4vw, 1.5rem);
+  box-shadow: 0 7px 0 rgba(0, 0, 0, .18);
+}
+.join-btn:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(0, 0, 0, .18); }
+
 /* ---------- Which Word? ---------- */
 .stage-which .picture-card { width: clamp(100px, 24vmin, 200px); }
 .stage-which .picture-card .picture { font-size: clamp(3.6rem, 15vmin, 7.5rem); }
@@ -520,6 +545,63 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .day-row.weekend .day-name .ending { color: #f3aed0; }
 .day-row.saying { animation: bounce .6s; background: #fff; box-shadow: 0 5px 0 rgba(94, 96, 206, .35), 0 0 0 5px rgba(94, 96, 206, .3); }
 .day-speak { flex: none; font-size: clamp(1.1rem, 4vw, 1.6rem); opacity: .55; }
+/* ---------- the joining-sounds poster (poster.html) ---------- */
+.poster-main { max-width: 900px; gap: clamp(14px, 3vh, 26px); }
+.poster-title { color: #7209b7; }
+.poster-sec { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; break-inside: avoid; }
+.poster-h {
+  margin: 0; font-size: clamp(1.2rem, 4.5vw, 1.8rem); color: var(--ink);
+  text-shadow: 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff;
+}
+.poster-note { margin: 0; color: var(--soft-ink); font-weight: 600; font-size: .95rem; }
+.saying { animation: bounce .6s; }
+
+.vowel-row { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 2vw, 16px); width: 100%; }
+.vowel-tile {
+  flex: 1 1 120px; max-width: 160px; padding: 12px 8px 10px; border-radius: 22px; background: #fff;
+  border: 5px solid #ffd166; box-shadow: 0 6px 0 rgba(0, 0, 0, .1);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.vowel-big { font-size: clamp(2.4rem, 9vw, 3.6rem); color: #e8590c; }
+.vowel-pic { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+.vowel-word { font-weight: 600; color: var(--soft-ink); font-size: .95rem; }
+
+.join-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 100%; }
+.join-card {
+  display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px;
+  border-radius: 18px; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .1);
+}
+.join-card .bit { font-size: 1.6rem; color: #7209b7; }
+.join-card .plus { font-weight: 700; color: #b9bbcc; font-size: 1.1rem; }
+.join-card .made { font-size: 1.9rem; color: var(--mint); }
+.join-card:active, .vowel-tile:active, .word-card:active { transform: translateY(3px); }
+
+.word-groups { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.word-group { display: flex; align-items: center; gap: 10px; break-inside: avoid; }
+.group-tag {
+  flex: none; width: 46px; height: 46px; border-radius: 14px; background: #ffe8a3; color: #e8590c;
+  display: grid; place-items: center; font-size: 1.8rem;
+}
+.group-words { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.word-card {
+  padding: 8px 4px; border-radius: 16px; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .1);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.word-pic { font-size: 1.7rem; }
+.word-text { font-size: 1.5rem; color: #2b2d42; letter-spacing: 1px; }
+.word-text .mid { color: #e8590c; }
+
+@media print {
+  body.poster-page { background: #fff; }
+  .poster-page .scenery, .no-print { display: none !important; }
+  .poster-main { max-width: none; padding: 0; gap: 14px; }
+  .poster-page .days-top { justify-content: center; } /* the home button is gone in print */
+  .poster-h { text-shadow: none; }
+  .join-card, .word-card, .vowel-tile { box-shadow: none; border: 2px solid #d7d9e6; }
+  .vowel-tile { border-color: #ffd166; }
+  .poster-sec { page-break-inside: avoid; }
+}
+
 /* ---------- the sound check page (sounds.html) ---------- */
 .check-main { max-width: 760px; }
 .check-title { color: #2a9d8f; }
