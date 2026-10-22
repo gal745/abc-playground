@@ -617,6 +617,88 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .pair-rows.small .pair-tag { background: #eef6f5; border-color: #8fc2bf; color: #2a7f79; }
 .word-text .pair-bit { color: #1b7f79; }
 
+/* ---------- Finish the Word ---------- */
+.stage-finish .picture-card { width: clamp(110px, 26vmin, 220px); }
+.stage-finish .picture-card .picture { font-size: clamp(4rem, 16vmin, 8rem); }
+.word-slots .slot.pair-slot { width: clamp(92px, 23vmin, 180px); aspect-ratio: auto; height: clamp(66px, 16vmin, 130px); }
+.word-slots.long .slot.pair-slot { width: clamp(70px, 18vmin, 150px); height: clamp(46px, 12.5vmin, 108px); }
+.pair-choices { gap: clamp(10px, 2.5vw, 26px); }
+.letter-btn.pair-btn { width: auto; min-width: clamp(84px, 21vmin, 170px); aspect-ratio: auto; padding: clamp(8px, 2vmin, 18px) clamp(10px, 2.5vmin, 22px); }
+
+/* ---------- printable worksheets (sheets.html) ---------- */
+.sheets-main { max-width: 820px; }
+.sheets-title { color: #b5651d; }
+.sheet-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.sheet-bar .say-all, .sheet-bar .soft-btn { margin: 0; }
+.sheet {
+  width: 100%; background: #fff; border-radius: 18px; padding: clamp(16px, 3vw, 28px);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .08); margin-bottom: 18px; color: #2b2d42;
+}
+.sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 3px solid #eceef5; padding-bottom: 8px; }
+.sheet-title { margin: 0; font-size: clamp(1.1rem, 4vw, 1.5rem); }
+.sheet-name { color: #9397ad; font-weight: 600; font-size: .9rem; border-bottom: 2px dotted #c9ccda; min-width: 140px; }
+.sheet-how { margin: 8px 0 14px; color: var(--soft-ink); font-weight: 600; font-size: .95rem; }
+.sheet-grid { display: grid; gap: clamp(8px, 2vw, 16px); }
+.sheet-grid.two { grid-template-columns: repeat(2, 1fr); }
+.sheet-grid.three { grid-template-columns: repeat(2, 1fr); }
+.sheet-grid.four { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.sheet-grid.five { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
+.sheet-item {
+  border: 2px solid #dfe2ec; border-radius: 14px; padding: 10px 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.sheet-item.wide, .sheet-item.join-item { flex-direction: row; justify-content: center; gap: 12px; padding: 10px; }
+.sheet-pic { font-size: clamp(1.8rem, 6vw, 2.4rem); }
+.sheet-word { font-size: clamp(1.3rem, 5vw, 1.7rem); letter-spacing: 1px; white-space: nowrap; }
+.sheet-word .plus { color: #b9bbcc; margin: 0 3px; font-weight: 700; }
+.pair-plain { color: #1b7f79; }
+.pair-ring { color: #2b2d42; }
+.gap-box { display: inline-block; width: 2.2em; border-bottom: 3px solid #2b2d42; margin: 0 2px; }
+.write-line { display: inline-block; width: 4.5em; border-bottom: 3px solid #2b2d42; margin-left: 4px; }
+.word-bank { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; padding: 8px 12px; border: 2px dashed #c9ccda; border-radius: 12px; }
+.bank-label { font-weight: 600; color: var(--soft-ink); font-size: .9rem; }
+.bank-chip { font-size: 1.3rem; padding: 2px 10px; border-radius: 8px; background: #eef6f5; color: #1b7f79; }
+.match-sheet { display: flex; justify-content: space-between; gap: 20px; }
+.match-col { display: flex; flex-direction: column; gap: clamp(8px, 2.2vh, 18px); }
+.match-row { display: flex; align-items: center; gap: 10px; }
+.match-col.pics .match-row { justify-content: flex-end; }
+.dot-end { width: 11px; height: 11px; border-radius: 50%; background: #2b2d42; flex: none; }
+.box-row { display: inline-flex; gap: 5px; }
+.sound-box { width: 2em; height: 2em; border: 2.5px solid #2b2d42; border-radius: 6px; display: inline-grid; place-items: center; font-family: var(--font-letter); font-size: 1.1rem; }
+.sound-box.wide { width: 3em; }
+.sound-box.shown { background: #eef6f5; color: #1b7f79; }
+.tick-rows { display: flex; flex-direction: column; gap: 12px; }
+.tick-row { display: flex; align-items: center; gap: clamp(8px, 2.5vw, 20px); }
+.tick-tag { flex: none; width: 56px; height: 46px; border: 2.5px solid #1b7f79; border-radius: 12px; display: grid; place-items: center; font-size: 1.5rem; color: #1b7f79; }
+.tick-pic { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.tick-box { width: 22px; height: 22px; border: 2.5px solid #2b2d42; border-radius: 5px; }
+
+@media print {
+  body.sheets-page { background: #fff; }
+  .sheets-page .scenery, .sheets-page .days-top, .sheets-page .sheet-bar, .sheets-page .days-hint { display: none !important; }
+  .sheets-main { max-width: none; padding: 0; gap: 0; }
+  .sheet { box-shadow: none; border-radius: 0; padding: 0; margin: 0; page-break-after: always; break-after: page; }
+  .sheet:last-child { page-break-after: auto; break-after: auto; }
+  .sheet-item, .sheet-grid { break-inside: avoid; }
+  /* a sheet has a whole page to itself, so everything grows: easier to see, and room to write */
+  .sheets-page .sheet-title { font-size: 1.6rem; }
+  .sheets-page .sheet-name { font-size: 1rem; min-width: 190px; }
+  .sheets-page .sheet-how { font-size: 1.05rem; margin: 12px 0 22px; }
+  .sheets-page .sheet-grid { gap: 20px; }
+  .sheets-page .sheet-item { padding: 18px 8px; gap: 10px; }
+  .sheets-page .sheet-pic { font-size: 3rem; }
+  .sheets-page .sheet-word { font-size: 2.1rem; }
+  .sheets-page .word-bank { margin-bottom: 24px; padding: 12px 16px; }
+  .sheets-page .bank-chip { font-size: 1.7rem; padding: 4px 14px; }
+  .sheets-page .sound-box { font-size: 1.6rem; border-width: 3px; }
+  .sheets-page .match-col { gap: 34px; }
+  .sheets-page .dot-end { width: 13px; height: 13px; }
+  .sheets-page .tick-rows { gap: 28px; }
+  .sheets-page .tick-tag { width: 72px; height: 60px; font-size: 2rem; }
+  .sheets-page .tick-box { width: 30px; height: 30px; }
+  .sheets-page .gap-box, .sheets-page .write-line { border-bottom-width: 4px; }
+}
+
 @media print {
   body.poster-page { background: #fff; }
   .poster-page .scenery, .no-print { display: none !important; }

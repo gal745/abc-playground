@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Worksheets · ABC Playground</title>
+  <meta name="description" content="Printable worksheets for sound pairs and joining sounds.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✂️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page sheets-page">
+  <div class="scenery no-print" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main sheets-main">
+    <header class="days-top no-print">
+      <a class="round-btn" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title sheets-title">Worksheets</h1>
+      <span class="round-btn-spacer" aria-hidden="true"></span>
+    </header>
+    <p class="days-hint no-print">Six sheets for pencil work: sound pairs and joining sounds.
+      Each one prints on its own page.</p>
+    <div class="sheet-bar no-print">
+      <button id="printBtn" class="say-all"><span class="emoji">🖨️</span> Print all six</button>
+      <button id="shuffleBtn" class="soft-btn"><span class="emoji">🎲</span> Make new sheets</button>
+    </div>
+
+    <div id="sheets"></div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // Printable worksheets, built from the same word lists the games use. "Make new sheets"
+    // picks different words, so a fresh set can be printed each week.
+    (() => {
+      const $ = id => document.getElementById(id);
+      const el = UI.el;
+      const pairWords = DATA.soundPairs.flatMap(g => g.words.map(w => ({ ...w, p: g.p })));
+      const morePairWords = DATA.morePairs.flatMap(g => g.words.map(w => ({ ...w, p: g.p })));
+      const allPairs = DATA.soundPairs.map(g => g.p);
+
+      const sheet = (title, how, body, extra = '') =>
+        el('section', { class: `sheet ${extra}` },
+          el('header', { class: 'sheet-head' },
+            el('h2', { class: 'sheet-title', text: title }),
+            el('span', { class: 'sheet-name', text: 'Name:' })),
+          el('p', { class: 'sheet-how', text: how }),
+          body);
+
+      // the word with its pair in a box, or blanked out
+      function wordBits(w, { hide = false, plain = false } = {}) {
+        return el('span', { class: 'letter sheet-word' }, ...w.c.map(bit => {
+          if (bit.length === 1) return el('span', { text: bit });
+          if (hide && bit === w.p) return el('span', { class: 'gap-box' });
+          return el('span', { class: plain ? 'pair-ring' : 'pair-plain', text: bit });
+        }));
+      }
+
+      // never put the same picture on a sheet twice: foot and feet are both a foot
+      function pick(from, n) {
+        const seen = new Set();
+        return UI.shuffle(from).filter(w => !seen.has(w.e) && seen.add(w.e)).slice(0, n);
+      }
+
+      const picCard = w => el('span', { class: 'emoji sheet-pic', text: w.e });
+
+      // 1. circle the pair
+      function sheetCircle() {
+        const words = pick(pairWords, 12);
+        return sheet('Circle the sound pair', 'Two letters make one sound. Draw a circle around them.',
+          el('div', { class: 'sheet-grid four' }, ...words.map(w =>
+            el('div', { class: 'sheet-item' }, picCard(w), wordBits(w, { plain: true })))));
+      }
+
+      // 2. write the missing pair
+      function sheetMissing() {
+        const words = pick(pairWords, 10);
+        return sheet('Write the missing pair', 'Say the word. Which two letters are missing? Write them in the box.',
+          el('div', {},
+            el('div', { class: 'word-bank' }, el('span', { class: 'bank-label', text: 'Use these:' }),
+              ...allPairs.map(p => el('span', { class: 'bank-chip letter', text: p }))),
+            el('div', { class: 'sheet-grid five' }, ...words.map(w =>
+              el('div', { class: 'sheet-item' }, picCard(w), wordBits(w, { hide: true }))))));
+      }
+
+      // 3. draw a line from the word to the picture
+      function sheetMatch() {
+        const words = pick(pairWords, 8);
+        const pics = UI.shuffle(words);
+        return sheet('Draw a line to the picture', 'Read each word. Draw a line to the picture it matches.',
+          el('div', { class: 'match-sheet' },
+            el('div', { class: 'match-col' }, ...words.map(w =>
+              el('div', { class: 'match-row' }, wordBits(w), el('span', { class: 'dot-end' })))),
+            el('div', { class: 'match-col pics' }, ...pics.map(w =>
+              el('div', { class: 'match-row' }, el('span', { class: 'dot-end' }), picCard(w))))));
+      }
+
+      // 4. one box for every sound
+      function sheetBoxes() {
+        const words = pick(pairWords, 8);
+        return sheet('One box for each sound', 'Say the word slowly. Write one sound in each box — a pair of letters shares a box.',
+          el('div', { class: 'sheet-grid three' }, ...words.map((w, i) =>
+            el('div', { class: 'sheet-item wide' }, picCard(w),
+              el('span', { class: 'box-row' }, ...w.c.map(bit =>
+                el('span', { class: `sound-box${bit.length > 1 ? ' wide' : ''}${i === 0 ? ' shown' : ''}`, text: i === 0 ? bit : '' })))))),
+          'boxes-sheet');
+      }
+
+      // 5. tick the pictures with that sound
+      function sheetTick() {
+        const rows = DATA.soundPairs.map(g => {
+          const yes = UI.shuffle(g.words).slice(0, 2);
+          const no = UI.shuffle(pairWords.filter(w => w.p !== g.p)).slice(0, 2);
+          return { p: g.p, pics: UI.shuffle([...yes, ...no]) };
+        });
+        return sheet('Tick the ones you can hear it in', 'Say each picture out loud. Tick the box if you can hear the sound.',
+          el('div', { class: 'tick-rows' }, ...rows.map(r =>
+            el('div', { class: 'tick-row' },
+              el('span', { class: 'tick-tag letter', text: r.p }),
+              ...r.pics.map(w => el('span', { class: 'tick-pic' }, picCard(w), el('span', { class: 'tick-box' })))))));
+      }
+
+      // 6. joining sounds, the easy recap
+      function sheetJoin() {
+        const words = pick(DATA.cvc, 10);
+        return sheet('Join the sounds', 'Say each sound, then run them together. Write the word on the line.',
+          el('div', { class: 'sheet-grid two' }, ...words.map(w =>
+            el('div', { class: 'sheet-item join-item' }, picCard(w),
+              el('span', { class: 'letter sheet-word' },
+                ...[...w.w].flatMap((l, i) => (i ? [el('span', { class: 'plus', text: '+' }), el('span', { text: l })] : [el('span', { text: l })])),
+                el('span', { class: 'plus', text: '=' }),
+                el('span', { class: 'write-line' }))))));
+      }
+
+      function build() {
+        $('sheets').replaceChildren(
+          sheetCircle(), sheetMissing(), sheetMatch(), sheetBoxes(), sheetTick(), sheetJoin()
+        );
+      }
+
+      $('printBtn').addEventListener('click', () => window.print());
+      $('shuffleBtn').addEventListener('click', build);
+      build();
+    })();
+  </script>
+</body>
+</html>
