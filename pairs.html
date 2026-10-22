@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sound Pairs · ABC Playground</title>
+  <meta name="description" content="A poster of the letter pairs that make one sound: sh, ch, th, oo, ee.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page poster-page">
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main poster-main">
+    <header class="days-top">
+      <a class="round-btn no-print" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title pairs-title">Sound Pairs</h1>
+      <span class="round-btn-spacer no-print" aria-hidden="true"></span>
+    </header>
+    <p class="days-hint no-print">Two letters, one sound. Tap anything to hear it.
+      <button id="printBtn" class="link-btn">Print this poster</button></p>
+
+    <p class="pairs-lead">These two letters hold hands and say <b>one</b> sound.</p>
+
+    <section class="poster-sec">
+      <div id="pairs" class="pair-rows"></div>
+    </section>
+
+    <section class="poster-sec">
+      <h2 class="poster-h">More pairs to meet</h2>
+      <div id="more" class="pair-rows small"></div>
+    </section>
+
+    <p class="days-hint note no-print">Point at the pair and say its sound, then run your finger under the
+      whole word: <b>sh — o — p</b>. Count the sounds on fingers — <i>shop</i> has three, not four.</p>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // A poster of the letter pairs that make a single sound.
+    (() => {
+      const $ = id => document.getElementById(id);
+      let playing = null;
+
+      function mark(node) {
+        if (playing) playing.classList.remove('saying');
+        playing = node || null;
+        if (playing) playing.classList.add('saying');
+      }
+
+      // the pair's sound on its own, said twice
+      function sayPair(p, node) {
+        Sound.unlock();
+        mark(node);
+        Sound.say({ sound: p }, 200, { sound: p }).then(() => mark(null));
+      }
+
+      // each chunk of the word, then the whole word
+      function sayWord(word, node) {
+        Sound.unlock();
+        mark(node);
+        const parts = word.c.flatMap(bit => [{ sound: bit }, 120]);
+        parts.push(150, `${word.w}!`);
+        Sound.say(...parts).then(() => mark(null));
+      }
+
+      // a word with its pair picked out in colour
+      function wordText(word) {
+        return UI.el('span', { class: 'letter word-text' },
+          ...word.c.map(bit => UI.el('span', { class: bit.length > 1 ? 'pair-bit' : '', text: bit })));
+      }
+
+      function rows(groups, into) {
+        into.replaceChildren(...groups.map(g => {
+          const tag = UI.el('button', { class: 'pair-tag', 'aria-label': `${g.p}, one sound` },
+            UI.el('span', { class: 'letter', text: g.p }));
+          tag.addEventListener('click', () => sayPair(g.p, tag));
+          return UI.el('div', { class: 'pair-row' }, tag,
+            UI.el('div', { class: 'group-words' }, ...g.words.map(w => {
+              const card = UI.el('button', { class: 'word-card', 'aria-label': w.w },
+                UI.el('span', { class: 'emoji word-pic', text: w.e }),
+                wordText(w));
+              card.addEventListener('click', () => sayWord(w, card));
+              return card;
+            })));
+        }));
+      }
+
+      rows(DATA.soundPairs, $('pairs'));
+      rows(DATA.morePairs, $('more'));
+
+      $('printBtn').addEventListener('click', () => window.print());
+      document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
+    })();
+  </script>
+</body>
+</html>

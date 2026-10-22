@@ -455,6 +455,18 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 .join-row.together .letter-card { border-radius: 0; animation: none; }
 .join-row.together .letter-card:first-child { border-radius: 24px 0 0 24px; }
 .join-row.together .letter-card:last-child { border-radius: 0 24px 24px 0; }
+/* a pair of letters rides on one wider card: two letters, one sound */
+.join-row.long { gap: clamp(8px, 3vmin, 30px); }
+.join-row.long .letter-card { width: clamp(52px, 13vmin, 110px); font-size: clamp(2.1rem, 8.5vmin, 4.6rem); }
+.letter-card.pair-card {
+  width: auto; min-width: clamp(96px, 24vmin, 200px); aspect-ratio: auto; height: clamp(66px, 17vmin, 140px);
+  padding: 0 clamp(8px, 2vmin, 18px); position: relative;
+}
+.join-row.long .letter-card.pair-card { min-width: clamp(78px, 19vmin, 160px); height: clamp(52px, 13vmin, 110px); }
+.pair-card .pair-note {
+  position: absolute; left: 0; right: 0; bottom: 5px; font-size: clamp(.5rem, 1.5vmin, .75rem);
+  font-weight: 700; letter-spacing: .5px; opacity: .75; text-transform: uppercase;
+}
 .join-btn {
   display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px; border-radius: 999px;
   background: var(--c); color: #fff; font-weight: 700; font-size: clamp(1.05rem, 4vw, 1.5rem);
@@ -590,6 +602,20 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .word-pic { font-size: 1.7rem; }
 .word-text { font-size: 1.5rem; color: #2b2d42; letter-spacing: 1px; }
 .word-text .mid { color: #e8590c; }
+
+/* ---------- the sound-pairs poster (pairs.html) ---------- */
+.pairs-title { color: #1b7f79; }
+.pairs-lead { margin: 0; font-weight: 600; font-size: clamp(1rem, 3.6vw, 1.25rem); color: var(--soft-ink); }
+.pair-rows { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.pair-row { display: flex; align-items: center; gap: 10px; break-inside: avoid; }
+.pair-tag {
+  flex: none; width: clamp(56px, 14vw, 78px); height: clamp(50px, 12vw, 66px); border-radius: 16px;
+  background: #d6f3f0; color: #1b7f79; border: 3px solid #1b7f79;
+  display: grid; place-items: center; font-size: clamp(1.5rem, 6vw, 2.2rem);
+}
+.pair-tag:active { transform: translateY(3px); }
+.pair-rows.small .pair-tag { background: #eef6f5; border-color: #8fc2bf; color: #2a7f79; }
+.word-text .pair-bit { color: #1b7f79; }
 
 @media print {
   body.poster-page { background: #fff; }

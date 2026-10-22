@@ -91,8 +91,38 @@ const DATA = (() => {
   const cvc = parse(
     'cat 🐱, dog 🐶, pig 🐷, sun ☀️, bus 🚌, hat 🎩, bed 🛏️, box 📦, fox 🦊, ten 🔟, net 🥅, ' +
     'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴, ' +
-    'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️'
+    'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️, ' +
+    'bag 👜, ham 🍖, hug 🤗'
   );
+
+  // Two letters that hold hands and make ONE sound. Each word is written in the chunks it is
+  // read in, so sh-o-p is three sounds, not four. Only words that chunk cleanly belong here.
+  const chunked = list => list.split(',').map(s => {
+    const [bits, e] = s.trim().split(/\s+/);
+    return { c: bits.split('-'), w: bits.replace(/-/g, ''), e };
+  });
+  const pair = (p, list) => ({ p, words: chunked(list) });
+  const soundPairs = [
+    pair('sh', 'sh-i-p 🚢, sh-o-p 🏪, f-i-sh 🐟, d-i-sh 🍽️, sh-e-d 🏚️'),
+    pair('ch', 'ch-i-p 🍟, ch-i-ck 🐤, ch-o-p 🪓, ch-a-t 💬'),
+    pair('th', 'b-a-th 🛁, t-ee-th 🦷, th-r-ee 3️⃣, th-i-n-k 🤔'),
+    pair('oo', 'm-oo-n 🌙, b-oo-t 👢, b-oo-k 📖, f-oo-t 🦶, p-oo-l 🏊, b-r-oo-m 🧹'),
+    pair('ee', 'b-ee 🐝, t-r-ee 🌳, f-ee-t 🦶, g-r-ee-n 💚, sh-ee-p 🐑'),
+  ];
+  // A few more pairs to meet later on.
+  const morePairs = [
+    pair('ck', 'd-u-ck 🦆, s-o-ck 🧦, c-l-o-ck ⏰, r-o-ck 🪨'),
+    pair('ng', 'r-i-ng 💍, k-i-ng 🤴, s-o-ng 🎵, l-o-ng 📏'),
+    pair('ai', 'r-ai-n 🌧️, t-r-ai-n 🚂, s-n-ai-l 🐌, s-ai-l ⛵'),
+    pair('ar', 'c-ar 🚗, s-t-ar ⭐, sh-ar-k 🦈, f-ar-m 🚜'),
+    pair('or', 'f-or-k 🍴, c-or-n 🌽, h-or-n 📯, s-t-or-m ⛈️'),
+  ];
+
+  // How the voice should say each pair, in the same spelling style as the letter sounds.
+  const pairSounds = {
+    sh: 'shh', ch: 'chah', th: 'thah', oo: 'ooh', ee: 'ee',
+    ck: 'kah', ng: 'ng', ai: 'ay', ar: 'ar', or: 'or',
+  };
 
   // Two letters that make a word on their own: the first joining-up step, before c-a-t.
   // No pictures: these are little words you hear in a sentence, not things you can draw.
@@ -166,6 +196,7 @@ const DATA = (() => {
 
   return {
     letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels,
+    soundPairs, morePairs, pairSounds,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
 })();

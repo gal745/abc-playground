@@ -69,11 +69,12 @@ const Sound = (() => {
     return DATA.names[l];
   }
 
+  // `l` is a single letter, or a pair of letters that make one sound: sh, oo, ee…
   function soundText(l) {
     const mine = (Settings.get('spellings') || {})[l];
     if (mine) return mine;
     if (l === 'o' && accent() === 'us') return 'ah';
-    return DATA.sounds[l];
+    return DATA.sounds[l] || DATA.pairSounds[l] || l;
   }
 
   function speakOne(text) {

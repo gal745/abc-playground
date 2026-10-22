@@ -1,6 +1,6 @@
 # ABC Playground
 
-Fourteen short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Fifteen short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -19,12 +19,15 @@ No reading is needed: every instruction is spoken.
 | 🔎 Which Word? | Reading short rhyming words that look alike (cat, hat, bat; pan, pin, pen) |
 | 🎯 Middle Sound | Hearing the short vowel in the middle of a word (c**a**t, p**i**g) |
 | 🧲 Join the Sounds | Blending letters into a word: a + t → at, c + a + t → cat |
+| 🤝 Sound Pairs | Two letters that make one sound: sh, ch, th, oo, ee (then ck, ng, ai, ar, or) |
 
 Every game has **5 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 
 `poster.html` is a wall poster of the short sounds and how letters join up — the five short vowels with their keyword, nine two-letter words, and twenty-five three-letter words grouped by vowel. Everything is tappable to hear it sounded out, and it prints onto one A4 page. Linked from the home screen.
+
+`pairs.html` is the second poster: the letter pairs that make a single sound, each with its words, plus five more pairs to meet later. Also one A4 page.
 
 `days.html` is a quiet page away from the games: the seven days of the week in order, each said aloud when tapped, plus a button that says them all. It is linked from the home screen.
 

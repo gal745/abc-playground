@@ -44,6 +44,12 @@
 
     <div id="soundGrid" class="sound-grid"></div>
 
+    <div id="pairWrap" class="pair-check">
+      <h2 class="check-sub">Sound pairs</h2>
+      <p class="days-hint">Two letters, one sound. These can be changed in the same way.</p>
+      <div id="pairGrid" class="sound-grid"></div>
+    </div>
+
     <div id="fixPanel" class="fix-panel" hidden>
       <p class="fix-title">How should <b id="fixLetter">p</b> sound?</p>
       <div class="fix-row">
@@ -90,16 +96,23 @@
       const spelling = l => (mode === 'sound' ? Sound.soundText(l) : Sound.letterName(l));
       const mine = () => Settings.get('spellings') || {};
 
+      function tileFor(l, changed) {
+        const tile = UI.el('button', { class: `sound-tile${changed[l] ? ' changed' : ''}`, 'aria-label': `Sound ${l}` },
+          UI.el('span', { class: 'letter', text: l }),
+          UI.el('span', { class: 'sound-spell', text: spelling(l) }));
+        tile.addEventListener('click', () => play(l, tile));
+        return tile;
+      }
+
       function render() {
         const changed = mine();
-        tiles = DATA.letters.map(l => {
-          const tile = UI.el('button', { class: `sound-tile${changed[l] ? ' changed' : ''}`, 'aria-label': `Letter ${l}` },
-            UI.el('span', { class: 'letter', text: l }),
-            UI.el('span', { class: 'sound-spell', text: spelling(l) }));
-          tile.addEventListener('click', () => play(l, tile));
-          return tile;
-        });
+        tiles = DATA.letters.map(l => tileFor(l, changed));
         $('soundGrid').replaceChildren(...tiles);
+        // the letter pairs have one sound each, but no letter name
+        const pairTiles = mode === 'sound' ? Object.keys(DATA.pairSounds).map(p => tileFor(p, changed)) : [];
+        $('pairGrid').replaceChildren(...pairTiles);
+        $('pairWrap').hidden = !pairTiles.length;
+        tiles = tiles.concat(pairTiles);
       }
 
       function mark(tile) {
@@ -118,6 +131,12 @@
       // badly, a grown-up can hear the alternatives and pick the one that sounds right.
       const STEM = { a: 'a', b: 'b', c: 'k', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h', i: 'i', j: 'j', k: 'k', l: 'l', m: 'm', n: 'n', o: 'o', p: 'p', q: 'kw', r: 'r', s: 's', t: 't', u: 'u', v: 'v', w: 'w', x: 'ks', y: 'y', z: 'z' };
       const VOWEL_IDEAS = { a: ['ah', 'aa', 'a'], e: ['eh', 'e'], i: ['ih', 'i'], o: ['aw', 'o', 'oh'], u: ['uh', 'u'] };
+      const PAIR_IDEAS = {
+        sh: ['shh', 'shah', 'sh'], ch: ['chah', 'chuh', 'ch'], th: ['thah', 'thuh', 'th'],
+        oo: ['ooh', 'oo', 'ooo'], ee: ['ee', 'eee', 'ea'], ck: ['kah', 'kuh', 'k'],
+        ng: ['ng', 'ung', 'ing'], ai: ['ay', 'ai', 'ayh'], ar: ['ar', 'are', 'aah'], or: ['or', 'ore', 'aw'],
+      };
+      const standard = l => DATA.sounds[l] || DATA.pairSounds[l];
       let fixing = null;
 
       // sounds you can hold on and hum or hiss, so "sss" is worth offering for them
@@ -125,9 +144,9 @@
 
       function ideas(l) {
         const s = STEM[l];
-        const list = VOWEL_IDEAS[l]
+        const list = PAIR_IDEAS[l] || VOWEL_IDEAS[l]
           || [`${s}ah`, `${s}uh`, `${s}er`, ...(HELD.includes(l) ? [`${s}${s}${s}`] : [])];
-        return [...new Set([DATA.sounds[l], ...list])].slice(0, 5);
+        return [...new Set([standard(l), ...list])].slice(0, 5);
       }
 
       function openFix(l) {
@@ -147,7 +166,7 @@
         if (!fixing) return;
         const text = $('fixInput').value.trim().slice(0, 12);
         const all = { ...mine() };
-        if (!text || text === DATA.sounds[fixing]) delete all[fixing]; else all[fixing] = text;
+        if (!text || text === standard(fixing)) delete all[fixing]; else all[fixing] = text;
         Settings.set('spellings', all);
         const letter = fixing;
         render();
@@ -187,7 +206,8 @@
       $('playAll').addEventListener('click', () => {
         Sound.unlock();
         const parts = [];
-        DATA.letters.forEach((l, i) => parts.push(() => mark(tiles[i]), speaks(l), 320));
+        const all = DATA.letters.concat(mode === 'sound' ? Object.keys(DATA.pairSounds) : []);
+        all.forEach((l, i) => parts.push(() => mark(tiles[i]), speaks(l), 320));
         parts.push(() => mark(null));
         Sound.say(...parts);
       });
