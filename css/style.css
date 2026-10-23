@@ -600,6 +600,15 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
   display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
 .word-pic { font-size: 1.7rem; }
+/* The picture waits behind a cover, so the word has to be read before it can be checked.
+   A printed poster cannot be tapped, so there the pictures always show. */
+.pic-slot { position: relative; display: grid; place-items: center; }
+.pic-cover {
+  position: absolute; inset: -3px -6px; border-radius: 10px; background: #f0f2f8;
+  border: 2px dashed #c3c7d8; color: #a9adc2; font-weight: 700; font-size: 1.1rem;
+  display: grid; place-items: center; transition: opacity .3s;
+}
+.word-card.open .pic-cover, body.pics-shown .pic-cover { opacity: 0; pointer-events: none; }
 .word-text { font-size: 1.5rem; color: #2b2d42; letter-spacing: 1px; }
 .word-text .mid { color: #e8590c; }
 
@@ -706,6 +715,7 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
   .poster-page .days-top { justify-content: center; } /* the home button is gone in print */
   .poster-h { text-shadow: none; }
   .join-card, .word-card, .vowel-tile { box-shadow: none; border: 2px solid #d7d9e6; }
+  .pic-cover { display: none !important; }
   .vowel-tile { border-color: #ffd166; }
   .poster-sec { page-break-inside: avoid; }
 }

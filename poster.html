@@ -28,7 +28,8 @@
       <span class="round-btn-spacer no-print" aria-hidden="true"></span>
     </header>
     <p class="days-hint no-print">Tap anything to hear it sounded out, then said as a word.
-      <button id="printBtn" class="link-btn">Print this poster</button></p>
+      <button id="printBtn" class="link-btn">Print this poster</button>
+      · <button id="picsBtn" class="link-btn">Show all the pictures</button></p>
 
     <section class="poster-sec">
       <h2 class="poster-h">The five short sounds</h2>
@@ -76,6 +77,13 @@
         Sound.say(...parts).then(() => mark(null));
       }
 
+      // The picture hides behind a cover so the word has to be read first; tapping lifts it.
+      function coveredPic(e) {
+        return UI.el('span', { class: 'pic-slot' },
+          UI.el('span', { class: 'emoji word-pic', text: e }),
+          UI.el('span', { class: 'pic-cover', 'aria-hidden': 'true', text: '?' }));
+      }
+
       function sayVowel(v, node) {
         Sound.unlock();
         mark(node);
@@ -120,14 +128,19 @@
           UI.el('span', { class: 'group-tag letter', text: v }),
           UI.el('div', { class: 'group-words' }, ...words.map(x => {
             const card = UI.el('button', { class: 'word-card', 'aria-label': x.w },
-              UI.el('span', { class: 'emoji word-pic', text: x.e }),
+              coveredPic(x.e),
               UI.el('span', { class: 'letter word-text' },
                 ...[...x.w].map(l => UI.el('span', { class: l === v ? 'mid' : '', text: l }))));
-            card.addEventListener('click', () => sayWord(x.w, card));
+            card.addEventListener('click', () => { card.classList.add('open'); sayWord(x.w, card); });
             return card;
           })));
       }).filter(Boolean));
 
+      $('picsBtn').addEventListener('click', () => {
+        const shown = document.body.classList.toggle('pics-shown');
+        if (!shown) document.querySelectorAll('.word-card.open').forEach(c => c.classList.remove('open'));
+        $('picsBtn').textContent = shown ? 'Hide the pictures again' : 'Show all the pictures';
+      });
       $('printBtn').addEventListener('click', () => window.print());
       document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
     })();

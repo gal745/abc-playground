@@ -28,7 +28,8 @@
       <span class="round-btn-spacer no-print" aria-hidden="true"></span>
     </header>
     <p class="days-hint no-print">Two letters, one sound. Tap anything to hear it.
-      <button id="printBtn" class="link-btn">Print this poster</button></p>
+      <button id="printBtn" class="link-btn">Print this poster</button>
+      · <button id="picsBtn" class="link-btn">Show all the pictures</button></p>
 
     <p class="pairs-lead">These two letters hold hands and say <b>one</b> sound.</p>
 
@@ -91,9 +92,11 @@
           return UI.el('div', { class: 'pair-row' }, tag,
             UI.el('div', { class: 'group-words' }, ...g.words.map(w => {
               const card = UI.el('button', { class: 'word-card', 'aria-label': w.w },
-                UI.el('span', { class: 'emoji word-pic', text: w.e }),
+                UI.el('span', { class: 'pic-slot' },
+                  UI.el('span', { class: 'emoji word-pic', text: w.e }),
+                  UI.el('span', { class: 'pic-cover', 'aria-hidden': 'true', text: '?' })),
                 wordText(w));
-              card.addEventListener('click', () => sayWord(w, card));
+              card.addEventListener('click', () => { card.classList.add('open'); sayWord(w, card); });
               return card;
             })));
         }));
@@ -102,6 +105,11 @@
       rows(DATA.soundPairs, $('pairs'));
       rows(DATA.morePairs, $('more'));
 
+      $('picsBtn').addEventListener('click', () => {
+        const shown = document.body.classList.toggle('pics-shown');
+        if (!shown) document.querySelectorAll('.word-card.open').forEach(c => c.classList.remove('open'));
+        $('picsBtn').textContent = shown ? 'Hide the pictures again' : 'Show all the pictures';
+      });
       $('printBtn').addEventListener('click', () => window.print());
       document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
     })();
