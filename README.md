@@ -30,7 +30,7 @@ Every game has **5 levels**. Finishing a level unlocks the next one, and the dot
 
 `pairs.html` is the second poster: the letter pairs that make a single sound, each with its words, plus five more pairs to meet later. Also one A4 page.
 
-`sheets.html` is six printable worksheets for pencil work — circle the pair, write the missing pair, draw a line to the picture, one box per sound, tick what you can hear, and join the sounds. Each prints on its own page, and **Make new sheets** picks different words so a fresh set can be printed each week.
+`sheets.html` is seven printable worksheets for pencil work — circle the pair, write the missing pair, draw a line to the picture, one box per sound, tick what you can hear, and two sheets of joining letters (the second starts with two-sound words and uses different words from the first). Each prints on its own page, and **Make new sheets** picks different words so a fresh set can be printed each week.
 
 `days.html` is a quiet page away from the games: the seven days of the week in order, each said aloud when tapped, plus a button that says them all. It is linked from the home screen.
 

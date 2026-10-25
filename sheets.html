@@ -26,10 +26,10 @@
       <h1 class="days-title sheets-title">Worksheets</h1>
       <span class="round-btn-spacer" aria-hidden="true"></span>
     </header>
-    <p class="days-hint no-print">Six sheets for pencil work: sound pairs and joining sounds.
+    <p class="days-hint no-print">Seven sheets for pencil work: sound pairs and joining letters.
       Each one prints on its own page.</p>
     <div class="sheet-bar no-print">
-      <button id="printBtn" class="say-all"><span class="emoji">🖨️</span> Print all six</button>
+      <button id="printBtn" class="say-all"><span class="emoji">🖨️</span> Print all seven</button>
       <button id="shuffleBtn" class="soft-btn"><span class="emoji">🎲</span> Make new sheets</button>
     </div>
 
@@ -131,21 +131,41 @@
               ...r.pics.map(w => el('span', { class: 'tick-pic' }, picCard(w), el('span', { class: 'tick-box' })))))));
       }
 
+      // c + a + t = ____
+      function sum(word, withPic) {
+        const bits = [...word.w].flatMap((l, i) =>
+          (i ? [el('span', { class: 'plus', text: '+' }), el('span', { text: l })] : [el('span', { text: l })]));
+        return el('div', { class: `sheet-item join-item${withPic ? '' : ' no-pic'}` },
+          withPic ? picCard(word) : null,
+          el('span', { class: 'letter sheet-word' }, ...bits,
+            el('span', { class: 'plus', text: '=' }), el('span', { class: 'write-line' })));
+      }
+
       // 6. joining sounds, the easy recap
+      let joinUsed = [];
       function sheetJoin() {
         const words = pick(DATA.cvc, 10);
+        joinUsed = words.map(w => w.w);
         return sheet('Join the sounds', 'Say each sound, then run them together. Write the word on the line.',
-          el('div', { class: 'sheet-grid two' }, ...words.map(w =>
-            el('div', { class: 'sheet-item join-item' }, picCard(w),
-              el('span', { class: 'letter sheet-word' },
-                ...[...w.w].flatMap((l, i) => (i ? [el('span', { class: 'plus', text: '+' }), el('span', { text: l })] : [el('span', { text: l })])),
-                el('span', { class: 'plus', text: '=' }),
-                el('span', { class: 'write-line' }))))));
+          el('div', { class: 'sheet-grid two' }, ...words.map(w => sum(w, true))));
+      }
+
+      // 7. more joining, starting with the two-letter words. Different words from sheet 6,
+      // so the two sheets together cover more of the list.
+      function sheetJoinMore() {
+        const twos = UI.shuffle(DATA.joins).slice(0, 6).map(w => ({ w }));
+        const threes = pick(DATA.cvc.filter(x => !joinUsed.includes(x.w)), 12);
+        return sheet('Joining letters: more practice',
+          'Two sounds first, then three. Say each sound, run them together, and write the word.',
+          el('div', {},
+            el('div', { class: 'sheet-grid three-up' }, ...twos.map(w => sum(w, false))),
+            el('p', { class: 'sheet-sub', text: 'Now three sounds:' }),
+            el('div', { class: 'sheet-grid two' }, ...threes.map(w => sum(w, true)))));
       }
 
       function build() {
         $('sheets').replaceChildren(
-          sheetCircle(), sheetMissing(), sheetMatch(), sheetBoxes(), sheetTick(), sheetJoin()
+          sheetCircle(), sheetMissing(), sheetMatch(), sheetBoxes(), sheetTick(), sheetJoin(), sheetJoinMore()
         );
       }
 

@@ -650,6 +650,7 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
 .sheet-grid { display: grid; gap: clamp(8px, 2vw, 16px); }
 .sheet-grid.two { grid-template-columns: repeat(2, 1fr); }
 .sheet-grid.three { grid-template-columns: repeat(2, 1fr); }
+.sheet-grid.three-up { grid-template-columns: repeat(3, 1fr); }
 .sheet-grid.four { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
 .sheet-grid.five { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
 .sheet-item {
@@ -657,6 +658,8 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
   display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
 .sheet-item.wide, .sheet-item.join-item { flex-direction: row; justify-content: center; gap: 12px; padding: 10px; }
+.sheet-item.join-item.no-pic { padding: 12px 6px; }
+.sheet-sub { margin: 16px 0 10px; font-weight: 700; color: var(--soft-ink); }
 .sheet-pic { font-size: clamp(1.8rem, 6vw, 2.4rem); }
 .sheet-word { font-size: clamp(1.3rem, 5vw, 1.7rem); letter-spacing: 1px; white-space: nowrap; }
 .sheet-word .plus { color: #b9bbcc; margin: 0 3px; font-weight: 700; }
