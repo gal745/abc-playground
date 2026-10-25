@@ -124,6 +124,9 @@ const DATA = (() => {
     ck: 'kah', ng: 'ng', ai: 'ay', ar: 'ar', or: 'or',
   };
 
+  // Easy animal words, for the caterpillar.
+  const animals = 'cat dog pig bat rat hen bug fox'.split(' ');
+
   // Two letters that make a word on their own: the first joining-up step, before c-a-t.
   // No pictures: these are little words you hear in a sentence, not things you can draw.
   const joins = 'am an at if in it on ox up us'.split(' ');
@@ -196,7 +199,7 @@ const DATA = (() => {
   };
 
   return {
-    letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels,
+    letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels, animals,
     soundPairs, morePairs, pairSounds,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
