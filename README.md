@@ -48,6 +48,11 @@ Open `index.html` and turn the sound on. On a computer, **Microsoft Edge** has t
 
 On a phone, once the games are online, use "Add to Home Screen" to get an app icon.
 
+If a letter on screen shows as a word (an *e* as *and*, an *i* as *in*), the browser is translating the page.
+Every page asks not to be translated (`translate="no"`, `notranslate`) and every letter on screen is marked again
+individually, but a browser told to always translate English overrides that: choose **Never translate this site** in
+the translate menu. When a translation is detected, a warning bar explains this on screen.
+
 ## Grown-ups corner
 
 Press and hold the ⚙️ button on the home screen for one second. There you can:

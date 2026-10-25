@@ -14,6 +14,9 @@ const UI = (() => {
       else node.setAttribute(k, v);
     }
     for (const c of children.flat()) if (c != null && c !== '') node.append(c);
+    // A letter must never be translated. A browser translating the page turns the letter
+    // "e" into the word "and", which is worse than useless in a phonics game.
+    if (typeof props.class === 'string' && props.class.includes('letter')) node.translate = false;
     return node;
   }
 
@@ -116,6 +119,24 @@ const UI = (() => {
     };
     confettiFrame = requestAnimationFrame(frame);
   }
+
+  // Chrome marks the page when it translates it. Say so plainly, because every letter on
+  // screen is then wrong and a grown-up would have no way of knowing why.
+  function watchForTranslation() {
+    const html = document.documentElement;
+    let shown = false;
+    const check = () => {
+      if (shown || !/\btranslated-(ltr|rtl)\b/.test(html.className)) return;
+      shown = true;
+      const bar = el('div', { class: 'translate-warning' },
+        el('span', { text: 'Your browser is translating this page, so the letters on screen are being changed. Open the translate menu in the address bar and choose "Never translate this site".' }),
+        el('button', { class: 'link-btn', onclick: () => bar.remove() }, 'Hide'));
+      document.body.append(bar);
+    };
+    check();
+    new MutationObserver(check).observe(html, { attributes: true, attributeFilter: ['class'] });
+  }
+  document.addEventListener('DOMContentLoaded', watchForTranslation);
 
   return {
     COLORS, BALLOON_COLORS, PRAISE,
