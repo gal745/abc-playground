@@ -47,6 +47,12 @@
       <div id="threes" class="word-groups"></div>
     </section>
 
+    <section class="poster-sec page-two">
+      <h2 class="poster-h">Four letters join</h2>
+      <p class="poster-note">Still one sound for each letter — just one more of them.</p>
+      <div id="fours" class="group-words full"></div>
+    </section>
+
     <p class="days-hint note no-print">Say each sound on its own, then slide your finger under the word
       and run the sounds together. Stretch the middle sound: <b>c — aaa — t</b>.</p>
   </main>
@@ -122,7 +128,7 @@
       const keywordPics = DATA.shortVowels.map(v => v.e);
 
       $('threes').replaceChildren(...VOWELS.map(v => {
-        const words = DATA.cvc.filter(x => x.w[1] === v && !keywordPics.includes(x.e)).slice(0, 6);
+        const words = DATA.cvc.filter(x => x.w[1] === v && !keywordPics.includes(x.e)).slice(0, 8);
         if (!words.length) return null;
         return UI.el('div', { class: 'word-group' },
           UI.el('span', { class: 'group-tag letter', text: v }),
@@ -141,6 +147,17 @@
         if (!shown) document.querySelectorAll('.word-card.open').forEach(c => c.classList.remove('open'));
         $('picsBtn').textContent = shown ? 'Hide the pictures again' : 'Show all the pictures';
       });
+      // four-letter words: one sound per letter still, so the same card works
+      $('fours').replaceChildren(...DATA.cvcc.map(x => {
+        const vowel = [...x.w].find(l => VOWELS.includes(l));
+        const card = UI.el('button', { class: 'word-card', 'aria-label': x.w },
+          coveredPic(x.e),
+          UI.el('span', { class: 'letter word-text' },
+            ...[...x.w].map(l => UI.el('span', { class: l === vowel ? 'mid' : '', text: l }))));
+        card.addEventListener('click', () => { card.classList.add('open'); sayWord(x.w, card); });
+        return card;
+      }));
+
       $('printBtn').addEventListener('click', () => window.print());
       document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
     })();

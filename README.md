@@ -26,7 +26,7 @@ Every game has **5 levels**. Finishing a level unlocks the next one, and the dot
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 
-`poster.html` is a wall poster of the short sounds and how letters join up — the five short vowels with their keyword, nine two-letter words, and twenty-five three-letter words grouped by vowel. Everything is tappable to hear it sounded out, and it prints onto one A4 page. Linked from the home screen.
+`poster.html` is a wall poster of the short sounds and how letters join up — the five short vowels with their keyword, ten two-letter words, thirty-eight three-letter words grouped by vowel, and seventeen four-letter ones. Every word hides its picture until it is tapped, so the word has to be read first; tapping also sounds it out. It prints on two A4 pages, the four-letter words on the second. Linked from the home screen.
 
 `pairs.html` is the second poster: the letter pairs that make a single sound, each with its words, plus five more pairs to meet later. Also one A4 page.
 

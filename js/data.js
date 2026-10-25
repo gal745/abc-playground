@@ -92,7 +92,7 @@ const DATA = (() => {
     'cat 🐱, dog 🐶, pig 🐷, sun ☀️, bus 🚌, hat 🎩, bed 🛏️, box 📦, fox 🦊, ten 🔟, net 🥅, ' +
     'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴, ' +
     'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️, ' +
-    'bag 👜, ham 🍖, hug 🤗'
+    'bag 👜, ham 🍖, hug 🤗, man 👨, tap 🚰, nap 😴, kid 🧒, win 🏆, wet 💦, run 🏃, cut ✂️, bud 🌱, hot 🔥'
   );
 
   // Two letters that hold hands and make ONE sound. Each word is written in the chunks it is
@@ -126,7 +126,7 @@ const DATA = (() => {
 
   // Two letters that make a word on their own: the first joining-up step, before c-a-t.
   // No pictures: these are little words you hear in a sentence, not things you can draw.
-  const joins = 'am an at if in it on up us'.split(' ');
+  const joins = 'am an at if in it on ox up us'.split(' ');
 
   // Short vowels with the word they are usually taught with.
   const shortVowels = parse('a 🍎, e 🥚, i 🐛, o 🐙, u ☂️').map((x, i) => ({
@@ -161,7 +161,8 @@ const DATA = (() => {
 
   // Four-letter words with blends, for the later Build a Word levels.
   const cvcc = parse(
-    'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 🪔, swim 🏊'
+    'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 🪔, swim 🏊, ' +
+    'stop 🛑, drop 💧, mask 😷, swan 🦢, grin 😁'
   );
 
   // Days of the week, in order. Every name ends in "day", so that part is filled in already
