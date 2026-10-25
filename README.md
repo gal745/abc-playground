@@ -5,7 +5,7 @@ No reading is needed: every instruction is spoken.
 
 | Game | Skill |
 | --- | --- |
-| 🎈 Balloon Pop | Recognising letters and their sounds |
+| 🎈 Balloon Pop | Recognising letters and their sounds, then the pairs sh ch th oo ee (7 levels) |
 | 🐶 First Sounds | Hearing the first sound in a word |
 | 🃏 Letter Match | Matching capital and small letters |
 | 🎵 Rhyme Time | Hearing rhymes |
@@ -22,7 +22,7 @@ No reading is needed: every instruction is spoken.
 | 🤝 Sound Pairs | Two letters that make one sound: sh, ch, th, oo, ee (then ck, ng, ai, ar, or) |
 | 🧩 Finish the Word | Choosing the pair a word is missing: __ip, m__n, gr__n |
 
-Every game has **5 levels**. Finishing a level unlocks the next one, and the dots on each game's button show progress.
+Every game has **5 levels**, except Balloon Pop, which has 7. Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 

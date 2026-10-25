@@ -150,7 +150,7 @@ const App = (() => {
         'aria-label': `Level ${n}${open ? '' : ', locked'}${finished ? ', finished' : ''}`,
       },
       UI.el('span', { class: 'level-num', text: String(n) }),
-      UI.el('span', { class: 'level-stars emoji', text: '⭐'.repeat(n) }),
+      UI.el('span', { class: `level-stars emoji${n > 5 ? ' many' : ''}`, style: `--stars:${n}`, text: '⭐'.repeat(n) }),
       UI.el('span', { class: 'level-desc', text: g.levels[i] }),
       !open ? UI.el('span', { class: 'level-badge emoji', text: '🔒' })
         : finished ? UI.el('span', { class: 'level-badge emoji', text: '🏅' }) : null);

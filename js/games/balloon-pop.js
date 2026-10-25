@@ -4,20 +4,23 @@ App.register({
   name: 'Balloon Pop',
   emoji: '🎈',
   color: '#ff6b6b',
-  levels: ['Letters with pictures', 'Tricky look-alike letters', 'Listen for the sound', 'Big & little letters', 'Listen: big & little'],
+  levels: ['Letters with pictures', 'Tricky look-alike letters', 'Listen for the sound', 'Big & little letters', 'Listen: big & little', 'Sound pairs: sh ch th oo ee', 'Listen for the pair'],
 
   create(stage, api) {
     const L = api.level;
-    const GOAL = [5, 6, 6, 7, 7][L - 1];
-    const CROSS = [[11, 14], [9, 11], [9, 11], [9, 11], [8, 10]][L - 1]; // seconds for a balloon to float up
-    const GAP = [1500, 1300, 1300, 1200, 1100][L - 1];                   // ms between new balloons
-    const MAX = [4, 5, 5, 6, 6][L - 1];
+    const GOAL = [5, 6, 6, 7, 7, 6, 6][L - 1];
+    // seconds for a balloon to float up
+    const CROSS = [[11, 14], [9, 11], [9, 11], [9, 11], [8, 10], [10, 12], [9, 11]][L - 1];
+    const GAP = [1500, 1300, 1300, 1200, 1100, 1400, 1300][L - 1]; // ms between new balloons
+    const MAX = [4, 5, 5, 6, 6, 5, 5][L - 1];
     const withPicture = L === 1;
     const lookAlikes = L === 2 || L === 5;
-    const listenOnly = L === 3 || L === 5;
-    const mixedCase = L >= 4; // balloons show capital and small letters
+    const pairsLevel = L >= 6;               // balloons carry sh, ch, th, oo and ee
+    const listenOnly = L === 3 || L === 5 || L === 7;
+    const mixedCase = L === 4 || L === 5;    // balloons show capital and small letters
 
-    const letters = UI.activeLetters();
+    // the pair levels ignore the chosen letters: a pair is its own sound
+    const letters = pairsLevel ? DATA.soundPairs.map(g => g.p) : UI.activeLetters();
     const balloons = new Set();
     let target = null;
     let found = 0;
@@ -38,6 +41,10 @@ App.register({
 
     function announce() {
       if (!target) return;
+      if (pairsLevel) {
+        return Sound.say(listenOnly ? 'Listen carefully!' : 'Two letters, one sound!', 200,
+          'Pop the balloons that say', { sound: target }, 300, { sound: target });
+      }
       const name = Sound.letterName(target);
       if (listenOnly) {
         return Sound.say('Listen carefully!', 150,
@@ -100,9 +107,9 @@ App.register({
       const color = UI.pick(UI.BALLOON_COLORS);
       const shown = face(letter);
       const node = UI.el('button', {
-        class: 'balloon',
+        class: `balloon${letter.length > 1 ? ' pair' : ''}`,
         style: `--bc:${color};--size:${size}px;width:${size}px;height:${height}px`,
-        'aria-label': `Balloon, letter ${shown}`,
+        'aria-label': letter.length > 1 ? `Balloon, ${shown}` : `Balloon, letter ${shown}`,
       }, UI.el('span', { class: 'balloon-body' }, UI.el('span', { class: 'letter', text: shown })));
 
       const laneWidth = w / laneCount;
@@ -186,7 +193,7 @@ App.register({
         Sound.sfx('wrong');
         UI.replayClass(b.node.firstChild, 'wobble');
         if (busy) return;
-        if (listenOnly) Sound.say('Oops! That one says', { sound: b.letter }, 250, 'Listen...', { sound: target });
+        if (listenOnly || pairsLevel) Sound.say('Oops! That one says', { sound: b.letter }, 250, 'Listen...', { sound: target });
         else Sound.say(`Oops! That's ${Sound.letterName(b.letter)}.`, 150, `Can you find ${Sound.letterName(target)}?`);
       }
     }

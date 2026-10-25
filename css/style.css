@@ -224,7 +224,9 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 }
 .level-card:active { transform: translateY(5px); box-shadow: 0 4px 0 var(--c); }
 .level-num { font-weight: 700; font-size: clamp(2.6rem, 11vmin, 5.5rem); line-height: 1; color: var(--c); }
-.level-stars { font-size: clamp(.8rem, 3.6vmin, 1.8rem); letter-spacing: 1px; white-space: nowrap; }
+.level-stars { font-size: clamp(.8rem, 3.6vmin, 1.8rem); letter-spacing: 1px; white-space: nowrap; max-width: 100%; }
+/* past five levels the stars shrink, so the row still fits inside its card */
+.level-stars.many { font-size: min(clamp(.8rem, 3.6vmin, 1.8rem), calc(34vmin / var(--stars, 5) * .62)); }
 .level-desc { font-size: clamp(.7rem, 2.2vmin, 1rem); color: var(--soft-ink); text-align: center; line-height: 1.2; }
 .level-badge {
   position: absolute; top: -14px; right: -12px; width: clamp(34px, 9vmin, 52px); aspect-ratio: 1; border-radius: 50%; background: #fff;
@@ -330,6 +332,7 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
   border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 11px solid var(--bc);
 }
 .balloon .letter { color: #fff; font-size: calc(var(--size) * .58); text-shadow: 0 3px 0 rgba(0, 0, 0, .22); margin-top: -8%; }
+.balloon.pair .letter { font-size: calc(var(--size) * .36); letter-spacing: -1px; } /* two letters have to fit */
 .balloon.popped .balloon-body { animation: popped .35s forwards; }
 .balloon.popped::after { opacity: 0; }
 .spark {
