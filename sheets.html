@@ -26,10 +26,10 @@
       <h1 class="days-title sheets-title">Worksheets</h1>
       <span class="round-btn-spacer" aria-hidden="true"></span>
     </header>
-    <p class="days-hint no-print">Seven sheets for pencil work: sound pairs and joining letters.
+    <p class="days-hint no-print">Eight sheets for pencil work: sound pairs and joining letters.
       Each one prints on its own page.</p>
     <div class="sheet-bar no-print">
-      <button id="printBtn" class="say-all"><span class="emoji">🖨️</span> Print all seven</button>
+      <button id="printBtn" class="say-all"><span class="emoji">🖨️</span> Print all eight</button>
       <button id="shuffleBtn" class="soft-btn"><span class="emoji">🎲</span> Make new sheets</button>
     </div>
 
@@ -141,20 +141,26 @@
             el('span', { class: 'plus', text: '=' }), el('span', { class: 'write-line' })));
       }
 
-      // 6. joining sounds, the easy recap
+      // 6, 7 and 8 are all joining practice, and between them they work through the whole
+      // word list rather than repeating: each sheet takes words the ones before it did not.
       let joinUsed = [];
+      function freshWords(n) {
+        const left = DATA.cvc.filter(x => !joinUsed.includes(x.w));
+        const words = pick(left.length >= n ? left : DATA.cvc, n);
+        joinUsed = joinUsed.concat(words.map(w => w.w));
+        return words;
+      }
+
       function sheetJoin() {
-        const words = pick(DATA.cvc, 10);
-        joinUsed = words.map(w => w.w);
         return sheet('Join the sounds', 'Say each sound, then run them together. Write the word on the line.',
-          el('div', { class: 'sheet-grid two' }, ...words.map(w => sum(w, true))));
+          el('div', { class: 'sheet-grid two' }, ...freshWords(10).map(w => sum(w, true))));
       }
 
       // 7. more joining, starting with the two-letter words. Different words from sheet 6,
       // so the two sheets together cover more of the list.
       function sheetJoinMore() {
         const twos = UI.shuffle(DATA.joins).slice(0, 6).map(w => ({ w }));
-        const threes = pick(DATA.cvc.filter(x => !joinUsed.includes(x.w)), 12);
+        const threes = freshWords(12);
         return sheet('Joining letters: more practice',
           'Two sounds first, then three. Say each sound, run them together, and write the word.',
           el('div', {},
@@ -163,9 +169,22 @@
             el('div', { class: 'sheet-grid two' }, ...threes.map(w => sum(w, true)))));
       }
 
+      // 8. more joining again, ending with a few four-sound words to stretch into
+      function sheetJoinLonger() {
+        const threes = freshWords(10);
+        const fours = UI.shuffle(DATA.cvcc).slice(0, 4);
+        return sheet('Joining letters: even more',
+          'Same again. Say each sound, run them together, and write the word.',
+          el('div', {},
+            el('div', { class: 'sheet-grid two' }, ...threes.map(w => sum(w, true))),
+            el('p', { class: 'sheet-sub', text: 'Ready for four sounds?' }),
+            el('div', { class: 'sheet-grid two' }, ...fours.map(w => sum(w, true)))));
+      }
+
       function build() {
+        joinUsed = [];
         $('sheets').replaceChildren(
-          sheetCircle(), sheetMissing(), sheetMatch(), sheetBoxes(), sheetTick(), sheetJoin(), sheetJoinMore()
+          sheetCircle(), sheetMissing(), sheetMatch(), sheetBoxes(), sheetTick(), sheetJoin(), sheetJoinMore(), sheetJoinLonger()
         );
       }
 
