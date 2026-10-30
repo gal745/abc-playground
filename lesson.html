@@ -5,7 +5,7 @@
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Today's Lesson · ABC Playground</title>
-  <meta name="description" content="Eight interactive worksheets for an hour's lesson: joining two and three letters, and the sound pairs sh ch th oo ee.">
+  <meta name="description" content="Ten interactive worksheets for an hour's lesson: joining two and three letters, the sound pairs sh ch th oo ee, a word bank and sentences.">
   <meta name="theme-color" content="#9fdcff">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,10 +30,11 @@
         <span class="emoji">⏱️</span><span id="clockTime">0:00</span>
       </button>
     </header>
-    <p class="days-hint lesson-hint">Eight worksheets to do on the screen: joining two and three letters,
-      and the pairs <b>sh ch th oo ee</b>. About an hour altogether.</p>
+    <p class="days-hint lesson-hint">Ten worksheets to do on the screen: joining two and three letters,
+      the pairs <b>sh ch th oo ee</b>, then a bank of every word we read and sentences made out of them.
+      About an hour, with a little spare if they are flying.</p>
 
-    <nav id="tabs" class="ws-tabs" aria-label="The eight worksheets"></nav>
+    <nav id="tabs" class="ws-tabs" aria-label="The ten worksheets"></nav>
     <section id="host" class="ws-sheet"></section>
 
     <div class="ws-foot">
@@ -90,6 +91,21 @@
       function good(node) { node.classList.add('ws-ok'); UI.replayClass(node, 'bounce'); Sound.sfx('correct'); }
       function nope(node) { UI.replayClass(node, 'shake'); Sound.sfx('wrong'); }
 
+      // Every word the child reads today goes in here, so the word bank at the end really is
+      // the words of this lesson and not a list picked in advance.
+      const bank = new Map();
+      function keep(words) {
+        words.forEach(w => {
+          if (w && w.w && !bank.has(w.w)) bank.set(w.w, { w: w.w, e: w.e || '', c: w.c || [...w.w] });
+        });
+        return words;
+      }
+
+      // every picture we know, for the sentences at the end
+      const picOf = {};
+      [...pairWords, ...DATA.cvc, ...DATA.families.flatMap(f => f.words)]
+        .forEach(w => { if (!picOf[w.w]) picOf[w.w] = w.e; });
+
       // ---------- 1. warm up the sounds ----------
       function sheetWarmUp(api) {
         const groups = [
@@ -117,6 +133,7 @@
       // ---------- 2. a + t = at ----------
       function sheetJoinTwo(api) {
         const words = UI.shuffle(DATA.joins);
+        keep(words.map(w => ({ w })));
         api.total(words.length);
         return el('div', { class: 'ws-rows' }, ...words.map(w => {
           const row = el('div', { class: 'ws-row' });
@@ -184,7 +201,7 @@
       }
 
       function sheetSpellThree(api) {
-        const words = pick(plainWords, 8);
+        const words = keep(pick(plainWords, 8));
         api.total(words.length);
         return el('div', { class: 'ws-grid' }, ...words.map(w => spellCard(w, api)));
       }
@@ -193,14 +210,14 @@
         // one word for each pair first, so none is missed, then a few more to make eight
         const one = perPair(1);
         const rest = pick(pairWords.filter(w => !one.some(x => x.w === w.w)), 8 - one.length);
-        const words = UI.shuffle([...one, ...rest]);
+        const words = keep(UI.shuffle([...one, ...rest]));
         api.total(words.length);
         return el('div', { class: 'ws-grid' }, ...words.map(w => spellCard(w, api)));
       }
 
       // ---------- 4. find the two letters that make the sound ----------
       function sheetFindPair(api) {
-        const words = perPair(2);
+        const words = keep(perPair(2));
         api.total(words.length);
         return el('div', { class: 'ws-grid' }, ...words.map(w => {
           const card = el('div', { class: 'ws-card wide' });
@@ -231,7 +248,7 @@
 
       // ---------- 5. the pair is missing: pick it from the bank ----------
       function sheetMissingPair(api) {
-        const words = perPair(2);
+        const words = keep(perPair(2));
         api.total(words.length);
         let picked = null;
 
@@ -291,7 +308,7 @@
         return el('div', { class: 'ws-grid' }, ...targets.map(t => {
           const card = el('div', { class: 'ws-card' });
           const picks = el('div', { class: 'ws-picks' });
-          picks.replaceChildren(...UI.shuffle([t, ...near(t)]).map(w => {
+          picks.replaceChildren(...keep(UI.shuffle([t, ...near(t)])).map(w => {
             const btn = el('button', { class: 'ws-pick', 'aria-label': w.w }, letter(w.w));
             btn.addEventListener('click', () => {
               if (card.classList.contains('ws-ok')) return;
@@ -317,7 +334,7 @@
           const made = el('div', { class: 'ws-made' });
           let left = f.words.length;
 
-          const tiles = UI.shuffle(f.words).map(word => {
+          const tiles = UI.shuffle(keep(f.words)).map(word => {
             const start = word.w.slice(0, word.w.length - f.end.length);
             const tile = el('button', { class: 'ws-tile small', 'aria-label': word.w }, letter(start));
             tile.addEventListener('click', () => {
@@ -339,7 +356,95 @@
         }));
       }
 
-      // ---------- the eight sheets, in the order they are taught ----------
+      // ---------- 9. every word we have read today ----------
+      function sheetBank(api) {
+        // the bank is only honest if every sheet has chosen its words, so build any we skipped
+        for (let j = 0; j < BANK_AT; j++) if (!built[j]) buildSheet(j);
+
+        const words = [...bank.values()].sort((a, b) => a.w.localeCompare(b.w));
+        const groups = [
+          ['Two letters', words.filter(w => w.w.length === 2)],
+          ['Three letters', words.filter(w => w.w.length === 3)],
+          ['Four letters and more', words.filter(w => w.w.length >= 4)],
+        ].filter(g => g[1].length);
+        api.total(words.length);
+
+        return el('div', { class: 'ws-groups' }, ...groups.map(([label, list]) =>
+          el('div', { class: 'ws-group' },
+            el('h3', { class: 'ws-group-h', text: `${label} — ${list.length}` }),
+            el('div', { class: 'ws-tiles bank' }, ...list.map(w => {
+              const btn = el('button', { class: 'ws-bank-word', 'aria-label': w.w },
+                letter(w.w), w.e ? pic(w.e, 'tiny') : null);
+              btn.addEventListener('click', () => {
+                const spoken = say(...sounded(w.c, w.w));
+                if (btn.classList.contains('ws-ok')) return;
+                btn.classList.add('ws-ok');
+                api.score(spoken);
+              });
+              return btn;
+            })))));
+      }
+
+      // ---------- 10. the same little words, made into sentences ----------
+      // Nothing here is longer than four letters, and every word has been read already today.
+      const SENTENCES = [
+        'a cat on a bed', 'a rat in a bin', 'a bug on a log', 'a fox in a box',
+        'a man in a van', 'a hen in a net', 'a pig on a bus', 'a bee on a bud',
+        'a cat up a tree', 'a fish in a pool', 'a ship on a map', 'a book on a bed',
+        'a nut in a cup', 'a frog on a log', 'a dog in a bath', 'a chip on a dish',
+        'a cap on a kid', 'an ox in a box', 'a bug in a mug', 'a hat on a man',
+        'a pen in a bag', 'a web on a log',
+      ];
+
+      function sheetSentences(api) {
+        // prefer the sentences whose words the child has already met in this lesson
+        const made = SENTENCES.map(sentence => {
+          const words = sentence.split(' ');
+          const nouns = words.filter(w => picOf[w]);
+          return { sentence, words, pics: nouns.map(w => picOf[w]), missed: nouns.filter(w => !bank.has(w)).length };
+        });
+        const chosen = UI.shuffle(made).sort((a, b) => a.missed - b.missed).slice(0, 6);
+        chosen.forEach(s => keep(s.words.filter(w => picOf[w]).map(w => ({ w, e: picOf[w] }))));
+        api.total(chosen.length);
+        return el('div', { class: 'ws-rows' }, ...chosen.map(s => sentenceCard(s, api)));
+      }
+
+      function sentenceCard(item, api) {
+        const card = el('div', { class: 'ws-card sentence' });
+        const slots = item.words.map(() => el('span', { class: 'ws-slot word' }));
+        const pics = el('div', { class: 'ws-sentence-pics', hidden: 'hidden' }, ...item.pics.map(e => pic(e)));
+        const line = el('div', { class: 'ws-sentence' }, ...slots);
+        let pos = 0;
+
+        const tray = el('div', { class: 'ws-tray' }, ...UI.shuffle(item.words.slice()).map(w => {
+          const tile = el('button', { class: 'ws-tile small word', 'aria-label': w }, letter(w));
+          tile.addEventListener('click', () => {
+            if (pos >= item.words.length || tile.classList.contains('used')) return;
+            if (w !== item.words[pos]) {
+              nope(tile);
+              say(pos === 0 ? 'Which word starts the sentence?' : 'Which word comes next?');
+              return;
+            }
+            slots[pos].replaceChildren(letter(w));
+            slots[pos].classList.add('filled');
+            tile.classList.add('used');
+            pos++;
+            if (pos < item.words.length) { Sound.sfx('tap'); say(w); return; }
+            pics.hidden = false;
+            good(card);
+            api.score(say(...item.words.flatMap(x => [x, 90]), 250, `${item.sentence}!`));
+          });
+          return tile;
+        }));
+
+        // once it is built, tapping the sentence reads it again
+        line.addEventListener('click', () => { if (pos >= item.words.length) say(`${item.sentence}!`); });
+
+        card.append(line, tray, pics);
+        return card;
+      }
+
+      // ---------- the ten sheets, in the order they are taught ----------
       const SHEETS = [
         {
           title: 'Warm up the sounds', mins: 5, build: sheetWarmUp,
@@ -381,7 +486,19 @@
           how: 'The ending stays the same. Tap each beginning to make a new word, and read it out.',
           intro: 'The ending stays the same and the beginning changes. Make all the words.',
         },
+        {
+          title: 'Our word bank', mins: 6, build: sheetBank,
+          how: 'Every word we have read today. Read them down the list and tap each one to check it.',
+          intro: 'Here are all the words we have read today. Read each one, then tap it to check.',
+        },
+        {
+          title: 'Make a sentence', mins: 8, build: sheetSentences,
+          how: 'Tap the words in order to build the sentence, then read the whole thing out loud.',
+          intro: 'Now the words make sentences. Tap them in order, then read it out.',
+        },
       ];
+
+      const BANK_AT = SHEETS.length - 2;   // the word bank needs the sheets before it
 
       const finished = SHEETS.map(() => false);
       const built = [];      // each sheet is kept once it is built, so going back shows the work done
