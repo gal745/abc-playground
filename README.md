@@ -15,7 +15,6 @@ No reading is needed: every instruction is spoken.
 | ✏️ Trace It | Forming letters by tracing them with a finger |
 | 🚂 Alphabet Train | Alphabet order and missing letters |
 | 📅 Days of the Week | Spelling the days (the *day* ending is filled in) |
-| 🗓️ Days in Order | Putting the seven days in order, from any starting day |
 | 🔎 Which Word? | Reading short rhyming words that look alike (cat, hat, bat; pan, pin, pen) |
 | 🎯 Middle Sound | Hearing the short vowel in the middle of a word (c**a**t, p**i**g) |
 | 🧲 Join the Sounds | Blending letters into a word: a + t → at, c + a + t → cat |
@@ -23,6 +22,7 @@ No reading is needed: every instruction is spoken.
 | 🧩 Finish the Word | Choosing the pair a word is missing: __ip, m__n, gr__n |
 | 🐉 Feed the Dragon | Feed the Dino, a step up: sound pairs at the start, middle and end, then reading the word |
 | 🐛 Change a Sound | Changing one sound to make a new word (cat → hat → hot), then the caterpillar hatches into a butterfly |
+| ☁️ Catch the Cloud | Hearing a sound inside a short word: catch the clouds whose word has it |
 | 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
 

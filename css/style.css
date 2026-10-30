@@ -362,6 +362,25 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 .bubble.popped .bubble-body { animation: popped .35s forwards; }
 .spark.drop { background: rgba(190, 228, 255, .95); box-shadow: inset -2px -3px 0 rgba(120, 180, 225, .6); }
 
+/* ---------- Catch the Cloud ---------- */
+.stage-cloud { justify-content: flex-start; overflow: hidden; }
+.cloud-sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.cloud-target { z-index: 4; padding: 6px 24px 10px; }
+.cloud-target .letter { font-size: clamp(2.6rem, 10vmin, 4.6rem); }
+.puff { position: absolute; left: 0; top: 0; will-change: transform; }
+.puff-body {
+  position: relative; display: grid; place-items: center; width: 100%; height: calc(var(--size) * .46);
+  border-radius: 999px; background: #fff; box-shadow: 0 6px 0 rgba(120, 140, 190, .18);
+}
+.puff-body::before, .puff-body::after {
+  content: ""; position: absolute; bottom: 38%; border-radius: 50%; background: #fff;
+}
+.puff-body::before { left: 14%; width: 38%; aspect-ratio: 1; }
+.puff-body::after { right: 16%; width: 28%; aspect-ratio: 1; }
+.puff .letter { position: relative; z-index: 1; color: #40457a; }
+.puff.caught .puff-body { animation: popped .4s forwards; }
+.spark.drop.rain { width: 10px; height: 14px; border-radius: 50% 50% 60% 60%; background: #9fd3ff; animation-duration: .7s; }
+
 /* ---------- Feed the Frog ---------- */
 .stage-frog { justify-content: flex-start; overflow: hidden; gap: clamp(8px, 2vh, 18px); }
 .fly-sky { position: absolute; inset: 0; overflow: hidden; }
@@ -375,6 +394,8 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
 }
 .frog-slot.filled { border-style: solid; border-color: var(--c); background: #f1fbf8; }
 .frog-slot .letter { font-size: clamp(1.1rem, 4.4vmin, 2rem); color: #157f72; }
+.frog-slot .ghost { color: #9aa3b5; opacity: .55; }
+.frog-slot.next { border-color: var(--c); animation: pulse 1.4s ease-in-out infinite; }
 .frog { position: relative; z-index: 2; }
 .frog-body { display: inline-block; font-size: clamp(5.6rem, 28vmin, 12rem); line-height: 1; }
 .frog-pics { position: relative; z-index: 2; margin-top: auto; display: flex; gap: 14px; min-height: clamp(2.4rem, 9vmin, 4rem); }

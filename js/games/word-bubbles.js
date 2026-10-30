@@ -39,8 +39,6 @@ App.register({
     const card = UI.el('button', { class: 'target-card word-target', 'aria-label': 'Hear it again', onclick: () => announce() });
     stage.append(sky, card);
 
-    const bitsOf = w => w.c || [...w.w];
-
     // wrong answers that look as much like the word as possible, so the letters have to be read
     function lookAlike(t, n) {
       const same = w => [...w.w].filter((ch, i) => t.w[i] === ch).length;
@@ -177,9 +175,8 @@ App.register({
       api.progress(found, GOAL);
       Sound.sfx('correct');
       drawCard(true);   // now the word can be seen, next to its picture
-      // the reward teaches: the sounds, then the word, in one breath
-      const spoken = Sound.say(UI.pick(UI.PRAISE), 150,
-        ...bitsOf(target).flatMap(bit => [{ sound: bit }, 100]), 120, `${target.w}!`);
+      // just the word: they have already read it to pop it, so sounding it out again drags
+      const spoken = Sound.say(UI.pick(UI.PRAISE), 150, `${target.w}!`);
       if (found >= GOAL) {
         finished = true;
         api.after(spoken, () => api.win(), 1300);

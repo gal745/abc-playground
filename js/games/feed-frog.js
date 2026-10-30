@@ -14,6 +14,8 @@ App.register({
     const CROSS = [[11, 14], [10, 13], [10, 13], [9, 12], [7, 10]][L - 1];  // seconds to cross
     const GAP = [900, 850, 850, 750, 650][L - 1];
     const sayEachTime = L <= 2;   // later on the sentence is said once, then it is up to them
+    const showAll = L <= 4;       // the sentence sits there in faint letters: this is reading,
+                                  // not remembering. The last level shows the next word only.
 
     const queue = UI.shuffle(DATA.sentences);
     const otherWords = [...DATA.cvc, ...DATA.soundPairs.flatMap(g => g.words)]
@@ -53,9 +55,21 @@ App.register({
       slots = words.map((w, i) => UI.el('span', {
         class: 'frog-slot pop-in',
         style: `animation-delay:${0.05 + i * 0.06}s`,
-      }));
+      }, showAll ? ghostWord(w) : null));
       line.replaceChildren(...slots);
+      markNext();
       ask();
+    }
+
+    const ghostWord = w => UI.el('span', { class: 'letter ghost', text: UI.showLetter(w) });
+
+    // which word to catch next: the slot waiting for it says so, faintly
+    function markNext() {
+      slots.forEach((slot, i) => {
+        slot.classList.toggle('next', i === pos);
+        if (showAll || slot.classList.contains('filled')) return;
+        slot.replaceChildren(i === pos ? ghostWord(words[i]) : null);
+      });
     }
 
     function ask() {
@@ -65,7 +79,7 @@ App.register({
     function replay() {
       if (locked || !sentence) return;
       if (sayEachTime || pos === 0) return ask();
-      return Sound.say(sentence, 300, 'I want', words[pos], 'next.');
+      return Sound.say(sentence, 300, 'I want', `${words[pos]}`, 'next.');
     }
 
     // which word the next fly carries: often the one we need, otherwise a later word from the
@@ -176,9 +190,11 @@ App.register({
       slots[pos].classList.add('filled');
       pos++;
       forceNext = true;
+      markNext();
 
       if (pos < words.length) {
-        Sound.say(f.word);
+        // always name the next word, so nobody has to hold the sentence in their head
+        Sound.say(`${f.word}.`, 200, 'Now', `${words[pos]}.`);
         return;
       }
 
