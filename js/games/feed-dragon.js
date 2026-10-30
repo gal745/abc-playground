@@ -30,10 +30,14 @@ App.register({
     const bubble = UI.el('span', { class: 'dino-bubble' });
     const dragon = UI.el('button', { class: 'dino', 'aria-label': 'Hear it again', onclick: () => replay() }, body, bubble);
     const choices = UI.el('div', { class: `choices${CHOICES >= 4 ? ' count-4' : ''}` });
-    stage.append(dragon, choices);
+    // the word it just ate, written out, so every round ends by seeing the whole word
+    const shownWord = UI.el('div', { class: 'dragon-word' });
+    stage.append(dragon, shownWord, choices);
 
     function next() {
       locked = false;
+      shownWord.replaceChildren();
+      shownWord.classList.remove('shown');
       let foods;
 
       if (readWord) {
@@ -102,10 +106,21 @@ App.register({
       round++;
       api.progress(round, GOAL);
 
-      // sound the word out as it goes down, so the reward teaches too
+      // the whole word, written out and sounded through, so it is read as well as heard
+      const bits = f.c.map(bit => UI.el('span', {
+        class: `dragon-bit${bit.length > 1 ? ' pair' : ''}`,
+      }, UI.el('span', { class: 'letter', text: UI.showLetter(bit) })));
+      shownWord.replaceChildren(
+        UI.el('span', { class: 'emoji dragon-word-pic', text: f.e }),
+        UI.el('span', { class: 'dragon-word-bits' }, ...bits));
+      shownWord.classList.add('shown');
+      UI.replayClass(shownWord, 'pop-in');
+
+      const glow = i => bits.forEach((b, j) => b.classList.toggle('lit', i === j));
       const parts = [`Yum yum! ${f.w}!`, 200];
-      f.c.forEach(bit => parts.push({ sound: bit }, 110));
-      parts.push(150, `${f.w}!`, 250, UI.pick(UI.PRAISE));
+      f.c.forEach((bit, i) => parts.push(() => glow(i), { sound: bit }, 110));
+      parts.push(() => glow(-1), 150, `${f.w}!`,
+        () => UI.replayClass(shownWord, 'bounce'), 250, UI.pick(UI.PRAISE));
       api.after(Sound.say(...parts), () => (round >= GOAL ? api.win() : next()), 1600);
     }
 

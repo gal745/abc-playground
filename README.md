@@ -22,7 +22,7 @@ No reading is needed: every instruction is spoken.
 | 🤝 Sound Pairs | Two letters that make one sound: sh, ch, th, oo, ee (then ck, ng, ai, ar, or) |
 | 🧩 Finish the Word | Choosing the pair a word is missing: __ip, m__n, gr__n |
 | 🐉 Feed the Dragon | Feed the Dino, a step up: sound pairs at the start, middle and end, then reading the word |
-| 🐛 Caterpillar Words | Waking each letter of the word in turn, then the caterpillar hatches into a butterfly |
+| 🐛 Change a Sound | Changing one sound to make a new word (cat → hat → hot), then the caterpillar hatches into a butterfly |
 | 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
 

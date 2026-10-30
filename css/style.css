@@ -555,11 +555,31 @@ button:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
   transition: background .25s, color .25s, border-color .25s, transform .2s;
 }
 .bug-seg.current { border-color: var(--c); animation: pulse 1.2s ease-in-out infinite; }
+.bug-seg.pair .letter { font-size: .62em; letter-spacing: -1px; }   /* two letters share a segment */
+.bug-row { background: none; }
+.swap-row { gap: clamp(10px, 2.6vw, 28px); min-height: clamp(76px, 20vmin, 150px); }
+.swap-btn.pair .letter { font-size: .6em; letter-spacing: -2px; }
 .bug-seg.awake { background: var(--bc); border-color: var(--bc); color: #fff; text-shadow: 0 3px 0 rgba(0, 0, 0, .15); }
+.bug-seg.awake.current { border-color: #fff; box-shadow: 0 0 0 5px var(--c); }
 .bug-seg.glow { background: #fff1a8; border-color: #ffd166; color: #2b2d42; }
 .bug-seg:active { transform: translateY(4px); }
 
 /* ---------- Feed the Dragon ---------- */
+/* the word it just ate, written out under the dragon */
+.dragon-word {
+  display: flex; align-items: center; gap: clamp(8px, 2.5vw, 20px); min-height: clamp(54px, 13vmin, 98px);
+  padding: 0 clamp(10px, 3vw, 22px); border-radius: 22px; opacity: 0; transition: opacity .2s;
+}
+.dragon-word.shown { opacity: 1; background: rgba(255, 255, 255, .92); box-shadow: 0 5px 0 rgba(0, 0, 0, .08); }
+.dragon-word-pic { font-size: clamp(2.3rem, 8vmin, 3.8rem); }
+.dragon-word-bits { display: flex; gap: 3px; }
+.dragon-bit {
+  padding: 4px 6px; border-radius: 10px; transition: background .15s, color .15s;
+}
+.dragon-bit .letter { font-size: clamp(2.2rem, 8.5vmin, 3.8rem); color: var(--ink); }
+.dragon-bit.pair .letter { color: #1b7f79; }
+.dragon-bit.lit { background: #fff1a8; }
+
 .choices.word-row { gap: clamp(10px, 2.5vw, 26px); }
 .choices.word-row .word-btn { min-width: clamp(100px, 24vmin, 200px); font-size: clamp(1.8rem, 8vmin, 3.8rem); }
 
