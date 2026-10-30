@@ -23,8 +23,13 @@ const DATA = (() => {
   // into "boo". An "-ah" ending is read the same way by every voice (bah, nah, rah, wah are
   // real words), so the consonant at the front comes out clearly. The sounds that can be
   // held on their own - mmm, sss - are written as they are hummed or hissed.
+  //
+  // Two letters on their own are the danger: a voice that does not know the word reads them
+  // out as initials instead. "ih" came out as "I. H.", so the i sound is spelled "ihh" - long
+  // enough that the voice sounds it out instead of spelling it. If any sound comes out wrong
+  // on a particular device, the Sound check page (sounds.html) changes it by ear.
   const sounds = {
-    a: 'ah', b: 'bah', c: 'kah', d: 'dah', e: 'eh', f: 'fah', g: 'gah', h: 'hah', i: 'ih',
+    a: 'ah', b: 'bah', c: 'kah', d: 'dah', e: 'eh', f: 'fah', g: 'gah', h: 'hah', i: 'ihh',
     j: 'jah', k: 'kah', l: 'lah', m: 'mmm', n: 'nah', o: 'aw', p: 'pah', q: 'kwah', r: 'rah',
     s: 'sss', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'kss', y: 'yah', z: 'zah',
   };

@@ -60,7 +60,8 @@
       </div>
       <div id="fixChips" class="chips fix-chips"></div>
       <p class="hint">Tap a suggestion to hear it, or type your own spelling — whatever makes the voice
-        say it properly. Saved on this device only.</p>
+        say it properly. Saved on this device only, so if one of these works, tell me and I will make it
+        the spelling on every device.</p>
       <div class="fix-actions">
         <button id="fixCopy" class="link-btn">Copy my changes to send on</button>
         <button id="fixReset" class="link-btn">Put this letter back</button>
@@ -131,7 +132,13 @@
       // The sound of each letter is a spelling handed to the voice. If a voice reads one
       // badly, a grown-up can hear the alternatives and pick the one that sounds right.
       const STEM = { a: 'a', b: 'b', c: 'k', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h', i: 'i', j: 'j', k: 'k', l: 'l', m: 'm', n: 'n', o: 'o', p: 'p', q: 'kw', r: 'r', s: 's', t: 't', u: 'u', v: 'v', w: 'w', x: 'ks', y: 'y', z: 'z' };
-      const VOWEL_IDEAS = { a: ['ah', 'aa', 'a'], e: ['eh', 'e'], i: ['ih', 'i'], o: ['aw', 'o', 'oh'], u: ['uh', 'u'] };
+      // Short vowels are the hardest for a voice: there is no English word that is just the
+      // sound, so these are the spellings worth trying by ear. Two-letter ones can come out as
+      // initials ("ih" said as "I. H."), which is why the longer spellings are offered too.
+      const VOWEL_IDEAS = {
+        a: ['ah', 'aah', 'a', 'at'], e: ['eh', 'ehh', 'e', 'egg'], i: ['ihh', 'ih', 'ick', 'ill', 'it'],
+        o: ['aw', 'ock', 'o', 'oh'], u: ['uh', 'uhh', 'u', 'up'],
+      };
       const PAIR_IDEAS = {
         sh: ['shh', 'shah', 'sh'], ch: ['chah', 'chuh', 'ch'], th: ['thah', 'thuh', 'th'],
         oo: ['ooh', 'oo', 'ooo'], ee: ['ee', 'eee', 'ea'], ck: ['kah', 'kuh', 'k'],
