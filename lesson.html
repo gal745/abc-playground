@@ -102,9 +102,7 @@
       }
 
       // every picture we know, for the sentences at the end
-      const picOf = {};
-      [...pairWords, ...DATA.cvc, ...DATA.families.flatMap(f => f.words)]
-        .forEach(w => { if (!picOf[w.w]) picOf[w.w] = w.e; });
+      const picOf = DATA.pics;
 
       // ---------- 1. warm up the sounds ----------
       function sheetWarmUp(api) {
@@ -386,15 +384,8 @@
       }
 
       // ---------- 10. the same little words, made into sentences ----------
-      // Nothing here is longer than four letters, and every word has been read already today.
-      const SENTENCES = [
-        'a cat on a bed', 'a rat in a bin', 'a bug on a log', 'a fox in a box',
-        'a man in a van', 'a hen in a net', 'a pig on a bus', 'a bee on a bud',
-        'a cat up a tree', 'a fish in a pool', 'a ship on a map', 'a book on a bed',
-        'a nut in a cup', 'a frog on a log', 'a dog in a bath', 'a chip on a dish',
-        'a cap on a kid', 'an ox in a box', 'a bug in a mug', 'a hat on a man',
-        'a pen in a bag', 'a web on a log',
-      ];
+      // The sentences live in js/data.js, so Feed the Frog reads the very same ones.
+      const SENTENCES = DATA.sentences;
 
       function sheetSentences(api) {
         // prefer the sentences whose words the child has already met in this lesson

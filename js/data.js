@@ -180,6 +180,24 @@ const DATA = (() => {
     { w: 'Sunday', pre: 'sun' },
   ];
 
+  // Short sentences for reading. Nothing in them is longer than four letters, and the little
+  // words (a, an, in, on, up) are the ones joined up in `joins`, so a child who can read the
+  // word lists above can read every one of these.
+  const sentences = [
+    'a cat on a bed', 'a rat in a bin', 'a bug on a log', 'a fox in a box',
+    'a man in a van', 'a hen in a net', 'a pig on a bus', 'a bee on a bud',
+    'a cat up a tree', 'a fish in a pool', 'a ship on a map', 'a book on a bed',
+    'a nut in a cup', 'a frog on a log', 'a dog in a bath', 'a chip on a dish',
+    'a cap on a kid', 'an ox in a box', 'a bug in a mug', 'a hat on a man',
+    'a pen in a bag', 'a web on a log',
+  ];
+
+  // Every word that has a picture, looked up by the word itself.
+  const pics = {};
+  [...cvc, ...cvcc, ...soundPairs.flatMap(g => g.words), ...morePairs.flatMap(g => g.words),
+    ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words)]
+    .forEach(w => { if (w.e && !pics[w.w]) pics[w.w] = w.e; });
+
   // Letter groups in a common phonics teaching order.
   const sets = [
     { label: 'All letters', letters },
@@ -200,7 +218,7 @@ const DATA = (() => {
 
   return {
     letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels, animals,
-    soundPairs, morePairs, pairSounds,
+    soundPairs, morePairs, pairSounds, sentences, pics,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
 })();
