@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Today's Lesson · ABC Playground</title>
+  <meta name="description" content="Eight interactive worksheets for an hour's lesson: joining two and three letters, and the sound pairs sh ch th oo ee.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page lesson-page">
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main lesson-main" translate="no">
+    <header class="days-top">
+      <a class="round-btn" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title lesson-title">Today's Lesson</h1>
+      <button id="clock" class="ws-clock" aria-label="Start the lesson clock">
+        <span class="emoji">⏱️</span><span id="clockTime">0:00</span>
+      </button>
+    </header>
+    <p class="days-hint lesson-hint">Eight worksheets to do on the screen: joining two and three letters,
+      and the pairs <b>sh ch th oo ee</b>. About an hour altogether.</p>
+
+    <nav id="tabs" class="ws-tabs" aria-label="The eight worksheets"></nav>
+    <section id="host" class="ws-sheet"></section>
+
+    <div class="ws-foot">
+      <button id="prevBtn" class="soft-btn">◀ Back</button>
+      <button id="newBtn" class="soft-btn"><span class="emoji">🎲</span> New words</button>
+      <button id="nextBtn" class="say-all">Next sheet ▶</button>
+    </div>
+
+    <section id="finish" class="ws-done" hidden>
+      <h2 class="ws-done-h">The whole lesson is finished!</h2>
+      <div id="finishStars" class="ws-done-stars"></div>
+      <button id="againBtn" class="say-all"><span class="emoji">🔁</span> Start again with new words</button>
+    </section>
+
+    <p class="days-hint note">Paper versions to write on are on the <a href="sheets.html">Worksheets</a> page,
+      and the <a href="poster.html">Joining sounds</a> poster is there to point at.</p>
+  </main>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // An hour of worksheets done on the screen instead of on paper: the page says every sound,
+    // marks each answer as it is tapped, and ticks a sheet off when it is finished.
+    // Everything comes from the same word lists as the games, so 🎲 gives a fresh lesson.
+    (() => {
+      const $ = id => document.getElementById(id);
+      const el = UI.el;
+
+      const PAIRS = DATA.soundPairs.map(g => g.p);                         // sh ch th oo ee
+      const pairWords = DATA.soundPairs.flatMap(g => g.words.map(w => ({ ...w, p: g.p })));
+      const plainWords = DATA.cvc.map(w => ({ ...w, c: [...w.w] }));       // one sound per letter
+
+      // never the same picture twice on one sheet: foot and feet are both a foot
+      function pick(from, n) {
+        const seen = new Set();
+        return UI.shuffle(from).filter(w => !seen.has(w.e) && seen.add(w.e)).slice(0, n);
+      }
+
+      // `n` words for every pair, so none of the five is left out
+      function perPair(n) {
+        return UI.shuffle(DATA.soundPairs.flatMap(g => pick(g.words.map(w => ({ ...w, p: g.p })), n)));
+      }
+
+      const say = (...parts) => { Sound.unlock(); return Sound.say(...parts); };
+      const letter = (text, cls = '') => el('span', { class: `letter ws-l ${cls}`, text: UI.showLetter(text) });
+      const pic = (e, cls = '') => el('span', { class: `emoji ws-pic ${cls}`, text: e });
+      // each sound on its own, then the whole word: the thing we are teaching, every time
+      const sounded = (bits, word) => [...bits.flatMap(b => [{ sound: b }, 110]), 150, `${word}!`];
+
+      function good(node) { node.classList.add('ws-ok'); UI.replayClass(node, 'bounce'); Sound.sfx('correct'); }
+      function nope(node) { UI.replayClass(node, 'shake'); Sound.sfx('wrong'); }
+
+      // ---------- 1. warm up the sounds ----------
+      function sheetWarmUp(api) {
+        const groups = [
+          ['Short sounds', DATA.shortVowels.map(v => v.w)],
+          ['Letters', UI.shuffle([...'stpnmdgchbflrkwv']).slice(0, 10)],
+          ['Two letters, one sound', PAIRS],
+        ];
+        api.total(groups.reduce((n, g) => n + g[1].length, 0));
+        return el('div', { class: 'ws-groups' }, ...groups.map(([label, list]) =>
+          el('div', { class: 'ws-group' },
+            el('h3', { class: 'ws-group-h', text: label }),
+            el('div', { class: 'ws-tiles' }, ...list.map(l => {
+              const tile = el('button', { class: `ws-tile${l.length > 1 ? ' pair' : ''}`, 'aria-label': l },
+                letter(l), el('span', { class: 'ws-tick', text: '✓' }));
+              tile.addEventListener('click', () => {
+                const spoken = say({ sound: l }, 300, { sound: l });
+                if (tile.classList.contains('ws-ok')) return;
+                tile.classList.add('ws-ok');
+                api.score(spoken);
+              });
+              return tile;
+            })))));
+      }
+
+      // ---------- 2. a + t = at ----------
+      function sheetJoinTwo(api) {
+        const words = UI.shuffle(DATA.joins);
+        api.total(words.length);
+        return el('div', { class: 'ws-rows' }, ...words.map(w => {
+          const row = el('div', { class: 'ws-row' });
+          const sum = el('div', { class: 'ws-sum' });
+          [...w].forEach((l, i) => {
+            if (i) sum.append(el('span', { class: 'ws-plus', text: '+' }));
+            const bit = el('button', { class: 'ws-bit', 'aria-label': `the sound ${l}` }, letter(l));
+            bit.addEventListener('click', () => say({ sound: l }));
+            sum.append(bit);
+          });
+          const slot = el('span', { class: 'ws-slot' });
+          sum.append(el('span', { class: 'ws-plus', text: '=' }), slot);
+
+          const choices = UI.shuffle([w, ...UI.shuffle(DATA.joins.filter(x => x !== w)).slice(0, 2)]);
+          const picks = el('div', { class: 'ws-picks' });
+          picks.replaceChildren(...choices.map(c => {
+            const btn = el('button', { class: 'ws-pick', 'aria-label': c }, letter(c));
+            btn.addEventListener('click', () => {
+              if (row.classList.contains('ws-ok')) return;
+              if (c !== w) { nope(btn); say(`That says ${c}.`); return; }
+              slot.replaceChildren(letter(w));
+              picks.querySelectorAll('button').forEach(b => { b.disabled = true; });
+              good(row);
+              api.score(say(...sounded([...w], w)));
+            });
+            return btn;
+          }));
+          row.append(sum, picks);
+          return row;
+        }));
+      }
+
+      // ---------- 3 and 7. put the sounds in order ----------
+      // The same card does single letters (c-a-t) and chunks that hold a pair (sh-o-p): a pair
+      // shares one box, because it is one sound.
+      function spellCard(item, api) {
+        const card = el('div', { class: 'ws-card' });
+        const boxes = item.c.map(bit => el('span', { class: `ws-box${bit.length > 1 ? ' pair' : ''}` }));
+        const tray = el('div', { class: 'ws-tray' });
+        let pos = 0;
+
+        const tiles = UI.shuffle(item.c.slice()).map(bit => {
+          const tile = el('button', { class: `ws-tile small${bit.length > 1 ? ' pair' : ''}`, 'aria-label': bit }, letter(bit));
+          tile.addEventListener('click', () => {
+            if (pos >= item.c.length || tile.classList.contains('used')) return;
+            if (bit !== item.c[pos]) {
+              nope(tile);
+              say(pos === 0 ? 'Which sound comes first?' : 'Which sound comes next?');
+              return;
+            }
+            boxes[pos].replaceChildren(letter(bit));
+            boxes[pos].classList.add('filled');
+            tile.classList.add('used');
+            pos++;
+            if (pos < item.c.length) { Sound.sfx('tap'); say({ sound: bit }); return; }
+            good(card);
+            api.score(say(...sounded(item.c, item.w)));
+          });
+          return tile;
+        });
+        tray.replaceChildren(...tiles);
+
+        card.append(pic(item.e), el('div', { class: 'ws-boxes' }, ...boxes), tray);
+        return card;
+      }
+
+      function sheetSpellThree(api) {
+        const words = pick(plainWords, 8);
+        api.total(words.length);
+        return el('div', { class: 'ws-grid' }, ...words.map(w => spellCard(w, api)));
+      }
+
+      function sheetSpellPairs(api) {
+        // one word for each pair first, so none is missed, then a few more to make eight
+        const one = perPair(1);
+        const rest = pick(pairWords.filter(w => !one.some(x => x.w === w.w)), 8 - one.length);
+        const words = UI.shuffle([...one, ...rest]);
+        api.total(words.length);
+        return el('div', { class: 'ws-grid' }, ...words.map(w => spellCard(w, api)));
+      }
+
+      // ---------- 4. find the two letters that make the sound ----------
+      function sheetFindPair(api) {
+        const words = perPair(2);
+        api.total(words.length);
+        return el('div', { class: 'ws-grid' }, ...words.map(w => {
+          const card = el('div', { class: 'ws-card wide' });
+          const tag = el('button', { class: 'ws-tag', 'aria-label': `the sound ${w.p}` }, letter(w.p));
+          tag.addEventListener('click', () => say({ sound: w.p }, 250, { sound: w.p }));
+
+          const at = w.c.indexOf(w.p);   // only the pair we asked for, even if the word has two
+          const word = el('div', { class: 'ws-word' }, ...w.c.map((bit, i) => {
+            const chunk = el('button', { class: 'ws-chunk', 'aria-label': bit }, letter(bit));
+            chunk.addEventListener('click', () => {
+              if (card.classList.contains('ws-ok')) return;
+              if (i !== at) {
+                nope(chunk);
+                say(bit.length > 1 ? 'Not that pair.' : 'That is one letter on its own.', 200, 'Listen again:', { sound: w.p });
+                return;
+              }
+              chunk.classList.add('ringed');
+              good(card);
+              api.score(say({ sound: w.p }, 250, ...sounded(w.c, w.w)));
+            });
+            return chunk;
+          }));
+
+          card.append(tag, word, pic(w.e));
+          return card;
+        }));
+      }
+
+      // ---------- 5. the pair is missing: pick it from the bank ----------
+      function sheetMissingPair(api) {
+        const words = perPair(2);
+        api.total(words.length);
+        let picked = null;
+
+        const chips = PAIRS.map(p => {
+          const chip = el('button', { class: 'ws-chip', 'aria-label': p }, letter(p));
+          chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('picked'));
+            chip.classList.add('picked');
+            picked = p;
+            say({ sound: p }, 250, { sound: p });
+          });
+          return chip;
+        });
+        const bank = el('div', { class: 'ws-bank' },
+          el('span', { class: 'ws-bank-label', text: 'Tap a pair, then tap the gap:' }), ...chips);
+
+        const cards = words.map(w => {
+          const card = el('div', { class: 'ws-card' });
+          const at = w.c.indexOf(w.p);
+          const gap = el('button', { class: 'ws-gap', 'aria-label': 'the missing pair' });
+          gap.addEventListener('click', () => {
+            if (card.classList.contains('ws-ok')) return;
+            if (!picked) { say('Tap one of the pairs first.'); UI.replayClass(bank, 'bounce'); return; }
+            if (picked !== w.p) { nope(gap); say({ sound: picked }, 200, 'Not this word.'); return; }
+            gap.replaceChildren(letter(w.p));
+            gap.classList.add('filled');
+            good(card);
+            api.score(say(...sounded(w.c, w.w)));
+          });
+
+          const word = el('div', { class: 'ws-word' }, ...w.c.map((bit, i) =>
+            i === at ? gap : el('span', { class: 'ws-chunk flat' }, letter(bit))));
+
+          const hear = el('button', { class: 'ws-hear', 'aria-label': `say ${w.w}` }, el('span', { class: 'emoji', text: '🔊' }));
+          hear.addEventListener('click', () => say(`${w.w}!`));
+
+          card.append(pic(w.e), word, hear);
+          return card;
+        });
+
+        return el('div', {}, bank, el('div', { class: 'ws-grid' }, ...cards));
+      }
+
+      // ---------- 6. which word is it? ----------
+      function sheetWhichWord(api) {
+        const all = pairWords.concat(plainWords);
+        const targets = UI.shuffle([...pick(pairWords, 4), ...pick(plainWords, 4)]);
+        api.total(targets.length);
+
+        // wrong answers that look as close to the word as possible, so the letters have to be read
+        const near = t => {
+          const same = w => [...w.w].filter((l, i) => t.w[i] === l).length;
+          return UI.shuffle(all.filter(w => w.w !== t.w && w.e !== t.e && w.w.length === t.w.length))
+            .sort((a, b) => same(b) - same(a)).slice(0, 2);
+        };
+
+        return el('div', { class: 'ws-grid' }, ...targets.map(t => {
+          const card = el('div', { class: 'ws-card' });
+          const picks = el('div', { class: 'ws-picks' });
+          picks.replaceChildren(...UI.shuffle([t, ...near(t)]).map(w => {
+            const btn = el('button', { class: 'ws-pick', 'aria-label': w.w }, letter(w.w));
+            btn.addEventListener('click', () => {
+              if (card.classList.contains('ws-ok')) return;
+              if (w.w !== t.w) { nope(btn); say(`That says ${w.w}.`); return; }
+              picks.querySelectorAll('button').forEach(b => { b.disabled = true; });
+              btn.classList.add('chosen');
+              good(card);
+              api.score(say(...sounded(t.c, t.w)));
+            });
+            return btn;
+          }));
+          card.append(pic(t.e, 'big'), picks);
+          return card;
+        }));
+      }
+
+      // ---------- 8. word families: the ending stays, the beginning changes ----------
+      function sheetFamilies(api) {
+        const fams = UI.shuffle(DATA.families.filter(f => f.words.length >= 3)).slice(0, 5);
+        api.total(fams.length);
+        return el('div', { class: 'ws-rows' }, ...fams.map(f => {
+          const row = el('div', { class: 'ws-row fam' });
+          const made = el('div', { class: 'ws-made' });
+          let left = f.words.length;
+
+          const tiles = UI.shuffle(f.words).map(word => {
+            const start = word.w.slice(0, word.w.length - f.end.length);
+            const tile = el('button', { class: 'ws-tile small', 'aria-label': word.w }, letter(start));
+            tile.addEventListener('click', () => {
+              if (tile.classList.contains('used')) { say(`${word.w}!`); return; }
+              tile.classList.add('used');
+              made.append(el('span', { class: 'ws-made-word pop-in' }, letter(word.w), pic(word.e, 'tiny')));
+              left--;
+              const spoken = say(...sounded([...word.w], word.w));
+              if (!left) { good(row); api.score(spoken); }
+            });
+            return tile;
+          });
+
+          row.append(
+            el('div', { class: 'ws-fam-end' }, letter(`-${f.end}`)),
+            el('div', { class: 'ws-tiles' }, ...tiles),
+            made);
+          return row;
+        }));
+      }
+
+      // ---------- the eight sheets, in the order they are taught ----------
+      const SHEETS = [
+        {
+          title: 'Warm up the sounds', mins: 5, build: sheetWarmUp,
+          how: 'Tap every one and say its sound out loud with me.',
+          intro: 'Tap every sound and say it with me.',
+        },
+        {
+          title: 'Join two letters', mins: 6, build: sheetJoinTwo,
+          how: 'Tap each letter to hear its sound, run them together, then tap the word they make.',
+          intro: 'Two sounds joined together make a little word. Which word do they make?',
+        },
+        {
+          title: 'Join three letters', mins: 8, build: sheetSpellThree,
+          how: 'Say the picture. Tap the sounds in order, first sound first, and fill the boxes.',
+          intro: 'Say the picture slowly, then put the sounds in order.',
+        },
+        {
+          title: 'Find the pair', mins: 7, build: sheetFindPair,
+          how: 'The sound on the left is hiding in the word. Tap the two letters that say it.',
+          intro: 'Two letters, one sound. Find them hiding in the word.',
+        },
+        {
+          title: 'Write the missing pair', mins: 8, build: sheetMissingPair,
+          how: 'Say the word. Tap the pair it needs, then tap the gap to put it in.',
+          intro: 'Each word has lost two letters. Which pair does it need?',
+        },
+        {
+          title: 'Which word is it?', mins: 7, build: sheetWhichWord,
+          how: 'The words look alike, so read the letters carefully. Tap the one that matches the picture.',
+          intro: 'Read all three words, then tap the one that matches the picture.',
+        },
+        {
+          title: 'One box for each sound', mins: 8, build: sheetSpellPairs,
+          how: 'Put the sounds in order again. A pair of letters shares one box, because it is one sound.',
+          intro: 'Same again, with the pairs. Two letters that make one sound share a box.',
+        },
+        {
+          title: 'Word families', mins: 6, build: sheetFamilies,
+          how: 'The ending stays the same. Tap each beginning to make a new word, and read it out.',
+          intro: 'The ending stays the same and the beginning changes. Make all the words.',
+        },
+      ];
+
+      const finished = SHEETS.map(() => false);
+      const built = [];      // each sheet is kept once it is built, so going back shows the work done
+      let at = 0;
+      let openedOnce = false;
+
+      // ---------- one sheet, built once ----------
+      function buildSheet(i) {
+        const sheet = SHEETS[i];
+        const countEl = el('span', { class: 'ws-count' });
+        const barFill = el('span', { class: 'ws-bar-fill' });
+        const stamp = el('div', { class: 'ws-stamp', hidden: 'hidden' },
+          el('span', { class: 'emoji', text: '🌟' }), el('span', { text: 'This sheet is finished!' }));
+
+        let total = 0;
+        let got = 0;
+        const show = () => {
+          countEl.textContent = total ? `${got} of ${total}` : '';
+          barFill.style.width = total ? `${Math.round((got / total) * 100)}%` : '0';
+        };
+        const api = {
+          total(n) { total = n; show(); },
+          score(spoken) {
+            got++;
+            show();
+            if (got >= total) finishSheet(i, spoken, stamp);
+          },
+        };
+
+        const body = sheet.build(api);
+        const repeat = el('button', { class: 'ws-repeat', 'aria-label': 'Say that again' }, el('span', { class: 'emoji', text: '🔊' }));
+        repeat.addEventListener('click', () => say(sheet.intro));
+
+        built[i] = el('div', { class: 'ws-body' },
+          el('header', { class: 'ws-head' },
+            el('span', { class: 'ws-no', text: `${i + 1}` }),
+            el('div', { class: 'ws-head-text' },
+              el('h2', { class: 'ws-title', text: sheet.title }),
+              el('p', { class: 'ws-how', text: sheet.how })),
+            el('div', { class: 'ws-head-side' },
+              el('span', { class: 'ws-mins', text: `${sheet.mins} min` }),
+              repeat)),
+          el('div', { class: 'ws-progress' }, el('span', { class: 'ws-bar' }, barFill), countEl),
+          body,
+          stamp);
+        return built[i];
+      }
+
+      // ---------- the sheet on screen ----------
+      function openSheet(i, { speak = true, scroll = true, fresh = false } = {}) {
+        at = Math.max(0, Math.min(SHEETS.length - 1, i));
+        const sheet = SHEETS[at];
+        if (fresh || !built[at]) buildSheet(at);
+        $('host').replaceChildren(built[at]);
+
+        drawTabs();
+        $('prevBtn').disabled = at === 0;
+        $('nextBtn').disabled = at === SHEETS.length - 1;
+        if (speak && openedOnce) say(sheet.intro);
+        if (scroll && openedOnce) $('host').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        openedOnce = true;
+      }
+
+      function finishSheet(i, spoken, stamp) {
+        const first = !finished[i];
+        finished[i] = true;
+        stamp.hidden = false;
+        drawTabs();
+        if (!first) return;
+        Promise.resolve(spoken).then(() => {
+          if (finished.every(Boolean)) return allFinished();
+          const more = SHEETS.length - finished.filter(Boolean).length;
+          say(UI.pick(UI.PRAISE), 250, more === 1 ? 'One sheet to go!' : `${more} sheets to go.`);
+        });
+      }
+
+      function allFinished() {
+        const stars = $('finishStars');
+        stars.replaceChildren(...SHEETS.map((s, i) =>
+          el('span', { class: 'emoji ws-done-star pop-in', style: `animation-delay:${i * 0.09}s`, text: '⭐' })));
+        $('finish').hidden = false;
+        $('finish').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        UI.confetti();
+        say('You finished the whole lesson!', 300, UI.pick(UI.PRAISE));
+      }
+
+      function drawTabs() {
+        $('tabs').replaceChildren(...SHEETS.map((s, i) => {
+          const tab = el('button', {
+            class: `ws-tab${i === at ? ' on' : ''}${finished[i] ? ' done' : ''}`,
+            'aria-label': `Sheet ${i + 1}: ${s.title}`,
+          }, el('span', { class: 'ws-tab-no', text: finished[i] ? '✓' : `${i + 1}` }));
+          tab.addEventListener('click', () => openSheet(i));
+          return tab;
+        }));
+      }
+
+      // ---------- the lesson clock, so an hour can be paced ----------
+      let ticking = 0;
+      let seconds = 0;
+      function showClock() {
+        $('clockTime').textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+      }
+      $('clock').addEventListener('click', () => {
+        if (ticking) {
+          clearInterval(ticking);
+          ticking = 0;
+          $('clock').classList.remove('on');
+          return;
+        }
+        ticking = setInterval(() => { seconds++; showClock(); }, 1000);
+        $('clock').classList.add('on');
+      });
+      showClock();
+
+      $('prevBtn').addEventListener('click', () => openSheet(at - 1));
+      $('nextBtn').addEventListener('click', () => openSheet(at + 1));
+      $('newBtn').addEventListener('click', () => {
+        finished[at] = false;
+        $('finish').hidden = true;
+        openSheet(at, { speak: false, scroll: false, fresh: true });
+      });
+      $('againBtn').addEventListener('click', () => {
+        finished.fill(false);
+        built.fill(null);
+        $('finish').hidden = true;
+        seconds = 0;
+        showClock();
+        openSheet(0, { speak: false, fresh: true });
+      });
+
+      openSheet(0, { speak: false, scroll: false });
+      document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
+    })();
+  </script>
+</body>
+</html>
