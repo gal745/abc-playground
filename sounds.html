@@ -147,12 +147,14 @@
       const standard = l => DATA.sounds[l] || DATA.pairSounds[l];
       let fixing = null;
 
-      // sounds you can hold on and hum or hiss, so "sss" is worth offering for them
+      // sounds you can hold on and hum or hiss: worth offering the drawn-out spelling too,
+      // though some voices read those out as letters ("sss" as "ESS ESS") rather than hissing
       const HELD = ['f', 'l', 'm', 'n', 'r', 's', 'v', 'z'];
+      const EXTRA_IDEAS = { s: ['sah', 'sss', 'suh', 'ssah'], x: ['kss', 'ks', 'kuss', 'ksah'], m: ['mmm', 'mah', 'muh'] };
 
       function ideas(l) {
         const s = STEM[l];
-        const list = PAIR_IDEAS[l] || VOWEL_IDEAS[l]
+        const list = PAIR_IDEAS[l] || VOWEL_IDEAS[l] || EXTRA_IDEAS[l]
           || [`${s}ah`, `${s}uh`, `${s}er`, ...(HELD.includes(l) ? [`${s}${s}${s}`] : [])];
         return [...new Set([standard(l), ...list])].slice(0, 5);
       }

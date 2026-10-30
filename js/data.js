@@ -22,16 +22,17 @@ const DATA = (() => {
   // old "-uh" endings were invented words: British voices turned "puh" into "poo" and "buh"
   // into "boo". An "-ah" ending is read the same way by every voice (bah, nah, rah, wah are
   // real words), so the consonant at the front comes out clearly. The sounds that can be
-  // held on their own - mmm, sss - are written as they are hummed or hissed.
+  // held on their own - mmm - are written as they are hummed.
   //
-  // Two letters on their own are the danger: a voice that does not know the word reads them
-  // out as initials instead. "ih" came out as "I. H.", so the i sound is spelled "ihh" - long
-  // enough that the voice sounds it out instead of spelling it. If any sound comes out wrong
-  // on a particular device, the Sound check page (sounds.html) changes it by ear.
+  // A spelling that is not a word AND has no vowel in it is the danger: the voice gives up and
+  // reads the letters out instead. "ih" came out as "I. H." and "sss" as "ESS ESS", so i is
+  // spelled "ihh" and s is spelled "sah" like the other consonants. "mmm" is safe because it
+  // is a real word. If any sound comes out wrong on a particular device, the Sound check page
+  // (sounds.html) changes it by ear.
   const sounds = {
     a: 'ah', b: 'bah', c: 'kah', d: 'dah', e: 'eh', f: 'fah', g: 'gah', h: 'hah', i: 'ihh',
     j: 'jah', k: 'kah', l: 'lah', m: 'mmm', n: 'nah', o: 'aw', p: 'pah', q: 'kwah', r: 'rah',
-    s: 'sss', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'kss', y: 'yah', z: 'zah',
+    s: 'sah', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'kss', y: 'yah', z: 'zah',
   };
 
   // Pictures that START with each letter sound. The first word is the letter's "keyword".
