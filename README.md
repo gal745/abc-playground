@@ -36,7 +36,13 @@ Every game has **5 levels**, except Balloon Pop, which has 7. Finishing a level 
 
 `sheets.html` is eight printable worksheets for pencil work — circle the pair, write the missing pair, draw a line to the picture, one box per sound, tick what you can hear, and three sheets of joining letters. The joining sheets share no words between them, the second starts with two-sound words, and the third ends with four-sound ones. Each prints on its own page, and **Make new sheets** picks different words so a fresh set can be printed each week.
 
-`lesson.html` is a whole lesson done on the screen: ten interactive worksheets, about an hour in all. Warming up the
+`today.html` is **Today's Lesson**: a short reading lesson a child can work through alone, about fifteen minutes.
+Warm up the sounds, then join two letters, three letters, the pairs **sh ch th oo ee**, and four letters — one word on
+the screen at a time, each sound tapped in turn, then the letters slide together and the word is read out. Every
+instruction is spoken, nothing is typed, it moves on by itself, and a few idle seconds bring a nudge. Linked from the
+home screen, and the thing to point a child at on a day when nobody can sit with them.
+
+`lesson.html` is the version to do together: ten interactive worksheets, about an hour in all. Warming up the
 sounds, joining two letters (a + t), joining three (c-a-t), finding the pair hiding in a word, filling a missing pair
 from a bank of **sh ch th oo ee**, reading words that look alike, one box for each sound, and word families — then a
 word bank of every word the child actually read in that lesson, and six sentences (*a cat up a tree*) built by tapping

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Today's Lesson · ABC Playground</title>
+  <meta name="description" content="A short reading lesson a child can do on their own: joining two, three and four sounds into words.">
+  <meta name="theme-color" content="#9fdcff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Noto+Color+Emoji&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="days-page today-page">
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="hill h1"></div>
+    <div class="hill h2"></div>
+  </div>
+
+  <main class="days-main today-main" translate="no">
+    <header class="days-top">
+      <a class="round-btn" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
+      <h1 class="days-title today-title">Today's Lesson</h1>
+      <button id="sayAgain" class="round-btn" aria-label="Say that again" hidden><span class="emoji">🔊</span></button>
+    </header>
+
+    <!-- the start card: one big button, because nobody is here to explain -->
+    <section id="startCard" class="ty-start">
+      <span class="emoji ty-start-pic">📖</span>
+      <h2 class="ty-start-h">Reading on your own</h2>
+      <p class="ty-start-p">Sounds, then little words, then longer ones. I will tell you what to do.</p>
+      <button id="startBtn" class="say-all ty-go"><span class="emoji">▶️</span> Start</button>
+      <p class="ty-note">Sound on, please! About 15 minutes.</p>
+    </section>
+
+    <nav id="stepBar" class="ty-steps" aria-label="The parts of the lesson" hidden></nav>
+    <p id="stepHow" class="ty-how" hidden></p>
+    <div id="dots" class="ty-dots" hidden></div>
+    <section id="stage" class="ty-stage" hidden></section>
+
+    <section id="finish" class="ty-finish" hidden>
+      <h2 class="ty-finish-h">All finished!</h2>
+      <div id="finishStars" class="ty-stars"></div>
+      <p id="finishCount" class="ty-finish-p"></p>
+      <div class="ty-finish-row">
+        <button id="againBtn" class="say-all"><span class="emoji">🔁</span> Do it again</button>
+        <a class="print-link" href="index.html"><span class="emoji">🎮</span> Go and play</a>
+      </div>
+    </section>
+
+    <p class="days-hint note">For grown-ups: this is a whole short lesson a child can do alone — every
+      instruction is spoken, nothing is typed, and it moves on by itself. The longer teacher-led version
+      is on the <a href="lesson.html">lesson sheets</a> page.</p>
+  </main>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/data.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // Today's Lesson: a short reading lesson for a child working on their own. One thing on the
+    // screen at a time, every instruction spoken, and it moves itself on. Joining two sounds,
+    // then three, then the pairs, then four - the same ground as the last lesson, one step further.
+    (() => {
+      const $ = id => document.getElementById(id);
+      const el = UI.el;
+      const say = (...parts) => { Sound.unlock(); return Sound.say(...parts); };
+      const letter = (text, cls = '') => el('span', { class: `letter ty-l ${cls}`, text: UI.showLetter(text) });
+
+      const chunksOf = w => (w.c || [...w.w]);
+      const withChunks = list => list.map(w => ({ w: w.w, e: w.e || '', c: chunksOf(w) }));
+      const littleWords = DATA.joins.map(w => ({ w, e: '', c: [...w] }));
+      const pairWords = withChunks(DATA.soundPairs.flatMap(g => g.words));
+
+      // never the same picture twice in one step
+      function pick(from, n) {
+        const seen = new Set();
+        return UI.shuffle(from).filter(w => !w.e || (!seen.has(w.e) && seen.add(w.e))).slice(0, n);
+      }
+      // a word for every pair, so sh ch th oo and ee all come round
+      const onePerPair = () => UI.shuffle(DATA.soundPairs.map(g => withChunks([UI.pick(g.words)])[0]));
+
+      const WARM = ['a', 'e', 'i', 'o', 'u', 'sh', 'ch', 'th', 'oo', 'ee'];
+
+      const STEPS = [
+        {
+          title: 'Warm up', how: 'Tap every sound and say it out loud.',
+          intro: "Let's warm up. Tap every sound and say it with me.",
+          warmUp: true,
+        },
+        {
+          title: 'Two sounds', how: 'Tap each letter, then they join up into a word.',
+          intro: 'Two sounds now. Tap each letter and say its sound.',
+          words: () => pick(littleWords, 5),
+        },
+        {
+          title: 'Three sounds', how: 'Say the picture, then tap the sounds in order.',
+          intro: 'Three sounds. Tap them in order, and they make the word.',
+          words: () => pick(withChunks(DATA.cvc), 7),
+        },
+        {
+          title: 'Two letters, one sound', how: 'Some sounds need two letters. They share a card.',
+          intro: 'These ones are clever. Two letters, one sound.',
+          words: () => onePerPair().concat(pick(pairWords, 1)).slice(0, 6),
+        },
+        {
+          title: 'Four sounds', how: 'A longer word. Still one sound at a time.',
+          intro: 'Now a longer word. Four sounds, one at a time.',
+          words: () => pick(withChunks(DATA.cvcc), 6),
+        },
+      ];
+
+      let step = 0;
+      let queue = [];
+      let item = null;
+      let pos = 0;
+      let locked = false;
+      let tiles = [];
+      let wordsRead = 0;
+      let wrongHere = 0;
+      let idleTimer = 0;
+      let lastSaid = null;
+
+      // a child on their own gets a nudge, not silence, if nothing happens
+      function waitForTap(hint) {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (locked) return;
+          const tile = tiles[pos];
+          if (tile) UI.replayClass(tile, 'bounce');
+          hint();
+        }, 8000);
+      }
+      const stopWaiting = () => clearTimeout(idleTimer);
+
+      function speak(...parts) {
+        lastSaid = parts;
+        return say(...parts);
+      }
+      $('sayAgain').addEventListener('click', () => { if (lastSaid) say(...lastSaid); });
+
+      function drawSteps() {
+        $('stepBar').replaceChildren(...STEPS.map((s, i) => el('span', {
+          class: `ty-step${i === step ? ' on' : ''}${i < step ? ' done' : ''}`,
+          text: i < step ? '✓' : `${i + 1}`,
+          'aria-label': `Part ${i + 1}: ${s.title}`,
+        })));
+      }
+
+      function drawDots(total, done) {
+        $('dots').replaceChildren(...Array.from({ length: total }, (_, i) =>
+          el('span', { class: `ty-dot${i < done ? ' on' : ''}` })));
+      }
+
+      // ---------- part 1: warm up ----------
+      function startWarmUp() {
+        const sounds = UI.shuffle(WARM);
+        let done = 0;
+        drawDots(sounds.length, 0);
+        const grid = el('div', { class: 'ty-warm' }, ...sounds.map((s, i) => {
+          const tile = el('button', {
+            class: `ty-sound pop-in${s.length > 1 ? ' pair' : ''}`,
+            style: `animation-delay:${0.05 + i * 0.05}s`,
+            'aria-label': `The sound ${s}`,
+          }, letter(s), el('span', { class: 'ty-tick', text: '✓' }));
+          tile.addEventListener('click', () => {
+            const first = !tile.classList.contains('got');
+            say({ sound: s }, 250, { sound: s });
+            if (!first) return;
+            tile.classList.add('got');
+            done++;
+            drawDots(sounds.length, done);
+            stopWaiting();
+            if (done >= sounds.length) {
+              locked = true;
+              Sound.sfx('correct');
+              setTimeout(() => nextStep(), 1200);
+            } else {
+              waitForTap(() => say('Tap another one.'));
+            }
+          });
+          return tile;
+        }));
+        $('stage').replaceChildren(grid);
+        waitForTap(() => say('Tap a sound to hear it.'));
+      }
+
+      // ---------- parts 2 to 5: joining sounds into a word ----------
+      function nextWord() {
+        if (!queue.length) return nextStep();
+        item = queue.shift();
+        pos = 0;
+        locked = false;
+        wrongHere = 0;
+        drawDots(STEPS[step].total, STEPS[step].total - queue.length - 1);
+
+        const pic = el('div', { class: `ty-pic${item.e ? '' : ' empty'}` },
+          item.e ? el('span', { class: 'emoji', text: '❓' }) : null);
+        const row = el('div', { class: 'ty-row' });
+        tiles = item.c.map((bit, i) => {
+          const tile = el('button', {
+            class: `ty-tile pop-in${bit.length > 1 ? ' pair' : ''}`,
+            style: `--bc:${UI.COLORS[i % UI.COLORS.length]};animation-delay:${0.08 + i * 0.1}s`,
+            'aria-label': `The sound ${bit}`,
+          }, letter(bit));
+          tile.addEventListener('click', () => tapTile(i, tile, bit, row, pic));
+          return tile;
+        });
+        row.replaceChildren(...tiles);
+        mark();
+
+        $('stage').replaceChildren(pic, row);
+        const first = STEPS[step].total === queue.length + 1;
+        speak(first ? STEPS[step].intro : UI.pick(['Your turn.', 'Next one!', 'Here we go.']), 200, 'Tap the first sound.');
+        waitForTap(() => say('Tap this one.', 150, { sound: item.c[pos] }));
+      }
+
+      function mark() {
+        tiles.forEach((t, i) => t.classList.toggle('next', i === pos && !locked));
+      }
+
+      function tapTile(i, tile, bit, row, pic) {
+        if (locked) return;
+        stopWaiting();
+        if (i !== pos) {
+          Sound.sfx('wrong');
+          UI.replayClass(tile, 'shake');
+          UI.replayClass(tiles[pos], 'bounce');
+          wrongHere++;
+          // after a couple of tries, stop asking and show them
+          say(wrongHere >= 2 ? ['This one next.', 150, { sound: item.c[pos] }] : [pos === 0 ? 'Start at the beginning.' : 'This one is next.']);
+          waitForTap(() => say('Tap this one.', 150, { sound: item.c[pos] }));
+          return;
+        }
+
+        Sound.sfx('tap');
+        tile.classList.add('got');
+        pos++;
+        mark();
+
+        if (pos < item.c.length) {
+          say({ sound: bit });
+          waitForTap(() => say('And the next one.', 150, { sound: item.c[pos] }));
+          return;
+        }
+        blend(row, pic);
+      }
+
+      // the sounds run together and the word comes out: the whole point of the lesson
+      function blend(row, pic) {
+        locked = true;
+        mark();
+        wordsRead++;
+        const glow = i => tiles.forEach((t, j) => t.classList.toggle('glow', i === j));
+        const parts = [300, () => row.classList.add('together')];
+        item.c.forEach((bit, i) => parts.push(() => glow(i), { sound: bit }, 90));
+        parts.push(() => glow(-1), 200, `${item.w}!`, () => {
+          Sound.sfx('correct');
+          UI.replayClass(row, 'bounce');
+          if (item.e) pic.replaceChildren(el('span', { class: 'emoji ty-pic-shown pop-in', text: item.e }));
+        }, 300, UI.pick(UI.PRAISE));
+        Sound.say(...parts).then(ok => { if (ok) setTimeout(nextWord, 700); });
+      }
+
+      // ---------- moving through the lesson ----------
+      function nextStep() {
+        stopWaiting();
+        step++;
+        if (step >= STEPS.length) return finish();
+        startStep();
+      }
+
+      function startStep() {
+        const s = STEPS[step];
+        drawSteps();
+        $('stepHow').textContent = s.how;
+        locked = false;
+        if (s.warmUp) {
+          speak(s.intro);
+          return startWarmUp();
+        }
+        queue = s.words();
+        s.total = queue.length;
+        nextWord();
+      }
+
+      function finish() {
+        $('stage').hidden = true;
+        $('dots').hidden = true;
+        $('stepHow').hidden = true;
+        drawSteps();
+        $('finishStars').replaceChildren(...Array.from({ length: 5 }, (_, i) =>
+          el('span', { class: 'emoji ty-star pop-in', style: `animation-delay:${i * 0.1}s`, text: '⭐' })));
+        $('finishCount').textContent = `You read ${wordsRead} words all by yourself.`;
+        $('finish').hidden = false;
+        UI.confetti();
+        Sound.sfx('win');
+        speak('You did the whole lesson!', 300, `You read ${wordsRead} words all by yourself.`, 300, 'Brilliant!');
+      }
+
+      function begin() {
+        $('startCard').hidden = true;
+        $('finish').hidden = true;
+        $('stepBar').hidden = false;
+        $('stepHow').hidden = false;
+        $('dots').hidden = false;
+        $('stage').hidden = false;
+        $('sayAgain').hidden = false;
+        wordsRead = 0;
+        step = 0;
+        startStep();
+      }
+
+      $('startBtn').addEventListener('click', () => { Sound.unlock(); begin(); });
+      $('againBtn').addEventListener('click', () => { Sound.unlock(); begin(); });
+      document.addEventListener('pointerdown', () => Sound.unlock(), { once: true, capture: true });
+    })();
+  </script>
+</body>
+</html>

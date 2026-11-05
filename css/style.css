@@ -1214,6 +1214,85 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .ws-done-stars { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .ws-done-star { font-size: clamp(1.6rem, 7vw, 2.4rem); }
 
+/* ---------- Today's Lesson: a short lesson a child does alone (today.html) ---------- */
+.today-main { max-width: 760px; gap: clamp(10px, 2.4vh, 22px); justify-content: flex-start; }
+.today-title { color: #0a7c74; }
+
+.ty-start {
+  width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  margin-top: clamp(10px, 4vh, 40px); padding: clamp(18px, 5vw, 32px); border-radius: 30px;
+  background: rgba(255, 255, 255, .95); box-shadow: 0 8px 0 rgba(0, 0, 0, .08); text-align: center;
+}
+.ty-start-pic { font-size: clamp(3.4rem, 16vmin, 6rem); animation: bob 3s ease-in-out infinite; }
+.ty-start-h { margin: 0; font-size: clamp(1.3rem, 5.5vw, 2rem); color: var(--ink); }
+.ty-start-p { margin: 0; color: var(--soft-ink); font-weight: 600; line-height: 1.4; }
+.ty-go { font-size: clamp(1.2rem, 5vw, 1.6rem); padding: 14px 32px; }
+.ty-note { margin: 0; color: var(--soft-ink); font-size: .9rem; font-family: system-ui, sans-serif; }
+
+.ty-steps { display: flex; justify-content: center; gap: 8px; }
+.ty-step {
+  width: clamp(30px, 8vw, 38px); aspect-ratio: 1; border-radius: 12px; display: grid; place-items: center;
+  background: rgba(255, 255, 255, .9); color: var(--soft-ink); font-weight: 700; box-shadow: 0 3px 0 rgba(0, 0, 0, .08);
+}
+.ty-step.done { background: #d8f3e5; color: #148f5b; }
+.ty-step.on { background: #0a7c74; color: #fff; box-shadow: 0 3px 0 #06615b; }
+.ty-how {
+  margin: 0; max-width: 34ch; text-align: center; color: var(--soft-ink); font-weight: 600;
+  font-size: clamp(.95rem, 3.6vw, 1.15rem); line-height: 1.35;
+}
+.ty-dots { display: flex; justify-content: center; gap: 7px; }
+.ty-dot { width: 11px; height: 11px; border-radius: 50%; background: rgba(255, 255, 255, .85); box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .06); }
+.ty-dot.on { background: #43aa8b; }
+
+.ty-stage { width: 100%; display: flex; flex-direction: column; align-items: center; gap: clamp(12px, 3vh, 26px); }
+/* ten sounds, five to a row, however narrow the screen: auto-fit spilled over the edge */
+.ty-warm { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(6px, 2vw, 14px); width: 100%; max-width: 520px; }
+.ty-sound {
+  position: relative; aspect-ratio: 1; border-radius: 22px; background: #fff; border: 4px solid #e4e7f2;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .1); display: grid; place-items: center;
+}
+.ty-sound .ty-l { font-size: clamp(1.5rem, 6.4vw, 2.6rem); color: var(--ink); }
+.ty-sound.pair .ty-l { font-size: clamp(1.05rem, 4.6vw, 1.9rem); }
+.ty-sound:active { transform: translateY(5px); box-shadow: none; }
+.ty-sound.got { background: #e9f8ef; border-color: #7fd3a6; }
+.ty-tick { position: absolute; top: -10px; right: -8px; font-size: 1.1rem; color: #148f5b; font-weight: 700; opacity: 0; }
+.ty-sound.got .ty-tick { opacity: 1; }
+
+.ty-pic { min-height: clamp(70px, 18vmin, 130px); display: grid; place-items: center; }
+.ty-pic.empty { min-height: 0; }
+.ty-pic .emoji { font-size: clamp(3rem, 14vmin, 6rem); opacity: .5; }
+.ty-pic .ty-pic-shown { opacity: 1; }
+
+.ty-row { display: flex; align-items: center; gap: clamp(10px, 4vmin, 28px); transition: gap .45s cubic-bezier(.3, 1.2, .5, 1); }
+.ty-row.together { gap: 3px; }
+.ty-tile {
+  width: clamp(64px, 19vmin, 132px); aspect-ratio: 1; border-radius: 26px; background: #fff; color: var(--bc);
+  border: 5px solid var(--bc); box-shadow: 0 8px 0 var(--bc); display: grid; place-items: center;
+  transition: background .2s, color .2s, transform .15s;
+}
+.ty-tile .ty-l { font-size: clamp(2.2rem, 10vmin, 4.4rem); }
+.ty-tile.pair .ty-l { font-size: clamp(1.5rem, 7vmin, 3.2rem); letter-spacing: -2px; }
+.ty-tile:active { transform: translateY(6px); box-shadow: none; }
+.ty-tile.got { background: var(--bc); color: #fff; text-shadow: 0 3px 0 rgba(0, 0, 0, .15); }
+.ty-tile.next { animation: pulse 1.3s ease-in-out infinite; }
+.ty-tile.glow { background: #ffe88a; border-color: #ffd166; color: #2b2d42; box-shadow: 0 8px 0 #ffd166; text-shadow: none; }
+
+.ty-finish {
+  width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: clamp(16px, 5vw, 28px); border-radius: 30px; background: rgba(255, 255, 255, .96);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .08); text-align: center;
+}
+.ty-finish-h { margin: 0; color: #0a7c74; font-size: clamp(1.3rem, 5.5vw, 2rem); }
+.ty-finish-p { margin: 0; color: var(--soft-ink); font-weight: 600; }
+.ty-stars { display: flex; gap: 6px; }
+.ty-star { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+.ty-finish-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ty-finish-row .print-link { margin: 0; text-decoration: none; }
+.today-page .days-hint.note {
+  margin-top: clamp(24px, 7vh, 60px); max-width: 46ch; font-size: .82rem; font-weight: 500;
+  font-family: system-ui, sans-serif; color: #7c819a; line-height: 1.45;
+}
+
 #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 30; }
 
 /* ---------- animations ---------- */
