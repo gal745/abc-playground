@@ -36,6 +36,8 @@
       <div id="accentSeg" class="seg accent-seg">
         <button data-v="gb"><span class="emoji">🇬🇧</span> British</button><button data-v="us"><span class="emoji">🇺🇸</span> American</button><button data-v="au"><span class="emoji">🇦🇺</span> Australian</button>
       </div>
+      <p id="voiceNow" class="voice-now"></p>
+      <p id="voiceWarn" class="tip" hidden></p>
       <div class="voice-row">
         <select id="voiceSelect" aria-label="Voice"></select>
         <div id="rateSeg" class="seg"><button data-v="slow">Slow</button><button data-v="normal">Normal</button></div>
@@ -270,6 +272,20 @@
           ...list.map(v => UI.el('option', { value: v.voiceURI }, label(v)))
         );
         $('voiceSelect').value = list.some(v => v.voiceURI === chosen) ? chosen : '';
+
+        // the voice that will actually speak, and where it is from
+        const now = Sound.voiceInUse();
+        const want = { gb: 'British', us: 'American', au: 'Australian' }[Settings.get('accent')] || 'British';
+        $('voiceNow').textContent = now
+          ? `Speaking now: ${label(now.voice)} — ${now.where} (${now.lang})`
+          : 'No speech voice found on this device.';
+        $('voiceNow').classList.toggle('off-accent', !!now && !now.wanted);
+        $('voiceWarn').hidden = !now || now.wanted;
+        if (now && !now.wanted) {
+          $('voiceWarn').innerHTML = `<b>This device has no ${want} voice.</b> It is speaking in ${now.where} instead. `
+            + `Add one in the device's own settings (Android: System → Languages → Text-to-speech. iPhone: Accessibility → Spoken Content → Voices), `
+            + `or try another accent button above.`;
+        }
       }
 
       function refresh() {

@@ -120,7 +120,7 @@ App.register({
       return Sound.say(
         fresh ? 'Here comes another caterpillar!' : null, fresh ? 250 : null,
         `It says ${word.w}.`, 300, `Now make it say ${target.w}!`,
-        findIt ? 250 : null, findIt ? 'Which sound has to change?' : null);
+        findIt ? 250 : null, findIt ? 'Which sound changes?' : null);
     }
 
     function replay() {
@@ -133,7 +133,7 @@ App.register({
       if (i !== at) {
         Sound.sfx('wrong');
         UI.replayClass(seg, 'shake');
-        Sound.say({ sound: bit }, 200, `stays the same in ${target.w}.`, 250, 'Try another one.');
+        Sound.say({ sound: bit }, 200, 'stays the same.', 250, 'Try another one.');
         return;
       }
       Sound.sfx('tap');

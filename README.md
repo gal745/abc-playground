@@ -77,7 +77,8 @@ Press and hold the ⚙️ button on the home screen for one second. There you ca
 - read a short "how to play together" guide
 - choose which letters to practise (for example just *s a t p i n*)
 - show letters as lowercase or capitals
-- choose a British, American or Australian accent, the voice and the speed
+- choose a British, American or Australian accent, the voice and the speed — the panel names the voice that is
+  actually speaking and where it is from, and says so plainly when a device has no British or Australian voice installed
 - open all levels at once (handy for older children)
 - download the printable sheets
 

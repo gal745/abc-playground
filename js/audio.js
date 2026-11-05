@@ -2,6 +2,9 @@
 const Sound = (() => {
   const synth = window.speechSynthesis || null;
   const recordings = {}; // letter -> Audio element, or false when there is no recording
+  let misses = 0;        // most sites have no recordings at all: stop hunting for them
+  let everPlayed = false;
+  let anyRecordings = true;
   let seq = 0;           // bumps whenever speech is interrupted, so old sequences stop
   let stopCurrent = null;
   let audioCtx = null;
@@ -41,14 +44,30 @@ const Sound = (() => {
   }
 
   // English voices for the chosen accent, best first (nearby accents if there are none).
+  // Android reports its voices as en-gb-x-rjs-local and the like, so match the start of the
+  // language, not the whole of it: matching the whole of it fell through to "any English
+  // voice" and could land on an American one even with British voices on the phone.
+  const speaks = (v, lang) => langOf(v) === lang || langOf(v).startsWith(`${lang}-`);
   function voicesFor(which = accent()) {
     const all = englishVoices();
     for (const lang of ACCENT_LANGS[which] || ACCENT_LANGS.gb) {
-      const list = all.filter(v => langOf(v) === lang);
+      const list = all.filter(v => speaks(v, lang));
       if (list.length) return list.sort((a, b) => quality(b) - quality(a));
     }
     return all.sort((a, b) => quality(b) - quality(a));
   }
+
+  // Is the voice actually from the part of the world the accent asks for? A device with no
+  // British or Australian voice falls back to whatever English it has, and a grown-up should
+  // be told rather than left wondering why it sounds American.
+  function accentOf(v) {
+    if (!v) return null;
+    const lang = langOf(v);
+    const names = { 'en-gb': 'British', 'en-au': 'Australian', 'en-ie': 'Irish', 'en-nz': 'New Zealand', 'en-us': 'American', 'en-ca': 'Canadian', 'en-in': 'Indian', 'en-za': 'South African' };
+    const key = Object.keys(names).find(k => lang === k || lang.startsWith(`${k}-`));
+    return { voice: v, lang: v.lang, where: key ? names[key] : 'English', wanted: !key || ACCENT_LANGS[accent()].includes(key) };
+  }
+  const voiceInUse = () => accentOf(bestVoice());
 
   function bestVoice() {
     const chosen = Settings.get('voice');
@@ -61,7 +80,9 @@ const Sound = (() => {
 
   const hasNaturalVoice = () => { const v = bestVoice(); return !!v && quality(v) >= 80; };
 
-  const rate = () => (Settings.get('rate') === 'slow' ? 0.75 : 0.95);
+  // A touch under natural speed: these are five- and seven-year-olds reading in a second
+  // language, and every word has to be caught the first time.
+  const rate = () => (Settings.get('rate') === 'slow' ? 0.7 : 0.9);
 
   function letterName(l) {
     l = l.toLowerCase();
@@ -143,9 +164,15 @@ const Sound = (() => {
 
   async function letterSound(l, my) {
     l = l.toLowerCase();
-    if (recordings[l] !== false) {
+    // Looking for a recording that is not there costs a moment before the voice speaks. Most
+    // sites have none at all, so after a few misses stop looking and answer straight away.
+    if (anyRecordings && recordings[l] !== false) {
       const played = await playRecording(l);
-      if (played || my !== seq) return;
+      if (played) { everPlayed = true; return; }
+      if (my !== seq) return;
+      // one recording anywhere means the rest are worth looking for; none after several
+      // letters means this site has none, so stop paying for the look-up every time
+      if (!everPlayed && ++misses >= 6) anyRecordings = false;
     }
     await speakOne(soundText(l));
   }
@@ -257,5 +284,5 @@ const Sound = (() => {
   }
   if (synth) synth.getVoices();
 
-  return { say, stop, sfx, unlock, voicesFor, hasNaturalVoice, onVoices, letterName, soundText };
+  return { say, stop, sfx, unlock, voicesFor, hasNaturalVoice, voiceInUse, onVoices, letterName, soundText };
 })();

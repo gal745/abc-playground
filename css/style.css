@@ -1004,6 +1004,8 @@ body.days-page { height: auto; min-height: 100%; overflow: visible; }
   margin: 0 0 12px; padding: 10px 14px; border-radius: 14px; background: #fff4c7; color: #5c4a00;
   font-family: system-ui, sans-serif; font-size: .92rem; line-height: 1.45;
 }
+.voice-now { margin: 10px 0; color: var(--soft-ink); font-family: system-ui, sans-serif; font-size: .88rem; }
+.voice-now.off-accent { color: #b3541e; font-weight: 600; }
 .voice-row { display: flex; gap: 10px; margin-bottom: 12px; }
 select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 10px; border-radius: 12px; border: 2px solid #e2dcf0; background: #fff; color: var(--ink); }
 .print-row { display: flex; flex-wrap: wrap; gap: 10px; }

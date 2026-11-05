@@ -66,7 +66,7 @@ App.register({
     function ask() {
       if (oddOneOut) {
         return Sound.say('Three of these rhyme.', 200, 'Which one does not rhyme?', 350,
-          ...(readOptions ? readAll() : ['Say the words out loud yourself!']), () => highlight(null));
+          ...(readOptions ? readAll() : ['Say the words out loud.']), () => highlight(null));
       }
       return Sound.say(`${target.w}.`, 250, `Which one rhymes with ${target.w}?`, 350, ...readAll(), () => highlight(null));
     }

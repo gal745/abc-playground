@@ -229,7 +229,7 @@
               if (card.classList.contains('ws-ok')) return;
               if (i !== at) {
                 nope(chunk);
-                say(bit.length > 1 ? 'Not that pair.' : 'That is one letter on its own.', 200, 'Listen again:', { sound: w.p });
+                say(bit.length > 1 ? 'Not that pair.' : 'That is only one letter.', 200, 'Listen again:', { sound: w.p });
                 return;
               }
               chunk.classList.add('ringed');

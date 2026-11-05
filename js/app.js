@@ -387,6 +387,22 @@ const App = (() => {
     select.value = list.some(v => v.voiceURI === chosen) ? chosen : '';
     const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
     $('voiceTip').hidden = mobile || Sound.hasNaturalVoice();
+
+    // Which voice is really speaking? A device with no British or Australian voice quietly
+    // falls back to whatever English it has, and a grown-up should be told, not left guessing.
+    const now = Sound.voiceInUse();
+    const where = { gb: 'British', us: 'American', au: 'Australian' }[Settings.get('accent')] || 'British';
+    $('voiceNow').textContent = now
+      ? `Speaking now: ${label(now.voice)} — ${now.where} (${now.lang})`
+      : 'No speech voice found on this device.';
+    $('voiceNow').classList.toggle('off-accent', !!now && !now.wanted);
+    $('voiceWarn').hidden = !now || now.wanted;
+    if (now && !now.wanted) {
+      $('voiceWarn').innerHTML = `<b>This device has no ${where} voice.</b> It is speaking in `
+        + `${now.where} instead. On Android: Settings → System → Languages → Text-to-speech, and `
+        + `install the ${where} voice. On iPhone: Settings → Accessibility → Spoken Content → Voices → English. `
+        + `Or try the other accent buttons above — one of them may have a voice on this device.`;
+    }
   }
 
   function testVoice() {

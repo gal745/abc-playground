@@ -45,8 +45,8 @@ App.register({
     });
 
     const instructions = () => (pictures
-      ? Sound.say("Let's play a matching game!", 200, 'Find a letter, and a picture that starts with its sound.')
-      : Sound.say("Let's play a matching game!", 200, 'Turn over two cards, and find a big letter and its little letter.'));
+      ? Sound.say("Let's play a matching game!", 200, 'Find a letter and a picture that starts with it.')
+      : Sound.say("Let's play a matching game!", 200, 'Find a big letter and its little letter.'));
 
     const spoken = c => (c.kind === 'pic' ? c.word : Sound.letterName(c.l));
 
