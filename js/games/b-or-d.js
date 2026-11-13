@@ -31,6 +31,10 @@ App.register({
       : 0);
 
     const KEY = { b: (DATA.words.b || [])[0], d: (DATA.words.d || [])[0] };
+    // b is blue - b for blue - and d is red. The colour is the thing a child catches first,
+    // long before the shape, so it is on the letters, the buttons and the bed.
+    const DOT = { b: '🔵', d: '🔴' };
+    const COLOUR = { b: 'blue', d: 'red' };
 
     let queue = [];
     let item = null;
@@ -55,7 +59,8 @@ App.register({
     stage.append(pic, slots, choices, bed);
 
     function trick() {
-      return Sound.say('Think of the word bed.', 300, 'b at the front,', 200, 'd at the back!');
+      return Sound.say('b is blue.', 250, 'd is red.', 350,
+        'Think of the word bed.', 300, 'The blue b is at the front,', 200, 'and the red d is at the back!');
     }
 
     function next() {
@@ -71,13 +76,12 @@ App.register({
 
       slots.replaceChildren(...[...item.w].map((l, i) => (i === spot
         ? UI.el('span', { class: 'bd-gap', id: 'bdGap' })
-        : UI.el('span', { class: 'letter bd-letter', text: UI.showLetter(l) }))));
+        : UI.el('span', { class: `letter bd-letter${'bd'.includes(l) ? ` is-${l}` : ''}`, text: UI.showLetter(l) }))));
 
       choices.replaceChildren(...UI.shuffle(['b', 'd']).map(letter => {
-        const kw = KEY[letter];
-        const btn = UI.el('button', { class: 'bd-btn pop-in', 'aria-label': `the letter ${letter}` },
+        const btn = UI.el('button', { class: `bd-btn is-${letter} pop-in`, 'aria-label': `the ${COLOUR[letter]} letter ${letter}` },
           UI.el('span', { class: 'letter bd-big', text: letter }),
-          kw ? UI.el('span', { class: 'emoji bd-kw', text: kw.e }) : null);
+          UI.el('span', { class: 'emoji bd-kw', text: DOT[letter] }));
         btn.addEventListener('click', () => choose(btn, letter));
         return btn;
       }));
@@ -102,10 +106,10 @@ App.register({
         UI.replayClass(bed, 'bounce');
         wrongHere++;
         const kw = KEY[letter];
-        const named = `That one is ${Sound.letterName(letter)}${kw ? `, like ${kw.w}.` : '.'}`;
+        const named = `That is the ${COLOUR[letter]} one, ${Sound.letterName(letter)}${kw ? `, like ${kw.w}.` : '.'}`;
         const parts = [named, 300];
-        if (wrongHere === 1) parts.push('Look at the bed:', 200, 'b at the front,', 150, 'd at the back.');
-        else parts.push('This one is', { name: want }, 200, `for ${item.w}.`);
+        if (wrongHere === 1) parts.push('Look at the bed:', 200, 'blue b at the front,', 150, 'red d at the back.');
+        else parts.push('Try the', COLOUR[want], 'one,', { name: want }, 200, `for ${item.w}.`);
         Sound.say(...parts);
         // after a second slip, the right letter gives itself a nudge
         if (wrongHere >= 2) {
@@ -121,7 +125,7 @@ App.register({
       btn.classList.add('right');
       const gap = document.getElementById('bdGap');
       UI.flyTo(btn.firstChild, gap, () => {
-        gap.replaceChildren(UI.el('span', { class: 'letter bd-letter in', text: UI.showLetter(want) }));
+        gap.replaceChildren(UI.el('span', { class: `letter bd-letter in is-${want}`, text: UI.showLetter(want) }));
         gap.classList.add('filled');
         UI.replayClass(slots, 'bounce');
       });

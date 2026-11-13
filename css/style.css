@@ -1,4 +1,6 @@
 :root {
+  --bd-blue: #1f6fd0;   /* b is blue: b for blue */
+  --bd-red: #e0322f;    /* and d is red */
   --ink: #2b2d42;
   --soft-ink: #62647c;
   --sky-top: #9fdcff;
@@ -1233,7 +1235,9 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .stage-bord .bd-pic .picture { font-size: clamp(3rem, 13vmin, 6.5rem); }
 .bd-word { display: flex; align-items: center; gap: clamp(4px, 1.6vw, 10px); }
 .bd-letter { font-size: clamp(2.2rem, 10vmin, 4.4rem); color: var(--ink); }
-.bd-letter.in { color: #0a7c74; }
+/* b is blue and d is red, everywhere in this game: the colour is the first thing they see */
+.bd-letter.is-b, .bd-bed-word .bd-b { color: var(--bd-blue); }
+.bd-letter.is-d, .bd-bed-word .bd-d { color: var(--bd-red); }
 .bd-gap {
   width: clamp(44px, 13vmin, 80px); height: clamp(58px, 15vmin, 100px); border-radius: 14px;
   border: 4px dashed var(--c); display: grid; place-items: center; animation: pulse 1.6s ease-in-out infinite;
@@ -1243,12 +1247,16 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .bd-btn {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
   width: clamp(96px, 26vmin, 170px); padding: clamp(10px, 2.5vh, 18px) 10px; border-radius: 28px;
-  background: #fff; border: 5px solid var(--c); box-shadow: 0 8px 0 rgba(0, 0, 0, .12);
+  background: #fff; border: 5px solid var(--bc, var(--c)); box-shadow: 0 8px 0 var(--bc, rgba(0, 0, 0, .12));
 }
+.bd-btn.is-b { --bc: var(--bd-blue); }
+.bd-btn.is-d { --bc: var(--bd-red); }
+.bd-btn.is-b .bd-big { color: var(--bd-blue); }
+.bd-btn.is-d .bd-big { color: var(--bd-red); }
 .bd-btn:active { transform: translateY(5px); box-shadow: 0 3px 0 rgba(0, 0, 0, .12); }
 .bd-big { font-size: clamp(3rem, 15vmin, 6rem); color: var(--ink); line-height: .95; }
 .bd-kw { font-size: clamp(1.4rem, 6vmin, 2.4rem); }
-.bd-btn.hint { animation: pulse 1s ease-in-out infinite; box-shadow: 0 8px 0 var(--c), 0 0 0 6px rgba(241, 91, 181, .3); }
+.bd-btn.hint { animation: pulse 1s ease-in-out infinite; box-shadow: 0 8px 0 var(--bc), 0 0 0 6px rgba(0, 0, 0, .12); }
 .bd-btn:disabled { opacity: .45; }
 .bd-btn.right:disabled { opacity: 1; background: #e6f8ec; }
 /* the reminder card: a bed is b and d facing each other */
@@ -1258,8 +1266,7 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 }
 .bd-bed .emoji { font-size: clamp(1.4rem, 5.5vmin, 2.2rem); }
 .bd-bed-word { font-size: clamp(1.5rem, 6vmin, 2.4rem); letter-spacing: 2px; color: var(--soft-ink); }
-.bd-bed-word .bd-b { color: #e01e5a; }
-.bd-bed-word .bd-d { color: #2f6fd1; }
+
 
 /* ---------- Read and Find ---------- */
 .stage-readfind { gap: clamp(10px, 2.5vh, 24px); }
