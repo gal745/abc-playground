@@ -6,22 +6,23 @@ App.register({
   name: 'Word Bubbles',
   emoji: '🫧',
   color: '#4d96ff',
-  levels: ['Two-letter words', 'Three-letter words', 'Pair words: sh ch th oo ee', 'Read it: find the picture', 'All the words, and quick'],
+  levels: ['Two-letter words', 'Three-letter words', 'Pair words: sh ch th oo ee', 'Read it: find the picture', 'All the words, and quick', 'Longer words: four sounds'],
 
   create(stage, api) {
     const L = api.level;
     const GOAL = 5;
-    const RISE = [[13, 16], [12, 15], [12, 15], [11, 14], [9, 12]][L - 1];  // seconds to float up
-    const GAP = [1500, 1400, 1400, 1300, 1100][L - 1];                      // ms between bubbles
-    const MAX = [4, 4, 4, 5, 5][L - 1];
-    const readOnly = L >= 4;      // the word is not said: the picture is the only clue
+    const RISE = [[13, 16], [12, 15], [12, 15], [11, 14], [9, 12], [12, 15]][L - 1];  // seconds to float up
+    const GAP = [1500, 1400, 1400, 1300, 1100, 1400][L - 1];                         // ms between bubbles
+    const MAX = [4, 4, 4, 5, 5, 4][L - 1];
+    const readOnly = L === 4 || L === 5;   // the word is not said: the picture is the only clue
 
     const little = DATA.joins.map(w => ({ w, e: '' }));
     const pairWords = DATA.soundPairs.flatMap(g => g.words);
     const pool = L === 1 ? little
       : L === 2 ? DATA.cvc
         : L === 3 ? pairWords
-          : DATA.cvc.concat(pairWords);
+          : L === 6 ? DATA.cvcc            // frog, drum, tent: four sounds, like today's lesson
+            : DATA.cvc.concat(pairWords);
 
     const bubbles = new Set();
     let target = null;

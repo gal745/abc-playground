@@ -39,23 +39,23 @@
       <p class="ty-note">Sound on, please!</p>
     </section>
 
-    <section class="ty-card" id="part1" data-no="1" data-title="Warm up the sounds"
+    <section class="ty-card" id="part1" data-game="balloons" data-game-name="🎈 Balloon Pop" data-no="1" data-title="Warm up the sounds"
       data-how="Tap every sound and say it out loud."
       data-say="Let's warm up. Tap every sound and say it with me."></section>
 
-    <section class="ty-card" id="part2" data-no="2" data-title="Read it, then find it"
+    <section class="ty-card" id="part2" data-game="readfind" data-game-name="📘 Read and Find" data-no="2" data-title="Read it, then find it"
       data-how="Read the word. Tap the picture it says."
       data-say="Read the word by yourself, then tap the picture it says."></section>
 
-    <section class="ty-card" id="part3" data-no="3" data-title="Word families"
+    <section class="ty-card" id="part3" data-game="bug" data-game-name="🐛 Change a Sound" data-no="3" data-title="Word families"
       data-how="The ending is the same. Tap each word and read it."
       data-say="These words end the same way. Tap each one and read it out loud."></section>
 
-    <section class="ty-card" id="part4" data-no="4" data-title="Longer words"
+    <section class="ty-card" id="part4" data-game="bubbles" data-game-name="🫧 Word Bubbles" data-no="4" data-title="Longer words"
       data-how="Four sounds now. Tap the word to see what it is."
       data-say="Longer words. Read each one, then tap it to see the picture."></section>
 
-    <section class="ty-card" id="part5" data-no="5" data-title="Read a sentence"
+    <section class="ty-card" id="part5" data-game="sentence" data-game-name="🖼️ Match the Sentence" data-no="5" data-title="Read a sentence"
       data-how="Read the sentence. Tap the two pictures it tells you about."
       data-say="Now a whole sentence. Read it, then tap the pictures it tells you about."></section>
 
@@ -123,7 +123,12 @@
         const next = el('button', { class: 'ty-next', hidden: 'hidden' }, 'Next ⬇');
         next.addEventListener('click', () => scrollTo(PARTS[PARTS.indexOf(id) + 1] || 'finish'));
 
-        const me = { done: 0, total: 0, announced: false, body, tick, next, box };
+        // once a part is finished, the game that keeps up the same job is one tap away
+        const play = el('a', {
+          class: 'ty-play', hidden: 'hidden', href: `index.html?play=${box.dataset.game}`,
+        }, el('span', { class: 'emoji', text: '🎮' }), ` Play ${box.dataset.gameName}`);
+
+        const me = { done: 0, total: 0, announced: false, body, tick, next, play, box };
         state[id] = me;
         me.score = () => {
           me.done++;
@@ -131,10 +136,11 @@
           box.classList.add('finished');
           tick.hidden = false;
           next.hidden = false;   // the last part's button goes to the stars
+          play.hidden = false;
           Sound.sfx('correct');
           progress();
         };
-        box.replaceChildren(head, body, tick, next);
+        box.replaceChildren(head, body, tick, el('div', { class: 'ty-after' }, next, play));
         build(body, me);
       }
 

@@ -436,6 +436,16 @@ const App = (() => {
     btn.addEventListener('click', e => { if (e.detail === 0) openSettings(); }); // keyboard
   }
 
+  // A link from the lesson (?play=readfind) opens that game's levels, so finishing a part of
+  // today's lesson and carrying on in the game it belongs to is one tap.
+  function gameFromLink() {
+    const id = new URLSearchParams(location.search).get('play');
+    const g = id && games.find(x => x.id === id);
+    if (!g) return null;
+    history.replaceState(null, '', location.pathname);
+    return g;
+  }
+
   // A personal link (?player=Name&avatar=🦁) sets up that child on this device and opens their games.
   function playerFromLink() {
     const params = new URLSearchParams(location.search);
@@ -490,9 +500,13 @@ const App = (() => {
     Sound.onVoices(() => { if (!$('settings').hidden) fillVoices(); });
 
     const invited = playerFromLink();
+    const asked = gameFromLink();
     if (invited) {
       Settings.select(invited.id);
       goHome();
+    } else if (asked && Settings.player()) {
+      goHome();              // straight back to the game the lesson sent them to
+      openLevels(asked);
     } else {
       showPlayers(false);
     }

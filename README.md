@@ -1,6 +1,6 @@
 # ABC Playground
 
-Twenty short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Twenty-two short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -23,10 +23,12 @@ No reading is needed: every instruction is spoken.
 | 🐉 Feed the Dragon | Feed the Dino, a step up: sound pairs at the start, middle and end, then reading the word |
 | 🐛 Change a Sound | Changing one sound to make a new word (cat → hat → hot), then the caterpillar hatches into a butterfly |
 | ☁️ Catch the Cloud | Hearing a sound inside a short word: catch the clouds whose word has it |
-| 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture |
+| 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture (6 levels, the last one four-sound words) |
+| 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
+| 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
 
-Every game has **5 levels**, except Balloon Pop, which has 7. Finishing a level unlocks the next one, and the dots on each game's button show progress.
+Every game has **5 levels**, except Balloon Pop (7) and Word Bubbles (6). Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 

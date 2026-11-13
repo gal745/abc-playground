@@ -1227,6 +1227,32 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .ws-done-stars { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .ws-done-star { font-size: clamp(1.6rem, 7vw, 2.4rem); }
 
+/* ---------- Read and Find ---------- */
+.stage-readfind { gap: clamp(10px, 2.5vh, 24px); }
+.read-word {
+  padding: clamp(10px, 2.6vw, 18px) clamp(18px, 6vw, 40px); border-radius: 28px; background: #fff;
+  border: 6px solid var(--c); box-shadow: 0 8px 0 rgba(0, 0, 0, .1);
+}
+.read-word .letter { font-size: clamp(2.6rem, 12vmin, 5.4rem); color: var(--ink); letter-spacing: 2px; }
+.read-word:active { transform: translateY(5px); box-shadow: 0 3px 0 rgba(0, 0, 0, .1); }
+.read-word.read { border-color: #7fd3a6; }
+.read-help { margin: 0; color: var(--soft-ink); font-weight: 600; font-size: clamp(.8rem, 3vw, .95rem); }
+
+/* ---------- Match the Sentence ---------- */
+.stage-sentence { gap: clamp(8px, 2.2vh, 20px); }
+.sentence-card {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(6px, 2vw, 14px);
+  max-width: min(94vw, 560px); padding: clamp(10px, 2.6vw, 18px) clamp(14px, 4vw, 26px); border-radius: 26px;
+  background: #fff; border: 5px solid var(--c); box-shadow: 0 8px 0 rgba(0, 0, 0, .1);
+}
+.sentence-card:active { transform: translateY(5px); box-shadow: 0 3px 0 rgba(0, 0, 0, .1); }
+.sentence-word { font-size: clamp(1.4rem, 6.4vmin, 2.6rem); color: var(--ink); }
+.sentence-choices { gap: clamp(8px, 2.4vw, 22px); }
+.pic-btn.pair-pic {
+  width: clamp(92px, 26vmin, 190px); aspect-ratio: 1.35; display: flex; align-items: center; justify-content: center;
+  gap: 4px; font-size: clamp(1.9rem, 8vmin, 3.4rem);
+}
+
 /* ---------- Today's Lesson: one sheet to scroll down (today.html) ---------- */
 .today-main { max-width: 680px; gap: clamp(10px, 2.4vh, 20px); justify-content: flex-start; padding-top: 8px; }
 .today-title { color: #0a7c74; margin-bottom: 4px; }
@@ -1266,11 +1292,18 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
   display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; padding: 9px;
   border-radius: 16px; background: #e9f8ef; color: #148f5b; font-weight: 700; animation: pop-in .4s both;
 }
+.ty-after { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
 .ty-next {
-  display: block; margin: 12px auto 0; padding: 10px 22px; border-radius: 999px; background: #0a7c74; color: #fff;
+  padding: 10px 22px; border-radius: 999px; background: #0a7c74; color: #fff;
   font-weight: 700; font-size: 1rem; box-shadow: 0 4px 0 #06615b;
 }
 .ty-next:active { transform: translateY(4px); box-shadow: none; }
+.ty-play {
+  display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 999px;
+  background: #fff; border: 2px solid #cfd6e6; color: var(--ink); font-weight: 600; font-size: .95rem;
+  text-decoration: none; box-shadow: 0 4px 0 rgba(0, 0, 0, .08);
+}
+.ty-play:active { transform: translateY(4px); box-shadow: none; }
 
 /* the opening card */
 .ty-intro { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
