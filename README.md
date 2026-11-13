@@ -1,6 +1,6 @@
 # ABC Playground
 
-Twenty-two short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Twenty-three short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -24,6 +24,7 @@ No reading is needed: every instruction is spoken.
 | 🐛 Change a Sound | Changing one sound to make a new word (cat → hat → hot), then the caterpillar hatches into a butterfly |
 | ☁️ Catch the Cloud | Hearing a sound inside a short word: catch the clouds whose word has it |
 | 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture (6 levels, the last one four-sound words) |
+| 🛏️ b or d? | Telling b and d apart: the missing letter in a word, with the *bed* reminder on screen |
 | 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
