@@ -92,4 +92,6 @@ Put recordings named `a.mp3` … `z.mp3` in `audio/sounds/`. They replace the co
 
 ## Editing words
 
-All words, pictures and rhymes are in `js/data.js`.
+All words, pictures and rhymes are in `js/data.js`. Every word is one a five- to eight-year-old can picture and has
+probably met already — nothing that would have to be taught before it can be read — and the sentences describe
+something real (*a cat up a tree*, *a dog in a bath*) rather than a rhyme that happens to fit.

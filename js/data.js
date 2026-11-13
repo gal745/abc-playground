@@ -93,12 +93,14 @@ const DATA = (() => {
     rhyme('oo', 'shoe 👟, two 2️⃣'),
   ];
 
-  // Three-letter words for Build a Word and Middle Sound.
+  // Three-letter words for Build a Word and Middle Sound. Every one is a word a five- to
+  // eight-year-old already knows in their own language and can see in the picture: no "bud",
+  // no "tin", nothing they would have to be taught the meaning of before they can read it.
   const cvc = parse(
     'cat 🐱, dog 🐶, pig 🐷, sun ☀️, bus 🚌, hat 🎩, bed 🛏️, box 📦, fox 🦊, ten 🔟, net 🥅, ' +
     'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴, ' +
-    'pin 📌, tin 🥫, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️, ' +
-    'bag 👜, ham 🍖, hug 🤗, man 👨, tap 🚰, nap 😴, kid 🧒, win 🏆, wet 💦, run 🏃, cut ✂️, bud 🌱, hot 🔥'
+    'pin 📌, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️, ' +
+    'bag 👜, hug 🤗, man 👨, tap 🚰, nap 😴, kid 🧒, win 🏆, wet 💦, run 🏃, cut ✂️, hot 🔥'
   );
 
   // Two letters that hold hands and make ONE sound. Each word is written in the chunks it is
@@ -109,7 +111,7 @@ const DATA = (() => {
   });
   const pair = (p, list) => ({ p, words: chunked(list) });
   const soundPairs = [
-    pair('sh', 'sh-i-p 🚢, sh-o-p 🏪, f-i-sh 🐟, d-i-sh 🍽️, sh-e-d 🏚️'),
+    pair('sh', 'sh-i-p 🚢, sh-o-p 🏪, f-i-sh 🐟, d-i-sh 🍽️'),   // no shed: the picture is a tumbledown house, and the word is one more to teach
     pair('ch', 'ch-i-p 🍟, ch-i-ck 🐤, ch-o-p 🪓, ch-a-t 💬'),
     pair('th', 'b-a-th 🛁, t-ee-th 🦷, th-r-ee 3️⃣, th-i-n-k 🤔'),
     pair('oo', 'm-oo-n 🌙, b-oo-t 👢, b-oo-k 📖, f-oo-t 🦶, p-oo-l 🏊, b-r-oo-m 🧹'),
@@ -152,7 +154,7 @@ const DATA = (() => {
     fam('en', 'pen 🖊️, ten 🔟, hen 🐔'),
     fam('og', 'dog 🐶, log 🪵, frog 🐸'),
     fam('ox', 'box 📦, fox 🦊, ox 🐂'),
-    fam('in', 'pin 📌, bin 🗑️, tin 🥫, win 🏆'),
+    fam('in', 'pin 📌, bin 🗑️, win 🏆'),
     fam('et', 'net 🥅, jet ✈️, wet 💦'),
     fam('ed', 'bed 🛏️, red 🔴, sled 🛷'),
     fam('un', 'sun ☀️, run 🏃'),
@@ -164,7 +166,6 @@ const DATA = (() => {
     parse('cap 🧢, cup 🥤'),
     parse('log 🪵, leg 🦵'),
     parse('net 🥅, nut 🥜'),
-    parse('ten 🔟, tin 🥫'),
     parse('bag 👜, bug 🐛'),
   ];
 
@@ -186,16 +187,18 @@ const DATA = (() => {
     { w: 'Sunday', pre: 'sun' },
   ];
 
-  // Short sentences for reading. Nothing in them is longer than four letters, and the little
-  // words (a, an, in, on, up) are the ones joined up in `joins`, so a child who can read the
-  // word lists above can read every one of these.
+  // Short sentences for reading. Nothing in them is longer than four letters, the little words
+  // (a, in, on, up) are the ones joined up in `joins`, and every one of them says something a
+  // child can picture - a cat up a tree, a dog in a bath - rather than a rhyme that happens to
+  // fit, like an ox in a box.
   const sentences = [
-    'a cat on a bed', 'a rat in a bin', 'a bug on a log', 'a fox in a box',
-    'a man in a van', 'a hen in a net', 'a pig on a bus', 'a bee on a bud',
-    'a cat up a tree', 'a fish in a pool', 'a ship on a map', 'a book on a bed',
-    'a nut in a cup', 'a frog on a log', 'a dog in a bath', 'a chip on a dish',
-    'a cap on a kid', 'an ox in a box', 'a bug in a mug', 'a hat on a man',
-    'a pen in a bag', 'a web on a log',
+    'a cat on a bed', 'a cat in a box', 'a cat up a tree', 'a dog on a bed',
+    'a dog in a bath', 'a fox in a box', 'a frog on a log', 'a frog in a pool',
+    'a fish in a pool', 'a fish on a dish', 'a duck in a pool', 'a man in a van',
+    'a man on a bus', 'a kid on a bus', 'a kid in a tent', 'a hat on a man',
+    'a cap on a kid', 'a bug on a leg', 'a bug in a web', 'a bug in a mug',
+    'a rat in a bin', 'a pen in a bag', 'a pen in a cup', 'a book on a bed',
+    'a book in a bag', 'a chip on a dish',
   ];
 
   // Every word that has a picture, looked up by the word itself.
