@@ -6,7 +6,7 @@ App.register({
   name: 'Catch the Cloud',
   emoji: '☁️',
   color: '#5e60ce',
-  levels: ['Starts with the sound', 'Ends with the sound', 'The sound in the middle', 'Pairs: sh ch th oo ee', 'Listen: the sound anywhere'],
+  levels: ['Starts with the sound', 'Ends with the sound', 'The sound in the middle', 'Pairs: sh ch th oo ee ck', 'Listen: the sound anywhere'],
 
   create(stage, api) {
     const L = api.level;

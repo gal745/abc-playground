@@ -4,20 +4,30 @@ App.register({
   name: 'Join the Sounds',
   emoji: '🧲',
   color: '#7209b7',
-  levels: ['Two letters: a + t', 'Three letters: c + a + t', 'Three letters, find the picture', 'Find it from three', 'Four letters: f + r + o + g'],
+  levels: ['Two letters: a + t', 'Three letters: c + a + t', 'Three letters, find the picture', 'Find it from three', 'Four letters: f + r + o + g', 'Long words, a chunk at a time'],
 
   create(stage, api) {
     const GOAL = 5;
     const L = api.level;
-    const PICS = [0, 0, 2, 3, 3][L - 1]; // how many pictures to choose between
+    const PICS = [0, 0, 2, 3, 3, 3][L - 1]; // how many pictures to choose between
     const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+    // the long words come in the chunks they are read in - b-r-oo-m, c-l-o-ck - so a word that
+    // looks too big on its own arrives as four small pieces
+    const everyPair = [...DATA.soundPairs, ...DATA.morePairs].flatMap(g => g.words);
+    const longOnes = everyPair.filter(w => w.w.length >= 5).concat(everyPair.filter(w => w.w.length === 4)).slice(0, 14);
     const list = L === 1 ? DATA.joins.map(w => ({ w, e: '' }))
-      : L === 5 ? DATA.cvcc : DATA.cvc;
+      : L === 5 ? DATA.cvcc
+        : L === 6 ? longOnes : DATA.cvc;
+
+    // a word is split into the pieces it is read in: letters usually, but sh, oo and ck are
+    // one piece each, which is what makes a five-letter word only four taps
+    const bitsOf = w => (w.c || [...w.w]);
+    let bits = [];
 
     let queue = [];
     let round = 0;
     let item = null;
-    let pos = 0;      // the next letter to tap
+    let pos = 0;      // the next piece to tap
     let locked = false;
     let cards = [];
     let picks = [];
@@ -40,6 +50,7 @@ App.register({
     function next() {
       if (!queue.length) queue = UI.shuffle(list);
       item = queue.pop();
+      bits = bitsOf(item);
       pos = 0;
       locked = false;
 
@@ -49,9 +60,9 @@ App.register({
       choices.replaceChildren();
 
       const colors = UI.shuffle(UI.COLORS);
-      cards = [...item.w].map((l, i) => {
+      cards = bits.map((l, i) => {
         const card = UI.el('button', {
-          class: 'letter-card pop-in',
+          class: `letter-card pop-in${l.length > 1 ? ' pair' : ''}`,
           style: `--bc:${colors[i % colors.length]};animation-delay:${0.1 + i * 0.1}s`,
           'aria-label': `Letter ${l}`,
         }, UI.el('span', { class: 'letter', text: UI.showLetter(l) }));
@@ -77,8 +88,8 @@ App.register({
 
     function replay() {
       if (locked || !item) return;
-      if (pos >= item.w.length) Sound.say('Now push them together!');
-      else Sound.say({ sound: item.w[pos] }, 250, 'Tap the letter that says', { sound: item.w[pos] });
+      if (pos >= bits.length) Sound.say('Now push them together!');
+      else Sound.say({ sound: bits[pos] }, 250, 'Tap the one that says', { sound: bits[pos] });
     }
 
     function tapLetter(i, card, l) {
@@ -94,7 +105,7 @@ App.register({
       card.classList.add('done');
       pos++;
       markCard();
-      if (pos < item.w.length) {
+      if (pos < bits.length) {
         Sound.say({ sound: l });
       } else {
         joinBtn.hidden = false;
@@ -104,7 +115,7 @@ App.register({
     }
 
     function join() {
-      if (locked || pos < item.w.length) return;
+      if (locked || pos < bits.length) return;
       locked = true;
       markCard();
       joinBtn.hidden = true;
@@ -114,7 +125,7 @@ App.register({
       // The sounds run into each other, then the whole word. This has to stay one spoken
       // sequence: starting another one would cut the blend off part way through.
       const parts = [];
-      [...item.w].forEach((l, i) => parts.push(() => glow(i), { sound: l }, 90));
+      bits.forEach((l, i) => parts.push(() => glow(i), { sound: l }, 90));
       parts.push(() => glow(-1), 200, `${item.w}!`, () => { Sound.sfx('correct'); UI.replayClass(row, 'bounce'); });
 
       if (PICS) {

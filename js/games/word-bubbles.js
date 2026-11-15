@@ -6,7 +6,7 @@ App.register({
   name: 'Word Bubbles',
   emoji: '🫧',
   color: '#4d96ff',
-  levels: ['Two-letter words', 'Three-letter words', 'Pair words: sh ch th oo ee', 'Read it: find the picture', 'All the words, and quick', 'Longer words: four sounds'],
+  levels: ['Two-letter words', 'Three-letter words', 'Pair words: sh ch th oo ee ck', 'Read it: find the picture', 'All the words, and quick', 'Longer words: four sounds'],
 
   create(stage, api) {
     const L = api.level;

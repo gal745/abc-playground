@@ -4,7 +4,7 @@ App.register({
   name: 'Balloon Pop',
   emoji: '🎈',
   color: '#ff6b6b',
-  levels: ['Letters with pictures', 'Tricky look-alike letters', 'Listen for the sound', 'Big & little letters', 'Listen: big & little', 'Sound pairs: sh ch th oo ee', 'Listen for the pair'],
+  levels: ['Letters with pictures', 'Tricky look-alike letters', 'Listen for the sound', 'Big & little letters', 'Listen: big & little', 'Sound pairs: sh ch th oo ee ck', 'Listen for the pair'],
 
   create(stage, api) {
     const L = api.level;

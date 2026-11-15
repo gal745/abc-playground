@@ -6,7 +6,7 @@ App.register({
   name: 'Read and Find',
   emoji: '📘',
   color: '#3a7ca5',
-  levels: ['Two pictures', 'Three pictures', 'Same family: look at the start', 'Pair words: sh ch th oo ee', 'Four sounds'],
+  levels: ['Two pictures', 'Three pictures', 'Same family: look at the start', 'Pair words: sh ch th oo ee ck', 'Four sounds'],
 
   create(stage, api) {
     const GOAL = 5;

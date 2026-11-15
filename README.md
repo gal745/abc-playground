@@ -1,11 +1,11 @@
 # ABC Playground
 
-Twenty-three short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Twenty-five short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
 | --- | --- |
-| 🎈 Balloon Pop | Recognising letters and their sounds, then the pairs sh ch th oo ee (7 levels) |
+| 🎈 Balloon Pop | Recognising letters and their sounds, then the pairs sh ch th oo ee ck (7 levels) |
 | 🐶 First Sounds | Hearing the first sound in a word |
 | 🃏 Letter Match | Matching capital and small letters |
 | 🎵 Rhyme Time | Hearing rhymes |
@@ -17,13 +17,15 @@ No reading is needed: every instruction is spoken.
 | 📅 Days of the Week | Spelling the days (the *day* ending is filled in) |
 | 🔎 Which Word? | Reading short rhyming words that look alike (cat, hat, bat; pan, pin, pen) |
 | 🎯 Middle Sound | Hearing the short vowel in the middle of a word (c**a**t, p**i**g) |
-| 🧲 Join the Sounds | Blending letters into a word: a + t → at, c + a + t → cat |
+| 🧲 Join the Sounds | Blending letters into a word: a + t → at, c + a + t → cat, and long words a chunk at a time (6 levels) |
 | 🤝 Sound Pairs | Two letters that make one sound: sh, ch, th, oo, ee (then ck, ng, ai, ar, or) |
 | 🧩 Finish the Word | Choosing the pair a word is missing: __ip, m__n, gr__n |
 | 🐉 Feed the Dragon | Feed the Dino, a step up: sound pairs at the start, middle and end, then reading the word |
 | 🐛 Change a Sound | Changing one sound to make a new word (cat → hat → hot), then the caterpillar hatches into a butterfly |
 | ☁️ Catch the Cloud | Hearing a sound inside a short word: catch the clouds whose word has it |
 | 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture (6 levels, the last one four-sound words) |
+| 🌱 Grow a Sentence | A sentence a piece at a time, so a whole one never lands at once |
+| 🧺 b and d Sort | Sorting letters and words into the blue b basket or the red d basket |
 | 🛏️ b or d? | Telling b and d apart: the missing letter in a word, b always blue and d always red, with the *bed* reminder on screen |
 | 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
@@ -38,6 +40,8 @@ Every game has **5 levels**, except Balloon Pop (7) and Word Bubbles (6). Finish
 `pairs.html` is the second poster: the letter pairs that make a single sound, each with its words, plus five more pairs to meet later. Also one A4 page.
 
 `sheets.html` is eight printable worksheets for pencil work — circle the pair, write the missing pair, draw a line to the picture, one box per sound, tick what you can hear, and three sheets of joining letters. The joining sheets share no words between them, the second starts with two-sound words, and the third ends with four-sound ones. Each prints on its own page, and **Make new sheets** picks different words so a fresh set can be printed each week.
+
+The sound pairs taught are **sh ch th oo ee ck**; **ng ai ar or** come later.
 
 `today.html` is **Today's Lesson**: a short reading lesson a child can work through alone, about fifteen minutes.
 Warm up the sounds, then join two letters, three letters, the pairs **sh ch th oo ee**, and four letters — one word on
