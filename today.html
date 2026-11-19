@@ -25,7 +25,7 @@
   <div id="bar" class="ty-bar">
     <a class="round-btn small" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
     <span class="ty-bar-track"><span id="barFill" class="ty-bar-fill"></span></span>
-    <span id="barCount" class="ty-bar-count">0 of 6</span>
+    <span id="barCount" class="ty-bar-count">0 of 7</span>
   </div>
 
   <main class="days-main today-main" translate="no">
@@ -34,7 +34,7 @@
     <section class="ty-card ty-intro" id="intro">
       <span class="emoji ty-start-pic">📖</span>
       <h2 class="ty-start-h">Reading, all by yourself</h2>
-      <p class="ty-start-p">All about <b>b</b> and <b>d</b> — and the two we did not finish last time.</p>
+      <p class="ty-start-p">All about <b>b</b> and <b>d</b>, with a <b>real book</b> in the middle — and the two we did not finish last time.</p>
       <button id="startBtn" class="say-all ty-go"><span class="emoji">▶️</span> Start</button>
       <p class="ty-note">Sound on, please!</p>
     </section>
@@ -51,15 +51,19 @@
       data-how="Now the last letter is missing."
       data-say="Now the letter at the end is missing. Say the word, and listen to the very last sound."></section>
 
-    <section class="ty-card" id="part4" data-game="bdsort" data-game-name="🧺 b and d Sort" data-no="4" data-title="Put them in a basket"
-      data-how="Blue b basket, or red d basket?"
-      data-say="Put each word in a basket. The blue one for b, the red one for d."></section>
+    <section class="ty-card ty-break" id="book" data-no="4" data-nonudge="1" data-title="Now a real book"
+      data-how="Put the screen down and get your book."
+      data-say="Stop here. It is time for a real book. Put the screen down, get your book, and read it with your teacher. When the book is finished, come back and tap the big button."></section>
 
-    <section class="ty-card" id="part5" data-game="join" data-game-name="🧲 Join the Sounds" data-no="5" data-title="Long words, bit by bit"
+    <section class="ty-card" id="part5" data-game="bdsort" data-game-name="🧺 b and d Sort" data-no="5" data-title="Put them in a basket"
+      data-how="Blue b basket, or red d basket?"
+      data-say="Welcome back. Put each word in a basket. The blue one for b, the red one for d."></section>
+
+    <section class="ty-card" id="part6" data-game="join" data-game-name="🧲 Join the Sounds" data-no="6" data-title="Long words, bit by bit"
       data-how="You know the word. Now tap the bits, one at a time."
       data-say="The one we did not finish last time. The picture tells you the word. Now tap the bits, one at a time."></section>
 
-    <section class="ty-card" id="part6" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="6" data-title="Grow a sentence"
+    <section class="ty-card" id="part7" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="7" data-title="Grow a sentence"
       data-how="The pictures tell you the sentence. Tap to make it grow."
       data-say="Here is the other one from last time. The pictures tell you what it says. Read a bit, then tap for more."></section>
 
@@ -73,9 +77,11 @@
       </div>
     </section>
 
-    <p class="days-hint note">For grown-ups: today's lesson, as one sheet to scroll down — reading whole
-      words, word families, four-sound words and short sentences. Every instruction is spoken as the child
-      reaches it, nothing is typed, and each part ticks itself off. The teacher-led worksheets are on the
+    <p class="days-hint note">For grown-ups: today's lesson, as one sheet to scroll down — <b>b</b> and <b>d</b>
+      on their own and in words, then <b>part 4 leaves the screen for a real book</b> read with you (ten
+      minutes or so — the page goes quiet and waits, and the child taps when the book is finished), then the
+      two parts we ran out of time for last lesson. Every instruction is spoken as the child reaches it,
+      nothing is typed, and each part ticks itself off. The teacher-led worksheets are on the
       <a href="lesson.html">lesson sheets</a> page.</p>
   </main>
 
@@ -106,7 +112,7 @@
         return UI.shuffle(from).filter(w => !w.e || (!seen.has(w.e) && seen.add(w.e))).slice(0, n);
       }
 
-      const PARTS = ['part1', 'part2', 'part3', 'part4', 'part5', 'part6'];
+      const PARTS = ['part1', 'part2', 'part3', 'book', 'part5', 'part6', 'part7'];
       const state = {};     // id -> { done, total, got, finish, announced }
       let wordsRead = 0;
 
@@ -128,9 +134,10 @@
         next.addEventListener('click', () => scrollTo(PARTS[PARTS.indexOf(id) + 1] || 'finish'));
 
         // once a part is finished, the game that keeps up the same job is one tap away
-        const play = el('a', {
+        // (the book break is not a job the screen can keep up, so it has no game)
+        const play = box.dataset.game ? el('a', {
           class: 'ty-play', hidden: 'hidden', href: `index.html?play=${box.dataset.game}`,
-        }, el('span', { class: 'emoji', text: '🎮' }), ` Play ${box.dataset.gameName}`);
+        }, el('span', { class: 'emoji', text: '🎮' }), ` Play ${box.dataset.gameName}`) : el('span', { hidden: 'hidden' });
 
         const me = { done: 0, total: 0, announced: false, body, tick, next, play, box };
         state[id] = me;
@@ -381,6 +388,27 @@
         }));
       }
 
+      // ---------- the break: a real book, halfway down ----------
+      // Halfway through, the lesson leaves the screen and goes to a real book with the teacher.
+      // It is a numbered part like all the others so the child can see it belongs to the lesson
+      // rather than being a stop, and the page stays quiet while they are away from it.
+      function buildBookBreak(body, me) {
+        me.total = 1;
+        const done = el('button', { class: 'ty-book-btn' },
+          el('span', { class: 'emoji', text: '✅' }), el('span', { text: 'We read our book!' }));
+        done.addEventListener('click', () => {
+          if (done.disabled) return;
+          done.disabled = true;
+          say('Well done. That was lovely reading.', 300, 'Now, back to b and d.');
+          me.score();
+        });
+        body.replaceChildren(el('div', { class: 'ty-book' },
+          el('span', { class: 'emoji ty-book-pic', text: '📚' }),
+          el('p', { class: 'ty-book-p' }, 'Time for a real book, with your teacher.'),
+          el('p', { class: 'ty-book-small' }, 'Tap this when the book is finished.'),
+          done));
+      }
+
       // ---------- the end ----------
       function finish() {
         if (!$('finish').hidden) return;
@@ -401,9 +429,10 @@
         card('part1', buildTwoLetters);
         card('part2', missingLetter('start'));
         card('part3', missingLetter('end'));
-        card('part4', buildBaskets);
-        card('part5', buildChunks);
-        card('part6', buildGrow);
+        card('book', buildBookBreak);
+        card('part5', buildBaskets);
+        card('part6', buildChunks);
+        card('part7', buildGrow);
         PARTS.forEach(id => { state[id].announced = false; });
         progress();
       }
@@ -448,6 +477,7 @@
       let nudge = 0;
       function nudgeLater(id) {
         clearTimeout(nudge);
+        if ($(id).dataset.nonudge) return;   // they are away from the screen, reading a book
         nudge = setTimeout(() => {
           const me = state[id];
           if (!me || me.done >= me.total) return;

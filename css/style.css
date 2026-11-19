@@ -1416,6 +1416,22 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 }
 .ty-play:active { transform: translateY(4px); box-shadow: none; }
 
+/* the book break: the one part of the lesson that is not on the screen */
+.ty-break { background: #fff6e4; box-shadow: 0 7px 0 rgba(224, 155, 42, .25); }
+.ty-break .ty-no { background: #d98324; }
+.ty-break.finished { background: #f3fcf7; }
+.ty-book { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.ty-book-pic { font-size: clamp(3.4rem, 17vmin, 6rem); animation: bob 3s ease-in-out infinite; }
+.ty-book-p { margin: 0; font-weight: 800; color: var(--ink); font-size: clamp(1.1rem, 4.6vw, 1.45rem); }
+.ty-book-small { margin: 0 0 6px; color: var(--soft-ink); font-weight: 600; font-size: clamp(.9rem, 3.6vw, 1.05rem); }
+.ty-book-btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border-radius: 999px;
+  background: #d98324; color: #fff; font-weight: 800; font-size: clamp(1rem, 4.2vw, 1.25rem);
+  box-shadow: 0 5px 0 #ab6516;
+}
+.ty-book-btn:active { transform: translateY(5px); box-shadow: none; }
+.ty-book-btn[disabled] { opacity: .55; }
+
 /* the opening card */
 .ty-intro { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
 .ty-start-pic { font-size: clamp(3rem, 14vmin, 5rem); animation: bob 3s ease-in-out infinite; }
