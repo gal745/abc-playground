@@ -1397,7 +1397,6 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 }
 .bw-word .emoji { font-size: clamp(1.7rem, 8vmin, 2.9rem); }
 .bw-word .letter { font-size: clamp(1.1rem, 5.2vmin, 2rem); color: var(--ink); }
-.bw-board.words-only .bw-word { padding: clamp(14px, 3.4vh, 24px) 4px; }
 .bw-word:active { transform: translateY(4px); box-shadow: none; }
 .bw-word.got { background: #e9f8ef; border-color: #7fd3a6; opacity: .65; }
 

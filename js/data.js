@@ -208,6 +208,33 @@ const DATA = (() => {
     ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words)]
     .forEach(w => { if (w.e && !pics[w.w]) pics[w.w] = w.e; });
 
+  // Words a child already knows how to SAY, grouped the way they think about words rather than
+  // by how hard they are to read. The b Words and d Words games use these: there the job is the
+  // first sound of a word they already own, so banana and butterfly are welcome - the picture
+  // says what the word is, and nobody has to sound it out. Every picture inside one group is
+  // different, because a game only ever shows one group at a time.
+  const picSets = {
+    animals: parse(`bear 🐻, bee 🐝, bat 🦇, bird 🐦, bug 🐛, bunny 🐰, butterfly 🦋,
+      dog 🐶, duck 🦆, deer 🦌, dolphin 🐬, dinosaur 🦕,
+      cat 🐱, pig 🐷, fox 🦊, frog 🐸, fish 🐠, sheep 🐑, snail 🐌, shark 🦈, cow 🐮, lion 🦁,
+      tiger 🐯, monkey 🐵, mouse 🐭, owl 🦉, horse 🐴, crab 🦀, hen 🐔, goat 🐐, snake 🐍,
+      elephant 🐘, zebra 🦓, penguin 🐧`),
+    food: parse(`banana 🍌, bread 🍞, burger 🍔, butter 🧈, biscuit 🍪,
+      donut 🍩, dumpling 🥟, drink 🥤,
+      apple 🍎, egg 🥚, cake 🍰, pizza 🍕, milk 🥛, rice 🍚, grapes 🍇, pear 🍐, lemon 🍋,
+      melon 🍈, carrot 🥕, corn 🌽, cheese 🧀, soup 🍲, chips 🍟, honey 🍯, orange 🍊,
+      strawberry 🍓, mango 🥭, salad 🥗`),
+    toys: parse(`ball ⚽, balloon 🎈, bike 🚲, boat ⛵, blocks 🧱,
+      doll 🪆, drum 🥁, dice 🎲,
+      car 🚗, kite 🪁, train 🚂, robot 🤖, plane ✈️, teddy 🧸, puzzle 🧩, yo-yo 🪀,
+      skateboard 🛹, rocket 🚀`),
+    things: parse(`bed 🛏️, book 📖, bag 👜, box 📦, bath 🛁, bin 🗑️, boot 👢, broom 🧹,
+      bowl 🥣, bell 🔔,
+      door 🚪, dish 🍽️, dress 👗,
+      cup ☕, sock 🧦, hat 🎩, lamp 💡, clock ⏰, key 🔑, chair 🪑, spoon 🥄,
+      phone 📱, shoe 👟, window 🪟, pen 🖊️, map 🗺️`),
+  };
+
   // Letter groups in a common phonics teaching order.
   const sets = [
     { label: 'All letters', letters },
@@ -228,7 +255,7 @@ const DATA = (() => {
 
   return {
     letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels, animals,
-    soundPairs, morePairs, pairSounds, sentences, pics,
+    soundPairs, morePairs, pairSounds, sentences, pics, picSets,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
 })();

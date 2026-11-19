@@ -27,8 +27,8 @@ No reading is needed: every instruction is spoken.
 | 🌱 Grow a Sentence | A sentence a piece at a time, so a whole one never lands at once |
 | 🧺 b and d Sort | Sorting letters and words into the blue b basket or the red d basket (6 levels, the last one with the word only said, not shown) |
 | 🔍 b and d Hunt | A board of b's and d's, or of words, and only one of the two letters is wanted: find every one |
-| 🐝 b Words | Filling a bag with every word on the board that starts with **b** — pictures first, then words alone, then a board where everything else starts with d |
-| 🦆 d Words | The same for **d**, with b as the thing to tell it apart from |
+| 🐝 b Words | Filling a bag with every word that starts with **b** — a level of animals, a level of food, a level of toys, a level of things round the house, then all of them mixed |
+| 🦆 d Words | The same for **d**, with b among the words to leave alone |
 | 🛏️ b or d? | Telling b and d apart: the missing letter in a word, b always blue and d always red, with the *bed* reminder on screen |
 | 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
