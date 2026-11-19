@@ -7,18 +7,19 @@ App.register({
   name: 'b and d Sort',
   emoji: '🧺',
   color: '#4d96ff',
-  levels: ['Just the letter', 'Words that start with it', 'Words that end with it', 'Start or end', 'Quick as you can'],
+  levels: ['Just the letter', 'Words that start with it', 'Words that end with it', 'Start or end', 'Quick as you can', 'Listen: no word to see'],
 
   create(stage, api) {
     const GOAL = 6;
     const L = api.level;
     const lettersOnly = L === 1;
+    const listen = L === 6;     // the word is said, not shown: which letter does it start with?
 
     const pairWords = [...DATA.soundPairs, ...DATA.morePairs].flatMap(g => g.words);
     const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
     const starts = every.filter(w => 'bd'.includes(w.w[0]));
     const ends = every.filter(w => 'bd'.includes(w.w[w.w.length - 1]));
-    const list = L === 2 ? starts : L === 3 ? ends : [...starts, ...ends];
+    const list = L === 2 ? starts : L === 3 ? ends : L === 6 ? starts : [...starts, ...ends];
 
     let queue = [];
     let item = null;      // { w, e } or { letter }
@@ -52,16 +53,20 @@ App.register({
         item = pick;
         const first = 'bd'.includes(pick.w[0]);
         want = first ? pick.w[0] : pick.w[pick.w.length - 1];
-        card.replaceChildren(
-          UI.el('span', { class: 'emoji sort-word-pic', text: pick.e }),
-          UI.el('span', { class: 'letter sort-word' }, ...[...pick.w].map(l =>
-            UI.el('span', { class: 'bd'.includes(l) ? `is-${l}` : '', text: UI.showLetter(l) }))));
+        card.replaceChildren(listen
+          ? UI.el('span', { class: 'emoji sort-word-pic', text: '👂' })
+          : UI.el('span', { class: 'emoji sort-word-pic', text: pick.e }),
+          listen
+            ? UI.el('span', { class: 'sort-listen', text: 'listen!' })
+            : UI.el('span', { class: 'letter sort-word' }, ...[...pick.w].map(l =>
+              UI.el('span', { class: 'bd'.includes(l) ? `is-${l}` : '', text: UI.showLetter(l) }))));
       }
       UI.replayClass(card, 'pop-in');
       ask();
     }
 
     function ask() {
+      if (listen) return Sound.say('Listen!', 250, `${item.w}.`, 300, `Does ${item.w} start with b, or with d?`);
       if (lettersOnly) return Sound.say('Which one is this?', 250, 'Put it in the right basket.');
       if (round === 0) return Sound.say(`${item.w}.`, 300, 'Does it belong with b, or with d?');
       return Sound.say(`${item.w}.`, 250, UI.pick(['Which basket?', 'Where does it go?', 'b or d?']));
@@ -88,6 +93,7 @@ App.register({
       const said = lettersOnly
         ? [`Yes! ${Sound.letterName(want)}.`, 200, `${want === 'b' ? 'Blue' : 'Red'} one.`]
         : [`Yes! ${item.w}`, 200, 'with', { name: want }, 250, `${item.w}!`];
+      if (listen) card.replaceChildren(UI.el('span', { class: 'emoji sort-word-pic', text: item.e }));
       api.after(Sound.say(...said, 250, UI.pick(UI.PRAISE)),
         () => (round >= GOAL ? api.win() : next()), L === 5 ? 700 : 1100);
       void thing;

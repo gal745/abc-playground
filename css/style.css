@@ -1338,6 +1338,32 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .sort-pic { font-size: clamp(2.4rem, 10vmin, 4rem); }
 .sort-letter { font-size: clamp(2.2rem, 9vmin, 3.6rem); color: var(--bc); }
 
+/* ---------- b and d Hunt ---------- */
+.stage-bdhunt { gap: clamp(10px, 2.6vh, 24px); }
+.hunt-target {
+  display: flex; align-items: center; gap: 12px; padding: clamp(8px, 2vh, 14px) clamp(16px, 5vw, 30px);
+  border-radius: 24px; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .1);
+}
+.hunt-big { font-size: clamp(2.6rem, 12vmin, 5rem); }
+.hunt-big.is-b { color: var(--bd-blue); }
+.hunt-big.is-d { color: var(--bd-red); }
+.hunt-find { color: var(--soft-ink); font-weight: 700; font-size: clamp(.9rem, 3.6vw, 1.1rem); }
+.hunt-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(6px, 2vw, 14px); width: min(94vw, 560px); }
+.hunt-board.size-12, .hunt-board.size-16 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hunt-tile {
+  aspect-ratio: 1; border-radius: 18px; background: #fff; border: 4px solid #e4e7f2;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, .1); display: grid; place-items: center;
+}
+.hunt-tile .letter { font-size: clamp(2rem, 9vmin, 3.6rem); color: var(--ink); }
+.hunt-tile.word { aspect-ratio: 1.5; }
+.hunt-tile.word .letter { font-size: clamp(1.1rem, 5vmin, 2rem); }
+.hunt-tile:active { transform: translateY(4px); box-shadow: none; }
+.hunt-tile.got { background: #e9f8ef; border-color: #7fd3a6; }
+.hunt-tile.got.is-b .letter { color: var(--bd-blue); }
+.hunt-tile.got.is-d .letter { color: var(--bd-red); }
+.hunt-tile.no { background: #ffeef0; border-color: #ffb3bd; }
+.sort-listen { color: var(--soft-ink); font-weight: 700; font-size: clamp(1rem, 4vw, 1.3rem); }
+
 /* ---------- Today's Lesson: one sheet to scroll down (today.html) ---------- */
 .today-main { max-width: 680px; gap: clamp(10px, 2.4vh, 20px); justify-content: flex-start; padding-top: 8px; }
 .today-title { color: #0a7c74; margin-bottom: 4px; }
@@ -1505,6 +1531,46 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 }
 .ty-more:active { transform: translateY(4px); box-shadow: none; }
 .ty-grow-pics { display: flex; gap: 10px; font-size: clamp(1.9rem, 8vw, 2.8rem); }
+
+/* today's b and d sheet */
+.ty-two { display: flex; justify-content: center; gap: clamp(14px, 6vw, 48px); }
+.ty-big-letter {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: clamp(10px, 2.6vh, 18px) clamp(16px, 5vw, 34px); border-radius: 26px;
+  background: #fff; border: 5px solid var(--bc); box-shadow: 0 7px 0 var(--bc);
+}
+.ty-big-letter.is-b { --bc: var(--bd-blue); }
+.ty-big-letter.is-d { --bc: var(--bd-red); }
+.ty-big-letter .ty-l { font-size: clamp(3.4rem, 16vw, 6rem); line-height: 1; }
+.ty-big-letter > .emoji { font-size: clamp(1.1rem, 4.4vw, 1.6rem); }
+.ty-big-letter.got { background: #f3fcf7; }
+.ty-kw { display: flex; align-items: center; gap: 5px; color: var(--soft-ink); font-size: clamp(.85rem, 3.4vw, 1.05rem); }
+.ty-kw .letter { font-size: clamp(.95rem, 3.8vw, 1.2rem); }
+
+.ty-tray { min-height: clamp(70px, 18vw, 110px); display: grid; place-items: center; }
+.ty-tray-word {
+  display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 20px;
+  background: #fff; border: 3px solid #e4e7f2; box-shadow: 0 5px 0 rgba(0, 0, 0, .08);
+}
+.ty-tray-word .emoji { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+.ty-tray-word .letter { font-size: clamp(1.8rem, 7.5vw, 2.6rem); }
+.ty-tray-done { color: #148f5b; font-weight: 700; font-size: clamp(1rem, 4vw, 1.3rem); }
+.ty-bins { display: flex; justify-content: center; gap: clamp(12px, 5vw, 40px); }
+.ty-bin {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: clamp(96px, 28vw, 160px);
+  padding: 10px 14px; border-radius: 22px; background: #fff; border: 4px solid var(--bc); box-shadow: 0 6px 0 var(--bc);
+}
+.ty-bin.is-b { --bc: var(--bd-blue); }
+.ty-bin.is-d { --bc: var(--bd-red); }
+.ty-bin .emoji { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+.ty-bin .ty-l { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+.ty-bin-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; min-height: 1.4em; font-size: clamp(1rem, 4vw, 1.4rem); }
+.ty-bin:active { transform: translateY(4px); box-shadow: none; }
+
+.ty-chunk-head { display: flex; align-items: center; gap: 10px; }
+.ty-chunk-word { font-size: clamp(1.6rem, 6.5vw, 2.3rem); color: var(--soft-ink); }
+.ty-chunk.next { border-color: #0a7c74; animation: pulse 1.4s ease-in-out infinite; }
+.ty-sentence .fresh { color: #0a7c74; }
 
 .ty-finish {
   width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px;

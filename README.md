@@ -1,6 +1,6 @@
 # ABC Playground
 
-Twenty-five short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Twenty-six short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -25,13 +25,14 @@ No reading is needed: every instruction is spoken.
 | ☁️ Catch the Cloud | Hearing a sound inside a short word: catch the clouds whose word has it |
 | 🫧 Word Bubbles | Balloon Pop with whole words: pop the word that is said, or the one that matches the picture (6 levels, the last one four-sound words) |
 | 🌱 Grow a Sentence | A sentence a piece at a time, so a whole one never lands at once |
-| 🧺 b and d Sort | Sorting letters and words into the blue b basket or the red d basket |
+| 🧺 b and d Sort | Sorting letters and words into the blue b basket or the red d basket (6 levels, the last one with the word only said, not shown) |
+| 🔍 b and d Hunt | A board of b's and d's, or of words, and only one of the two letters is wanted: find every one |
 | 🛏️ b or d? | Telling b and d apart: the missing letter in a word, b always blue and d always red, with the *bed* reminder on screen |
 | 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
 
-Every game has **5 levels**, except Balloon Pop (7) and Word Bubbles (6). Finishing a level unlocks the next one, and the dots on each game's button show progress.
+Every game has **5 levels**, except Balloon Pop (7), Word Bubbles (6), Join the Sounds (6) and b and d Sort (6). Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 

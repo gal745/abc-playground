@@ -5,7 +5,7 @@
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Today's Lesson · ABC Playground</title>
-  <meta name="description" content="Today's reading lesson, one sheet to scroll down: sh ch th and the new sound ck, b or d, long words a bit at a time, and sentences that grow.">
+  <meta name="description" content="Today's reading lesson, one sheet to scroll down: a whole lesson on b and d, then long words a bit at a time and sentences that grow.">
   <meta name="theme-color" content="#9fdcff">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
   <div id="bar" class="ty-bar">
     <a class="round-btn small" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
     <span class="ty-bar-track"><span id="barFill" class="ty-bar-fill"></span></span>
-    <span id="barCount" class="ty-bar-count">0 of 5</span>
+    <span id="barCount" class="ty-bar-count">0 of 6</span>
   </div>
 
   <main class="days-main today-main" translate="no">
@@ -34,33 +34,37 @@
     <section class="ty-card ty-intro" id="intro">
       <span class="emoji ty-start-pic">📖</span>
       <h2 class="ty-start-h">Reading, all by yourself</h2>
-      <p class="ty-start-p">Five little jobs. Big words come in little bits!</p>
+      <p class="ty-start-p">All about <b>b</b> and <b>d</b> — and the two we did not finish last time.</p>
       <button id="startBtn" class="say-all ty-go"><span class="emoji">▶️</span> Start</button>
       <p class="ty-note">Sound on, please!</p>
     </section>
 
-    <section class="ty-card" id="part1" data-game="pairs" data-game-name="🤝 Sound Pairs" data-no="1" data-title="Two letters, one sound"
-      data-how="sh ch th, and a new one: ck. Tap each and say it."
-      data-say="Two letters, one sound. Tap each one and say it with me. There is a new one today: ck."></section>
+    <section class="ty-card" id="part1" data-game="bdhunt" data-game-name="🔍 b and d Hunt" data-no="1" data-title="b is blue, d is red"
+      data-how="Tap each one and say its sound."
+      data-say="Today is all about b and d. b is blue. d is red. Tap them and say their sounds."></section>
 
-    <section class="ty-card" id="part2" data-game="bord" data-game-name="🛏️ b or d?" data-no="2" data-title="b or d?"
-      data-how="One letter is missing. Blue b, or red d?"
-      data-say="b or d? Remember the bed: blue b at the front, red d at the back."></section>
+    <section class="ty-card" id="part2" data-game="bord" data-game-name="🛏️ b or d?" data-no="2" data-title="Words that start with b or d"
+      data-how="The first letter is missing. Blue b, or red d?"
+      data-say="These words start with b or d. Which one is missing? Remember the bed."></section>
 
-    <section class="ty-card" id="part3" data-game="pairs" data-game-name="🤝 Sound Pairs" data-no="3" data-title="The new sound: ck"
-      data-how="ck says one sound, at the end of a word. Tap each word."
-      data-say="Here is the new sound. c and k together say one sound, at the end of a word."></section>
+    <section class="ty-card" id="part3" data-game="bord" data-game-name="🛏️ b or d?" data-no="3" data-title="Words that end with b or d"
+      data-how="Now the last letter is missing."
+      data-say="Now the letter at the end is missing. Say the word, and listen to the very last sound."></section>
 
-    <section class="ty-card" id="part4" data-game="join" data-game-name="🧲 Join the Sounds" data-no="4" data-title="Long words, bit by bit"
-      data-how="A big word is only little bits. Tap them one at a time."
-      data-say="A long word is only little bits stuck together. Tap them one at a time, and they join up."></section>
+    <section class="ty-card" id="part4" data-game="bdsort" data-game-name="🧺 b and d Sort" data-no="4" data-title="Put them in a basket"
+      data-how="Blue b basket, or red d basket?"
+      data-say="Put each word in a basket. The blue one for b, the red one for d."></section>
 
-    <section class="ty-card" id="part5" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="5" data-title="Grow a sentence"
-      data-how="Read the first bit, then tap for more."
-      data-say="Sentences come a bit at a time. Read the first bit, then tap for more."></section>
+    <section class="ty-card" id="part5" data-game="join" data-game-name="🧲 Join the Sounds" data-no="5" data-title="Long words, bit by bit"
+      data-how="You know the word. Now tap the bits, one at a time."
+      data-say="The one we did not finish last time. The picture tells you the word. Now tap the bits, one at a time."></section>
+
+    <section class="ty-card" id="part6" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="6" data-title="Grow a sentence"
+      data-how="The pictures tell you the sentence. Tap to make it grow."
+      data-say="Here is the other one from last time. The pictures tell you what it says. Read a bit, then tap for more."></section>
 
     <section id="finish" class="ty-finish" hidden>
-      <h2 class="ty-finish-h">All five finished!</h2>
+      <h2 class="ty-finish-h">All finished!</h2>
       <div id="finishStars" class="ty-stars"></div>
       <p id="finishCount" class="ty-finish-p"></p>
       <div class="ty-finish-row">
@@ -102,7 +106,7 @@
         return UI.shuffle(from).filter(w => !w.e || (!seen.has(w.e) && seen.add(w.e))).slice(0, n);
       }
 
-      const PARTS = ['part1', 'part2', 'part3', 'part4', 'part5'];
+      const PARTS = ['part1', 'part2', 'part3', 'part4', 'part5', 'part6'];
       const state = {};     // id -> { done, total, got, finish, announced }
       let wordsRead = 0;
 
@@ -156,172 +160,223 @@
         if (box) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
-      // ---------- 1. the pairs they are learning, and the new one ----------
-      function buildPairs(body, me) {
-        const show = ['sh', 'ch', 'th', 'ck', 'oo', 'ee'];
-        me.total = show.length;
-        body.replaceChildren(el('div', { class: 'ty-warm six' }, ...show.map(s2 => {
-          const tile = el('button', { class: `ty-sound pair${s2 === 'ck' ? ' new' : ''}`, 'aria-label': `The sound ${s2}` },
-            word(s2), el('span', { class: 'ty-tick', text: '✓' }));
-          tile.addEventListener('click', () => {
-            say({ sound: s2 }, 250, { sound: s2 });
-            if (tile.classList.contains('got')) return;
-            tile.classList.add('got');
+      // ---------- 1. the two letters themselves ----------
+      function buildTwoLetters(body, me) {
+        const KEY = { b: (DATA.words.b || [])[0], d: (DATA.words.d || [])[0] };
+        me.total = 2;
+        body.replaceChildren(el('div', { class: 'ty-two' }, ...['b', 'd'].map(l => {
+          const kw = KEY[l];
+          const btn = el('button', { class: `ty-big-letter is-${l}`, 'aria-label': `the letter ${l}` },
+            word(l, `is-${l}`),
+            el('span', { class: 'emoji', text: l === 'b' ? '🔵' : '🔴' }),
+            kw ? el('span', { class: 'ty-kw' }, el('span', { class: 'emoji', text: kw.e }), el('span', { class: 'letter', text: kw.w })) : null);
+          btn.addEventListener('click', () => {
+            say({ sound: l }, 250, { name: l }, 250, kw ? `for ${kw.w}` : null);
+            if (btn.classList.contains('got')) return;
+            btn.classList.add('got');
             me.score();
           });
-          return tile;
+          return btn;
         })));
+        body.append(bedCard());
       }
 
-      // ---------- 2. b or d: the letter that is missing ----------
-      function buildBorD(body, me) {
-        const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
-        const pool = every.filter(w => 'bd'.includes(w.w[0]) || 'bd'.includes(w.w[w.w.length - 1]));
-        const words = pick(pool, 6);
-        me.total = words.length;
-
-        body.replaceChildren(...words.map(w => {
-          const row = el('div', { class: 'ty-item' });
-          const at = 'bd'.includes(w.w[0]) ? 0 : w.w.length - 1;
-          const want = w.w[at];
-          const gap = el('span', { class: 'ty-gap' });
-          const line = el('div', { class: 'ty-bd-word' }, ...[...w.w].map((l, i) => (i === at
-            ? gap
-            : el('span', { class: `letter ty-l${'bd'.includes(l) ? ` is-${l}` : ''}`, text: UI.showLetter(l) }))));
-
-          const picks = el('div', { class: 'ty-bd-picks' }, ...['b', 'd'].map(letter => {
-            const btn = el('button', { class: `ty-bd-btn is-${letter}`, 'aria-label': `the letter ${letter}` },
-              word(letter), el('span', { class: 'emoji', text: letter === 'b' ? '🔵' : '🔴' }));
-            btn.addEventListener('click', () => {
-              if (row.classList.contains('right')) return;
-              if (letter !== want) {
-                Sound.sfx('wrong');
-                UI.replayClass(btn, 'shake');
-                say(`That is the ${letter === 'b' ? 'blue' : 'red'} one.`, 250, 'Look at the bed:', 200, 'blue b at the front, red d at the back.');
-                return;
-              }
-              row.classList.add('right');
-              gap.replaceChildren(word(want, `is-${want}`));
-              gap.classList.add('filled');
-              Sound.sfx('correct');
-              wordsRead++;
-              say(...sounded(chunksOf(w), w.w), 250, UI.pick(UI.PRAISE));
-              me.score();
-            });
-            return btn;
-          }));
-
-          row.append(el('span', { class: 'emoji ty-pic-small', text: w.e }), line, picks);
-          return row;
-        }));
-        body.append(el('div', { class: 'ty-bed' },
+      const bedCard = () => {
+        const bed = el('button', { class: 'ty-bed', 'aria-label': 'The bed trick' },
           el('span', { class: 'emoji', text: '🛏️' }),
           el('span', { class: 'letter ty-bed-word' },
-            el('span', { class: 'is-b', text: 'b' }), el('span', { text: 'e' }), el('span', { class: 'is-d', text: 'd' }))));
+            el('span', { class: 'is-b', text: 'b' }), el('span', { text: 'e' }), el('span', { class: 'is-d', text: 'd' })));
+        bed.addEventListener('click', () => say('b is blue.', 250, 'd is red.', 300, 'Think of the word bed.', 250, 'Blue b at the front, red d at the back.'));
+        return bed;
+      };
+
+      // ---------- 2 and 3. the missing letter, at the start and at the end ----------
+      function missingLetter(where) {
+        return (body, me) => {
+          const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
+          const pool = every.filter(w => (where === 'start' ? 'bd'.includes(w.w[0]) : 'bd'.includes(w.w[w.w.length - 1])));
+          const words = pick(pool, Math.min(6, pool.length));
+          me.total = words.length;
+
+          body.replaceChildren(...words.map(w => {
+            const row = el('div', { class: 'ty-item' });
+            const at = where === 'start' ? 0 : w.w.length - 1;
+            const want = w.w[at];
+            const gap = el('span', { class: 'ty-gap' });
+            const line = el('div', { class: 'ty-bd-word' }, ...[...w.w].map((l, i) => (i === at
+              ? gap
+              : el('span', { class: `letter ty-l${'bd'.includes(l) ? ` is-${l}` : ''}`, text: UI.showLetter(l) }))));
+
+            const picks = el('div', { class: 'ty-bd-picks' }, ...['b', 'd'].map(letter => {
+              const btn = el('button', { class: `ty-bd-btn is-${letter}`, 'aria-label': `the letter ${letter}` },
+                word(letter), el('span', { class: 'emoji', text: letter === 'b' ? '🔵' : '🔴' }));
+              btn.addEventListener('click', () => {
+                if (row.classList.contains('right')) return;
+                if (letter !== want) {
+                  Sound.sfx('wrong');
+                  UI.replayClass(btn, 'shake');
+                  say(`That is the ${letter === 'b' ? 'blue' : 'red'} one.`, 250, 'Look at the bed:', 200, 'blue b at the front, red d at the back.');
+                  return;
+                }
+                row.classList.add('right');
+                gap.replaceChildren(word(want, `is-${want}`));
+                gap.classList.add('filled');
+                Sound.sfx('correct');
+                wordsRead++;
+                say(...sounded(chunksOf(w), w.w), 250, UI.pick(UI.PRAISE));
+                me.score();
+              });
+              return btn;
+            }));
+
+            // the picture is always there: this job is about the letter, not about guessing the word
+            row.append(el('span', { class: 'emoji ty-pic-small', text: w.e }), line, picks);
+            return row;
+          }));
+          body.append(bedCard());
+        };
       }
 
-      // ---------- 3. the new sound ----------
-      function buildNewSound(body, me) {
-        const ck = DATA.soundPairs.find(g => g.p === 'ck');
-        const words = ck.words.slice();
+      // ---------- 4. into the baskets ----------
+      function buildBaskets(body, me) {
+        const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
+        const bs = pick(every.filter(w => w.w[0] === 'b' || w.w[w.w.length - 1] === 'b'), 3);
+        const ds = pick(every.filter(w => w.w[0] === 'd' || w.w[w.w.length - 1] === 'd'), 3);
+        const words = UI.shuffle([...bs, ...ds]);
         me.total = words.length;
-        body.replaceChildren(
-          el('div', { class: 'ty-new-sound' }, word('ck'), el('span', { class: 'ty-new-tag', text: 'says one sound' })),
-          el('div', { class: 'ty-longs' }, ...words.map(w => {
-            const tail = el('span', { class: 'emoji ty-long-pic', text: '❓' });
-            const btn = el('button', { class: 'ty-long', 'aria-label': `the word ${w.w}` },
-              el('span', { class: 'letter ty-l' }, ...w.c.map(bit =>
-                el('span', { class: bit === 'ck' ? 'ty-ck' : '', text: UI.showLetter(bit) }))),
-              tail);
-            btn.addEventListener('click', () => {
-              const first = !btn.classList.contains('got');
-              say(...sounded(w.c, w.w));
-              if (!first) return;
-              btn.classList.add('got');
-              tail.textContent = w.e;
-              UI.replayClass(tail, 'pop-in');
-              wordsRead++;
-              me.score();
-            });
-            return btn;
-          })));
+
+        const tray = el('div', { class: 'ty-tray' });
+        const bins = el('div', { class: 'ty-bins' }, ...['b', 'd'].map(letter => {
+          const bin = el('button', { class: `ty-bin is-${letter}`, 'aria-label': `the ${letter === 'b' ? 'blue b' : 'red d'} basket` },
+            el('span', { class: 'emoji', text: '🧺' }), word(letter, `is-${letter}`),
+            el('span', { class: 'ty-bin-words' }));
+          bin.addEventListener('click', () => drop(letter, bin));
+          return bin;
+        }));
+
+        let at = 0;
+        const chips = words.map(w => {
+          const want = w.w[0] === 'b' || w.w[0] === 'd' ? w.w[0] : w.w[w.w.length - 1];
+          const chip = el('span', { class: 'ty-tray-word' },
+            el('span', { class: 'emoji', text: w.e }),
+            el('span', { class: 'letter' }, ...[...w.w].map(l => el('span', { class: 'bd'.includes(l) ? `is-${l}` : '', text: UI.showLetter(l) }))));
+          return { chip, want, w };
+        });
+        const show = () => {
+          tray.replaceChildren(at < chips.length ? chips[at].chip : el('span', { class: 'ty-tray-done', text: '✓ all sorted' }));
+          if (at < chips.length) UI.replayClass(chips[at].chip, 'pop-in');
+        };
+        function drop(letter, bin) {
+          if (at >= chips.length) return;
+          const now = chips[at];
+          if (letter !== now.want) {
+            Sound.sfx('wrong');
+            UI.replayClass(bin, 'shake');
+            say(`${now.w.w} goes in the ${now.want === 'b' ? 'blue' : 'red'} one.`);
+            return;
+          }
+          Sound.sfx('correct');
+          bin.querySelector('.ty-bin-words').append(el('span', { class: 'emoji', text: now.w.e }));
+          UI.replayClass(bin, 'bounce');
+          wordsRead++;
+          say(`${now.w.w}!`, 200, 'with', { name: letter });
+          at++;
+          show();
+          me.score();
+        }
+        show();
+        body.replaceChildren(tray, bins);
       }
 
-      // ---------- 4. a long word is only little bits ----------
+      // ---------- 5. long words, bit by bit - gentler than last time ----------
+      // The picture is shown from the start and the word is said first, so the only job left is
+      // tapping the bits in order; the next one to tap glows.
       function buildChunks(body, me) {
         const everyPair = [...DATA.soundPairs, ...DATA.morePairs].flatMap(g => g.words);
-        const longest = everyPair.filter(w => w.w.length >= 5);          // teeth, three, green, clock
-        const words = pick(longest.length >= 5 ? longest : everyPair.filter(w => w.w.length >= 4), 5);
+        const bdOnes = everyPair.filter(w => w.w.includes('b') || w.w.includes('d'));
+        const words = pick(bdOnes.length >= 4 ? bdOnes : everyPair, 4);
         me.total = words.length;
+
         body.replaceChildren(...words.map(w => {
           const row = el('div', { class: 'ty-item chunks' });
-          const pic = el('span', { class: 'emoji ty-pic-small', text: '❓' });
+          const head = el('button', { class: 'ty-chunk-head', 'aria-label': `say ${w.w}` },
+            el('span', { class: 'emoji ty-pic-small', text: w.e }),
+            el('span', { class: 'letter ty-chunk-word', text: UI.showLetter(w.w) }));
+          head.addEventListener('click', () => say(`${w.w}.`, 200, `${w.w}!`));
+
           let pos = 0;
           const tiles = w.c.map((bit, i) => {
-            const tile = el('button', { class: `ty-chunk${bit.length > 1 ? ' pair' : ''}`, 'aria-label': bit }, word(bit));
+            const tile = el('button', { class: `ty-chunk${bit.length > 1 ? ' pair' : ''}${i === 0 ? ' next' : ''}`, 'aria-label': bit }, word(bit));
             tile.addEventListener('click', () => {
               if (row.classList.contains('right')) return;
               if (i !== pos) {
                 Sound.sfx('wrong');
                 UI.replayClass(tile, 'shake');
                 UI.replayClass(tiles[pos], 'bounce');
-                say(pos === 0 ? 'Start at this one.' : 'This bit is next.');
+                say('This bit is next.');
                 return;
               }
               Sound.sfx('tap');
               tile.classList.add('got');
+              tile.classList.remove('next');
               pos++;
+              if (tiles[pos]) tiles[pos].classList.add('next');
               if (pos < w.c.length) { say({ sound: bit }); return; }
               row.classList.add('right');
-              pic.textContent = w.e;
-              UI.replayClass(pic, 'pop-in');
               wordsRead++;
               say(...sounded(w.c, w.w), 250, UI.pick(UI.PRAISE));
               me.score();
             });
             return tile;
           });
-          row.append(pic, el('div', { class: 'ty-chunks' }, ...tiles));
+          row.append(head, el('div', { class: 'ty-chunks' }, ...tiles));
           return row;
         }));
       }
 
-      // ---------- 5. a sentence, grown a bit at a time ----------
+      // ---------- 6. a sentence that grows - gentler than last time ----------
+      // The pictures are there from the start, so they know what it is about before they read,
+      // and it comes in three small steps instead of two big ones.
       function buildGrow(body, me) {
+        const bdWord = w => /[bd]/.test(w);
         const made = UI.shuffle(DATA.sentences).map(s2 => {
           const ws = s2.split(' ');
-          return { s: s2, words: ws, pics: ws.filter(x => DATA.pics[x]).map(x => DATA.pics[x]) };
-        }).filter(x => x.pics.length === 2).slice(0, 4);
-        me.total = made.length;
+          return { s: s2, words: ws, pics: ws.filter(x => DATA.pics[x]).map(x => DATA.pics[x]), bd: ws.some(bdWord) };
+        }).filter(x => x.pics.length === 2);
+        const chosen = made.filter(x => x.bd).concat(made).slice(0, 3);
+        me.total = chosen.length;
 
-        body.replaceChildren(...made.map(item => {
+        body.replaceChildren(...chosen.map(item => {
           const row = el('div', { class: 'ty-item grow' });
           const joiner = item.words.findIndex(x => ['in', 'on', 'up', 'at'].includes(x));
           const cut = joiner > 0 ? joiner : 2;
-          const steps = [item.words.slice(0, cut), item.words];
+          const steps = [item.words.slice(0, cut), item.words.slice(0, cut + 2), item.words];
           let at = 0;
+
+          const pics = el('div', { class: 'ty-grow-pics' }, ...item.pics.map(e => el('span', { class: 'emoji', text: e })));
           const line = el('div', { class: 'ty-sentence' });
           const more = el('button', { class: 'ty-more' }, 'and then… ⬇');
-          const pics = el('div', { class: 'ty-grow-pics', hidden: 'hidden' }, ...item.pics.map(e => el('span', { class: 'emoji', text: e })));
 
           const draw = () => {
-            line.replaceChildren(...steps[at].map(x => word(x)));
+            line.replaceChildren(...steps[at].map((x, i) => word(x, i >= (at ? steps[at - 1].length : 0) ? 'fresh' : '')));
             UI.replayClass(line, 'bounce');
           };
-          line.addEventListener('click', () => say(...steps[at].flatMap(x => [x, 80]), 200, `${steps[at].join(' ')}.`));
+          const read = () => say(...steps[at].flatMap(x => [x, 80]), 200, `${steps[at].join(' ')}.`);
+          line.addEventListener('click', read);
           more.addEventListener('click', () => {
             if (at >= steps.length - 1) return;
             at++;
             draw();
+            if (at < steps.length - 1) { read(); return; }
             more.hidden = true;
-            pics.hidden = false;
             row.classList.add('right');
             wordsRead += item.words.length;
             say(...item.words.flatMap(x => [x, 80]), 250, `${item.s}!`, 250, UI.pick(UI.PRAISE));
             me.score();
           });
           draw();
-          row.append(line, more, pics);
+          read();
+          row.append(pics, line, more);
           return row;
         }));
       }
@@ -343,11 +398,12 @@
       function build() {
         $('finish').hidden = true;
         wordsRead = 0;
-        card('part1', buildPairs);
-        card('part2', buildBorD);
-        card('part3', buildNewSound);
-        card('part4', buildChunks);
-        card('part5', buildGrow);
+        card('part1', buildTwoLetters);
+        card('part2', missingLetter('start'));
+        card('part3', missingLetter('end'));
+        card('part4', buildBaskets);
+        card('part5', buildChunks);
+        card('part6', buildGrow);
         PARTS.forEach(id => { state[id].announced = false; });
         progress();
       }
@@ -411,7 +467,7 @@
 
       $('startBtn').addEventListener('click', () => {
         Sound.unlock();
-        say("Here is today's lesson.", 250, 'There is a new sound today, and some big words made of little bits.');
+        say("Today is all about b and d.", 250, 'And we will finish the two jobs we ran out of time for.');
         watchParts();
         setTimeout(() => scrollTo('part1'), 600);
       });
