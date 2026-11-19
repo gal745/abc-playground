@@ -115,7 +115,7 @@ const DATA = (() => {
     pair('ch', 'ch-i-p 🍟, ch-i-ck 🐤, ch-o-p 🪓, ch-a-t 💬'),
     pair('th', 'b-a-th 🛁, t-ee-th 🦷, th-r-ee 3️⃣, th-i-n-k 🤔'),
     pair('oo', 'm-oo-n 🌙, b-oo-t 👢, b-oo-k 📖, f-oo-t 🦶, p-oo-l 🏊, b-r-oo-m 🧹'),
-    pair('ee', 'b-ee 🐝, t-r-ee 🌳, f-ee-t 🦶, g-r-ee-n 💚, sh-ee-p 🐑'),
+    pair('ee', 'b-ee 🐝, t-r-ee 🌳, f-ee-t 🦶, g-r-ee-n 💚, sh-ee-p 🐑, d-ee-r 🦌'),
     // ck is the new one: two letters for one /k/ sound, always at the end of a word
     pair('ck', 'd-u-ck 🦆, s-o-ck 🧦, c-l-o-ck ⏰, r-o-ck 🪨, k-i-ck ⚽'),
   ];

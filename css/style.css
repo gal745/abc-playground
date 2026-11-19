@@ -1364,6 +1364,43 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .hunt-tile.no { background: #ffeef0; border-color: #ffb3bd; }
 .sort-listen { color: var(--soft-ink); font-weight: 700; font-size: clamp(1rem, 4vw, 1.3rem); }
 
+/* ---------- b Words and d Words ---------- */
+.stage-bwords, .stage-dwords { gap: clamp(8px, 2vh, 18px); }
+.bw-bag {
+  display: flex; align-items: center; gap: clamp(8px, 3vw, 16px);
+  padding: clamp(6px, 1.6vh, 12px) clamp(14px, 5vw, 28px);
+  border-radius: 24px; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .1);
+}
+.bw-bag-pic { font-size: clamp(2.2rem, 10vmin, 3.6rem); }
+.bw-bag-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.bw-bag-letter { font-size: clamp(1.8rem, 8vmin, 3rem); }
+.bw-bag-letter.is-b { color: var(--bd-blue); }
+.bw-bag-letter.is-d { color: var(--bd-red); }
+.bw-bag-how { color: var(--soft-ink); font-weight: 700; font-size: clamp(.85rem, 3.4vw, 1.05rem); }
+.bw-tray {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+  width: min(94vw, 560px); min-height: 4px;
+}
+.bw-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px;
+  background: #e9f8ef; border: 2px solid #7fd3a6;
+}
+.bw-chip .emoji { font-size: clamp(.95rem, 4vmin, 1.3rem); }
+.bw-chip .letter { font-size: clamp(.9rem, 3.8vmin, 1.2rem); color: #10795a; }
+.bw-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(6px, 2vw, 14px); width: min(94vw, 560px); }
+.bw-board.size-6 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bw-board.size-12 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bw-word {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  padding: clamp(8px, 2vh, 14px) 4px; border-radius: 18px; background: #fff; border: 4px solid #e4e7f2;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, .1);
+}
+.bw-word .emoji { font-size: clamp(1.7rem, 8vmin, 2.9rem); }
+.bw-word .letter { font-size: clamp(1.1rem, 5.2vmin, 2rem); color: var(--ink); }
+.bw-board.words-only .bw-word { padding: clamp(14px, 3.4vh, 24px) 4px; }
+.bw-word:active { transform: translateY(4px); box-shadow: none; }
+.bw-word.got { background: #e9f8ef; border-color: #7fd3a6; opacity: .65; }
+
 /* ---------- Today's Lesson: one sheet to scroll down (today.html) ---------- */
 .today-main { max-width: 680px; gap: clamp(10px, 2.4vh, 20px); justify-content: flex-start; padding-top: 8px; }
 .today-title { color: #0a7c74; margin-bottom: 4px; }
