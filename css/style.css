@@ -1542,6 +1542,15 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .ty-warm.six { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 2.6vw, 18px); }
 .ty-sound.new { border-color: #ffd166; background: #fffaf0; box-shadow: 0 5px 0 rgba(255, 193, 60, .35); }
 .ty-pic-small { font-size: clamp(2rem, 8vw, 3rem); }
+/* a picture with its word under it: for the parts where the sound is the question, not the reading */
+.ty-pic-word {
+  flex: 1; min-width: clamp(110px, 32vw, 200px); display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 10px; border-radius: 16px; background: #fff;
+}
+.ty-pic-word .emoji { font-size: clamp(2.6rem, 11vw, 4rem); }
+.ty-pic-word .letter { font-size: clamp(1.3rem, 5.6vw, 2rem); color: var(--ink); }
+.ty-pic-word:active { transform: translateY(3px); }
+.ty-item.right .ty-pic-word { background: transparent; }
 .ty-bd-word, .ty-chunks, .ty-bd-picks { display: flex; align-items: center; gap: 6px; }
 .ty-bd-word .ty-l { font-size: clamp(2rem, 8.5vw, 3rem); }
 .ty-gap {

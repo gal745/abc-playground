@@ -34,7 +34,7 @@
     <section class="ty-card ty-intro" id="intro">
       <span class="emoji ty-start-pic">📖</span>
       <h2 class="ty-start-h">Reading, all by yourself</h2>
-      <p class="ty-start-p">All about <b>b</b> and <b>d</b>, with a <b>real book</b> in the middle — and the two we did not finish last time.</p>
+      <p class="ty-start-p">More <b>b</b> and <b>d</b> — this time in animals, food and toys — with a <b>real book</b> in the middle.</p>
       <button id="startBtn" class="say-all ty-go"><span class="emoji">▶️</span> Start</button>
       <p class="ty-note">Sound on, please!</p>
     </section>
@@ -43,29 +43,29 @@
       data-how="Tap each one and say its sound."
       data-say="Today is all about b and d. b is blue. d is red. Tap them and say their sounds."></section>
 
-    <section class="ty-card" id="part2" data-game="bord" data-game-name="🛏️ b or d?" data-no="2" data-title="Words that start with b or d"
-      data-how="The first letter is missing. Blue b, or red d?"
-      data-say="These words start with b or d. Which one is missing? Remember the bed."></section>
+    <section class="ty-card" id="part2" data-game="bwords" data-game-name="🐝 b Words" data-no="2" data-title="Animals: b or d?"
+      data-how="Say the animal. Does it start with b, or with d?"
+      data-say="Here are some animals. Say the name, listen to the very first sound, and tap b or d."></section>
 
-    <section class="ty-card" id="part3" data-game="bord" data-game-name="🛏️ b or d?" data-no="3" data-title="Words that end with b or d"
-      data-how="Now the last letter is missing."
-      data-say="Now the letter at the end is missing. Say the word, and listen to the very last sound."></section>
+    <section class="ty-card" id="part3" data-game="dwords" data-game-name="🦆 d Words" data-no="3" data-title="Food and toys"
+      data-how="Same again. Which sound does it start with?"
+      data-say="Now some food and some toys. Say each one, and tap the letter it starts with."></section>
 
     <section class="ty-card ty-break" id="book" data-no="4" data-nonudge="1" data-title="Now a real book"
       data-how="Put the screen down and get your book."
       data-say="Stop here. It is time for a real book. Put the screen down, get your book, and read it with your teacher. When the book is finished, come back and tap the big button."></section>
 
-    <section class="ty-card" id="part5" data-game="bdsort" data-game-name="🧺 b and d Sort" data-no="5" data-title="Put them in a basket"
-      data-how="Blue b basket, or red d basket?"
-      data-say="Welcome back. Put each word in a basket. The blue one for b, the red one for d."></section>
+    <section class="ty-card" id="part5" data-game="bord" data-game-name="🛏️ b or d?" data-no="5" data-title="Words to read"
+      data-how="One letter is missing. Blue b, or red d?"
+      data-say="Welcome back. Now some words to read. One letter is missing from each one. Remember the bed."></section>
 
     <section class="ty-card" id="part6" data-game="join" data-game-name="🧲 Join the Sounds" data-no="6" data-title="Long words, bit by bit"
       data-how="You know the word. Now tap the bits, one at a time."
-      data-say="The one we did not finish last time. The picture tells you the word. Now tap the bits, one at a time."></section>
+      data-say="The picture tells you the word. Now tap the bits, one at a time, and say each one."></section>
 
     <section class="ty-card" id="part7" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="7" data-title="Grow a sentence"
       data-how="The pictures tell you the sentence. Tap to make it grow."
-      data-say="Here is the other one from last time. The pictures tell you what it says. Read a bit, then tap for more."></section>
+      data-say="Last one. The pictures tell you what it says. Read a bit, then tap for more."></section>
 
     <section id="finish" class="ty-finish" hidden>
       <h2 class="ty-finish-h">All finished!</h2>
@@ -78,11 +78,12 @@
     </section>
 
     <p class="days-hint note">For grown-ups: today's lesson, as one sheet to scroll down — <b>b</b> and <b>d</b>
-      on their own and in words, then <b>part 4 leaves the screen for a real book</b> read with you (ten
-      minutes or so — the page goes quiet and waits, and the child taps when the book is finished), then the
-      two parts we ran out of time for last lesson. Every instruction is spoken as the child reaches it,
-      nothing is typed, and each part ticks itself off. The teacher-led worksheets are on the
-      <a href="lesson.html">lesson sheets</a> page.</p>
+      again, this time in words they already know: animals first, then food and toys, where the only question
+      is the sound the word starts with and the picture does the rest. <b>Part 4 leaves the screen for a real
+      book</b> read with you (ten minutes or so — the page goes quiet and waits, and the child taps when the
+      book is finished). After it, words to read with a letter missing, a long word taken a bit at a time, and
+      a sentence that grows. Every instruction is spoken as the child reaches it, nothing is typed, and each
+      part ticks itself off. The teacher-led worksheets are on the <a href="lesson.html">lesson sheets</a> page.</p>
   </main>
 
   <canvas id="confetti" aria-hidden="true"></canvas>
@@ -201,13 +202,16 @@
       function missingLetter(where) {
         return (body, me) => {
           const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
-          const pool = every.filter(w => (where === 'start' ? 'bd'.includes(w.w[0]) : 'bd'.includes(w.w[w.w.length - 1])));
-          const words = pick(pool, Math.min(6, pool.length));
+          const starts = every.filter(w => 'bd'.includes(w.w[0]));
+          const ends = every.filter(w => 'bd'.includes(w.w[w.w.length - 1]) && !'bd'.includes(w.w[0]));
+          const words = where === 'start' ? pick(starts, 6)
+            : where === 'end' ? pick(ends, Math.min(6, ends.length))
+              : UI.shuffle([...pick(starts, 3), ...pick(ends, 3)]);
           me.total = words.length;
 
           body.replaceChildren(...words.map(w => {
             const row = el('div', { class: 'ty-item' });
-            const at = where === 'start' ? 0 : w.w.length - 1;
+            const at = 'bd'.includes(w.w[0]) && where !== 'end' ? 0 : w.w.length - 1;
             const want = w.w[at];
             const gap = el('span', { class: 'ty-gap' });
             const line = el('div', { class: 'ty-bd-word' }, ...[...w.w].map((l, i) => (i === at
@@ -244,58 +248,57 @@
         };
       }
 
-      // ---------- 4. into the baskets ----------
-      function buildBaskets(body, me) {
-        const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && w.w.length <= 5);
-        const bs = pick(every.filter(w => w.w[0] === 'b' || w.w[w.w.length - 1] === 'b'), 3);
-        const ds = pick(every.filter(w => w.w[0] === 'd' || w.w[w.w.length - 1] === 'd'), 3);
-        const words = UI.shuffle([...bs, ...ds]);
-        me.total = words.length;
+      // ---------- 2 and 3. first sounds, in words they already own ----------
+      // Nothing here has to be decoded: the picture says what the thing is, the word is under it to
+      // be looked at, and the only question is the sound it starts with. Animals first, because
+      // every child has plenty of those, then food and toys.
+      function firstSoundPics(sets) {
+        return (body, me) => {
+          const from = sets.flatMap(s2 => DATA.picSets[s2] || []);
+          const bs = pick(from.filter(w => w.w[0] === 'b'), 3);
+          const ds = pick(from.filter(w => w.w[0] === 'd'), 3);
+          const words = UI.shuffle([...bs, ...ds]);
+          me.total = words.length;
 
-        const tray = el('div', { class: 'ty-tray' });
-        const bins = el('div', { class: 'ty-bins' }, ...['b', 'd'].map(letter => {
-          const bin = el('button', { class: `ty-bin is-${letter}`, 'aria-label': `the ${letter === 'b' ? 'blue b' : 'red d'} basket` },
-            el('span', { class: 'emoji', text: '🧺' }), word(letter, `is-${letter}`),
-            el('span', { class: 'ty-bin-words' }));
-          bin.addEventListener('click', () => drop(letter, bin));
-          return bin;
-        }));
+          body.replaceChildren(...words.map(w => {
+            const row = el('div', { class: 'ty-item' });
+            const want = w.w[0];
+            const name = el('button', { class: 'ty-pic-word', 'aria-label': `say ${w.w}` },
+              el('span', { class: 'emoji', text: w.e }),
+              el('span', { class: 'letter', text: UI.showLetter(w.w) }));
+            name.addEventListener('click', () => say(`${w.w}.`, 200, 'Listen to the start:', 150, { sound: want }));
 
-        let at = 0;
-        const chips = words.map(w => {
-          const want = w.w[0] === 'b' || w.w[0] === 'd' ? w.w[0] : w.w[w.w.length - 1];
-          const chip = el('span', { class: 'ty-tray-word' },
-            el('span', { class: 'emoji', text: w.e }),
-            el('span', { class: 'letter' }, ...[...w.w].map(l => el('span', { class: 'bd'.includes(l) ? `is-${l}` : '', text: UI.showLetter(l) }))));
-          return { chip, want, w };
-        });
-        const show = () => {
-          tray.replaceChildren(at < chips.length ? chips[at].chip : el('span', { class: 'ty-tray-done', text: '✓ all sorted' }));
-          if (at < chips.length) UI.replayClass(chips[at].chip, 'pop-in');
+            const picks = el('div', { class: 'ty-bd-picks' }, ...['b', 'd'].map(letter => {
+              const btn = el('button', { class: `ty-bd-btn is-${letter}`, 'aria-label': `the letter ${letter}` },
+                word(letter), el('span', { class: 'emoji', text: letter === 'b' ? '🔵' : '🔴' }));
+              btn.addEventListener('click', () => {
+                if (row.classList.contains('right')) return;
+                if (letter !== want) {
+                  Sound.sfx('wrong');
+                  UI.replayClass(btn, 'shake');
+                  say(`${w.w}.`, 250, 'Listen to the very first sound:', 200, { sound: want }, 250, `${w.w}.`);
+                  return;
+                }
+                row.classList.add('right');
+                name.querySelector('.letter').replaceChildren(
+                  el('span', { class: `is-${want}`, text: UI.showLetter(want) }),
+                  el('span', { text: UI.showLetter(w.w.slice(1)) }));
+                Sound.sfx('correct');
+                wordsRead++;
+                say({ sound: want }, 150, `${w.w}!`, 200, `${w.w} starts with ${Sound.letterName(want)}.`, 250, UI.pick(UI.PRAISE));
+                me.score();
+              });
+              return btn;
+            }));
+
+            row.append(name, picks);
+            return row;
+          }));
+          body.append(bedCard());
         };
-        function drop(letter, bin) {
-          if (at >= chips.length) return;
-          const now = chips[at];
-          if (letter !== now.want) {
-            Sound.sfx('wrong');
-            UI.replayClass(bin, 'shake');
-            say(`${now.w.w} goes in the ${now.want === 'b' ? 'blue' : 'red'} one.`);
-            return;
-          }
-          Sound.sfx('correct');
-          bin.querySelector('.ty-bin-words').append(el('span', { class: 'emoji', text: now.w.e }));
-          UI.replayClass(bin, 'bounce');
-          wordsRead++;
-          say(`${now.w.w}!`, 200, 'with', { name: letter });
-          at++;
-          show();
-          me.score();
-        }
-        show();
-        body.replaceChildren(tray, bins);
       }
 
-      // ---------- 5. long words, bit by bit - gentler than last time ----------
+      // ---------- 6. long words, bit by bit ----------
       // The picture is shown from the start and the word is said first, so the only job left is
       // tapping the bits in order; the next one to tap glows.
       function buildChunks(body, me) {
@@ -341,7 +344,7 @@
         }));
       }
 
-      // ---------- 6. a sentence that grows - gentler than last time ----------
+      // ---------- 7. a sentence that grows ----------
       // The pictures are there from the start, so they know what it is about before they read,
       // and it comes in three small steps instead of two big ones.
       function buildGrow(body, me) {
@@ -427,10 +430,10 @@
         $('finish').hidden = true;
         wordsRead = 0;
         card('part1', buildTwoLetters);
-        card('part2', missingLetter('start'));
-        card('part3', missingLetter('end'));
+        card('part2', firstSoundPics(['animals']));
+        card('part3', firstSoundPics(['food', 'toys']));
         card('book', buildBookBreak);
-        card('part5', buildBaskets);
+        card('part5', missingLetter('either'));
         card('part6', buildChunks);
         card('part7', buildGrow);
         PARTS.forEach(id => { state[id].announced = false; });
@@ -497,7 +500,7 @@
 
       $('startBtn').addEventListener('click', () => {
         Sound.unlock();
-        say("Today is all about b and d.", 250, 'And we will finish the two jobs we ran out of time for.');
+        say('More b and d today.', 250, 'In animals, and food, and toys.');
         watchParts();
         setTimeout(() => scrollTo('part1'), 600);
       });
