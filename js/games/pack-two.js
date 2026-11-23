@@ -40,6 +40,7 @@
         let got = [];
         let round = 0;
         let locked = false;
+        let first = true;
 
         const holder = UI.el('span', { class: 'emoji pack-holder', text: emoji });
         const bubble = UI.el('span', { class: 'pack-bubble' });
@@ -73,17 +74,21 @@
             btn.addEventListener('click', () => choose(btn, item));
             return btn;
           }));
-          ask();
+          if (first) { first = false; api.later(ask, 550); } else ask();
         }
 
         function ask() {
           const how = NEED === 3 ? 'three things' : 'two things';
+          // the sound is said twice, and on the levels that show the letter it is named as well:
+          // a single short sound at the end of a sentence is the easiest thing in the world to miss
           return Sound.say(round === 0 ? `Let's pack ${packed}.` : UI.pick(['Next one.', 'Again!', 'Keep going.']),
-            200, `Find ${how} that start with`, { sound: target }, 300, L.listen ? { sound: target } : null);
+            250, `Find ${how} that start with`, 150, { sound: target }, 350, { sound: target },
+            // a pair like ch has no letter name worth saying, so it gets the sound again instead
+            L.listen ? null : [250, target.length > 1 ? { sound: target } : { name: target }]);
         }
 
         function replay() {
-          if (!locked) ask();
+          if (target) ask();
         }
 
         function choose(btn, item) {
