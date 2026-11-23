@@ -1,6 +1,6 @@
 # ABC Playground
 
-Twenty-eight short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
+Thirty short, talking phonics games for children aged 4–7 who are learning letters and their sounds.
 No reading is needed: every instruction is spoken.
 
 | Game | Skill |
@@ -29,6 +29,8 @@ No reading is needed: every instruction is spoken.
 | 🔍 b and d Hunt | A board of b's and d's, or of words, and only one of the two letters is wanted: find every one |
 | 🐝 b Words | Filling a bag with every word that starts with **b** — a level of animals, a level of food, a level of toys, a level of things round the house, then all of them mixed |
 | 🦆 d Words | The same for **d**, with b among the words to leave alone |
+| 🧺 Pack the Picnic | Hear a sound and pack the **two** foods that start with it — one right answer can be luck, two is the sound |
+| 🎒 Pack your Bag | The same, with toys and things from round the house; the last level wants three, with nothing shown but the sound |
 | 🛏️ b or d? | Telling b and d apart: the missing letter in a word, b always blue and d always red, with the *bed* reminder on screen |
 | 📘 Read and Find | Reading a word with nothing said first, then tapping the picture it means |
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |

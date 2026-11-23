@@ -942,6 +942,27 @@ body.days-page { height: auto; min-height: 100%; overflow-y: visible; overflow-x
 @keyframes chomp { 30% { transform: scale(1.22) rotate(-6deg); } 60% { transform: scale(.94) rotate(4deg); } }
 .eaten { visibility: hidden; }
 
+/* ---------- Pack the Picnic / Pack your Bag ---------- */
+.stage-picnic, .stage-packbag { gap: clamp(6px, 1.6vh, 14px); }
+.pack-top { position: relative; display: flex; align-items: center; gap: clamp(10px, 3vmin, 22px); }
+.pack-holder { display: inline-block; font-size: clamp(4rem, 17vmin, 8rem); line-height: 1; }
+.pack-bubble {
+  position: relative; width: clamp(70px, 16vmin, 120px); aspect-ratio: 1; border-radius: 50%;
+  background: #fff; border: 5px solid var(--c); color: var(--c); display: grid; place-items: center;
+  font-size: clamp(2.6rem, 9.5vmin, 4.6rem); box-shadow: 0 6px 0 rgba(0, 0, 0, .1);
+}
+.pack-bubble::before {
+  content: ""; position: absolute; left: -20px; top: 50%; margin-top: -10px;
+  border: 10px solid transparent; border-right: 14px solid var(--c);
+}
+.pack-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: min(94vw, 560px); min-height: 4px; }
+.pack-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px;
+  background: #e9f8ef; border: 2px solid #7fd3a6;
+}
+.pack-chip .emoji { font-size: clamp(.95rem, 4vmin, 1.3rem); }
+.pack-chip .letter { font-size: clamp(.9rem, 3.8vmin, 1.2rem); color: #10795a; }
+
 /* ---------- Trace It ---------- */
 .stage-trace { gap: clamp(10px, 2vh, 20px); }
 .trace-box { background: #fff; border-radius: 28px; border: 6px solid var(--c); box-shadow: 0 10px 0 rgba(0, 0, 0, .1); overflow: hidden; line-height: 0; }
