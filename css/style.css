@@ -1497,6 +1497,8 @@ select { flex: 1; min-width: 0; font: inherit; font-size: .95rem; padding: 8px 1
 .ty-item.right { border-color: #7fd3a6; background: #f4fcf8; }
 .ty-word { flex: none; min-width: clamp(96px, 26vw, 170px); padding: 6px 10px; border-radius: 14px; }
 .ty-word .ty-l { font-size: clamp(2.3rem, 10vw, 3.8rem); color: var(--ink); letter-spacing: 1px; }
+.ty-word .ty-l.is-b { color: var(--bd-blue); }
+.ty-word .ty-l.is-d { color: var(--bd-red); }
 .ty-pics { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(6px, 2vw, 14px); }
 .ty-pic-btn {
   width: clamp(78px, 21vw, 130px); aspect-ratio: 1; border-radius: 22px; background: #fff; border: 3px solid #e4e7f2;

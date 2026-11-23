@@ -25,7 +25,7 @@
   <div id="bar" class="ty-bar">
     <a class="round-btn small" href="index.html" aria-label="Back to the games"><span class="emoji">🏠</span></a>
     <span class="ty-bar-track"><span id="barFill" class="ty-bar-fill"></span></span>
-    <span id="barCount" class="ty-bar-count">0 of 7</span>
+    <span id="barCount" class="ty-bar-count">0 of 8</span>
   </div>
 
   <main class="days-main today-main" translate="no">
@@ -55,15 +55,19 @@
       data-how="Put the screen down and get your book."
       data-say="Stop here. It is time for a real book. Put the screen down, get your book, and read it with your teacher. When the book is finished, come back and tap the big button."></section>
 
-    <section class="ty-card" id="part5" data-game="bord" data-game-name="🛏️ b or d?" data-no="5" data-title="Words to read"
+    <section class="ty-card" id="part5" data-game="bord" data-game-name="🛏️ b or d?" data-no="5" data-title="A letter is missing"
       data-how="One letter is missing. Blue b, or red d?"
       data-say="Welcome back. Now some words to read. One letter is missing from each one. Remember the bed."></section>
 
-    <section class="ty-card" id="part6" data-game="join" data-game-name="🧲 Join the Sounds" data-no="6" data-title="Long words, bit by bit"
+    <section class="ty-card" id="read" data-game="readfind" data-game-name="📘 Read and Find" data-no="6" data-title="Three letters, then four"
+      data-how="Read the word, then tap the picture it means."
+      data-say="No clues this time. Read the word yourself, then tap the picture it means. Tap the word if you want to hear the sounds."></section>
+
+    <section class="ty-card" id="part6" data-game="join" data-game-name="🧲 Join the Sounds" data-no="7" data-title="Long words, bit by bit"
       data-how="You know the word. Now tap the bits, one at a time."
       data-say="The picture tells you the word. Now tap the bits, one at a time, and say each one."></section>
 
-    <section class="ty-card" id="part7" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="7" data-title="Grow a sentence"
+    <section class="ty-card" id="part7" data-game="grow" data-game-name="🌱 Grow a Sentence" data-no="8" data-title="Grow a sentence"
       data-how="The pictures tell you the sentence. Tap to make it grow."
       data-say="Last one. The pictures tell you what it says. Read a bit, then tap for more."></section>
 
@@ -81,8 +85,9 @@
       again, this time in words they already know: animals first, then food and toys, where the only question
       is the sound the word starts with and the picture does the rest. <b>Part 4 leaves the screen for a real
       book</b> read with you (ten minutes or so — the page goes quiet and waits, and the child taps when the
-      book is finished). After it, words to read with a letter missing, a long word taken a bit at a time, and
-      a sentence that grows. Every instruction is spoken as the child reaches it, nothing is typed, and each
+      book is finished). After it, words with a letter missing, then <b>three- and four-letter words with a b or a d
+      in them, read whole with nothing said first</b>, then a long word taken a bit at a time, and a
+      sentence that grows. Every instruction is spoken as the child reaches it, nothing is typed, and each
       part ticks itself off. The teacher-led worksheets are on the <a href="lesson.html">lesson sheets</a> page.</p>
   </main>
 
@@ -113,7 +118,7 @@
         return UI.shuffle(from).filter(w => !w.e || (!seen.has(w.e) && seen.add(w.e))).slice(0, n);
       }
 
-      const PARTS = ['part1', 'part2', 'part3', 'book', 'part5', 'part6', 'part7'];
+      const PARTS = ['part1', 'part2', 'part3', 'book', 'part5', 'read', 'part6', 'part7'];
       const state = {};     // id -> { done, total, got, finish, announced }
       let wordsRead = 0;
 
@@ -298,7 +303,51 @@
         };
       }
 
-      // ---------- 6. long words, bit by bit ----------
+      // ---------- 6. three letters, then four: the whole word, read ----------
+      // Nothing is said first and no letter is missing. The word is there, the pictures are there,
+      // and the only way through is to read it. Three short ones to settle in, then three longer
+      // ones, every one of them carrying a b or a d. Tapping the word sounds it out, for when they
+      // are stuck - it costs them nothing to ask.
+      function buildReadWords(body, me) {
+        const seen = new Set();
+        const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && !seen.has(w.w) && seen.add(w.w));
+        const withBD = n => every.filter(w => w.w.length === n && /[bd]/.test(w.w));
+        const words = [...pick(withBD(3), 3), ...pick(withBD(4), 3)];
+        me.total = words.length;
+
+        body.replaceChildren(...words.map(w => {
+          const row = el('div', { class: 'ty-item' });
+          const line = el('button', { class: 'ty-word', 'aria-label': `sound out ${w.w}` },
+            ...[...w.w].map(l => word(l, 'bd'.includes(l) ? `is-${l}` : '')));
+          line.addEventListener('click', () => say(...sounded(chunksOf(w), w.w)));
+
+          // the wrong pictures are words of the same length, so the shape of the word is no clue
+          const wrong = pick(every.filter(x => x.w.length === w.w.length && x.w !== w.w && x.e !== w.e), 2);
+          const pics = el('div', { class: 'ty-pics' }, ...UI.shuffle([w, ...wrong]).map(x => {
+            const btn = el('button', { class: 'ty-pic-btn', 'aria-label': x.w }, el('span', { class: 'emoji', text: x.e }));
+            btn.addEventListener('click', () => {
+              if (row.classList.contains('right')) return;
+              if (x.w !== w.w) {
+                Sound.sfx('wrong');
+                UI.replayClass(btn, 'shake');
+                say(`That one is ${x.w}.`, 250, 'Read it again:', 200, ...sounded(chunksOf(w), w.w));
+                return;
+              }
+              row.classList.add('right');
+              btn.classList.add('right');
+              Sound.sfx('correct');
+              wordsRead++;
+              say(...sounded(chunksOf(w), w.w), 250, UI.pick(UI.PRAISE));
+              me.score();
+            });
+            return btn;
+          }));
+          row.append(line, pics);
+          return row;
+        }));
+      }
+
+      // ---------- 7. long words, bit by bit ----------
       // The picture is shown from the start and the word is said first, so the only job left is
       // tapping the bits in order; the next one to tap glows.
       function buildChunks(body, me) {
@@ -344,7 +393,7 @@
         }));
       }
 
-      // ---------- 7. a sentence that grows ----------
+      // ---------- 8. a sentence that grows ----------
       // The pictures are there from the start, so they know what it is about before they read,
       // and it comes in three small steps instead of two big ones.
       function buildGrow(body, me) {
@@ -434,6 +483,7 @@
         card('part3', firstSoundPics(['food', 'toys']));
         card('book', buildBookBreak);
         card('part5', missingLetter('either'));
+        card('read', buildReadWords);
         card('part6', buildChunks);
         card('part7', buildGrow);
         PARTS.forEach(id => { state[id].announced = false; });
