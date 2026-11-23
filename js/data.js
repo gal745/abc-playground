@@ -32,7 +32,7 @@ const DATA = (() => {
   const sounds = {
     a: 'ah', b: 'bah', c: 'kah', d: 'dah', e: 'eh', f: 'fah', g: 'gah', h: 'hah', i: 'ihh',
     j: 'jah', k: 'kah', l: 'lah', m: 'mmm', n: 'nah', o: 'aw', p: 'pah', q: 'kwah', r: 'rah',
-    s: 'sah', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'kss', y: 'yah', z: 'zah',
+    s: 'sah', t: 'tah', u: 'uh', v: 'vah', w: 'wah', x: 'ksah', y: 'yah', z: 'zah',
   };
 
   // Pictures that START with each letter sound. The first word is the letter's "keyword".
@@ -45,7 +45,7 @@ const DATA = (() => {
     f: parse('fish 🐟, frog 🐸, fox 🦊, fire 🔥, flower 🌸'),
     g: parse('goat 🐐, gift 🎁, grapes 🍇, guitar 🎸, gorilla 🦍'),
     h: parse('hat 🎩, horse 🐴, house 🏠, heart ❤️, hippo 🦛'),
-    i: parse('insect 🐛'),
+    i: parse('insect 🪲'),
     j: parse('jeans 👖, juice 🧃'),
     k: parse('kite 🪁, key 🔑, king 🤴, kangaroo 🦘, koala 🐨'),
     l: parse('lion 🦁, leaf 🍃, lemon 🍋, lollipop 🍭, ladybug 🐞'),
@@ -77,7 +77,7 @@ const DATA = (() => {
     rhyme('air', 'bear 🐻, pear 🍐, chair 🪑'),
     rhyme('o', 'sock 🧦, clock ⏰'),
     rhyme('ow', 'mouse 🐭, house 🏠'),
-    rhyme('oa', 'goat 🐐, boat ⛵, coat 🧥'),
+    rhyme('oa', 'goat 🐐, boat 🚤, coat 🧥'),
     rhyme('i', 'king 🤴, ring 💍'),
     rhyme('o', 'fox 🦊, box 📦'),
     rhyme('oa', 'nose 👃, rose 🌹'),
@@ -87,7 +87,7 @@ const DATA = (() => {
     rhyme('igh', 'tie 👔, pie 🥧'),
     rhyme('ay', 'train 🚂, rain 🌧️'),
     rhyme('e', 'bed 🛏️, bread 🍞'),
-    rhyme('igh', 'light 💡, kite 🪁'),
+    rhyme('igh', 'bike 🚲, kite 🪁'),
     rhyme('u', 'drum 🥁, thumb 👍'),
     rhyme('or', 'four 4️⃣, door 🚪'),
     rhyme('oo', 'shoe 👟, two 2️⃣'),
@@ -100,7 +100,7 @@ const DATA = (() => {
     'cat 🐱, dog 🐶, pig 🐷, sun ☀️, bus 🚌, hat 🎩, bed 🛏️, box 📦, fox 🦊, ten 🔟, net 🥅, ' +
     'bat 🦇, map 🗺️, van 🚐, bug 🐛, web 🕸️, pen 🖊️, nut 🥜, rat 🐀, leg 🦵, six 6️⃣, cup 🥤, red 🔴, ' +
     'pin 📌, bin 🗑️, lip 👄, log 🪵, pot 🍲, mug ☕, hen 🐔, pan 🍳, cap 🧢, jet ✈️, ' +
-    'bag 👜, hug 🤗, man 👨, tap 🚰, nap 😴, kid 🧒, win 🏆, wet 💦, run 🏃, cut ✂️, hot 🔥'
+    'bag 👜, hug 🤗, man 👨, tap 🚰, nap 😴, kid 🧒, win 🏆, wet 💦, run 🏃, cut ✂️, hot 🥵'
   );
 
   // Two letters that hold hands and make ONE sound. Each word is written in the chunks it is
@@ -115,7 +115,7 @@ const DATA = (() => {
     pair('ch', 'ch-i-p 🍟, ch-i-ck 🐤, ch-o-p 🪓, ch-a-t 💬'),
     pair('th', 'b-a-th 🛁, t-ee-th 🦷, th-r-ee 3️⃣, th-i-n-k 🤔'),
     pair('oo', 'm-oo-n 🌙, b-oo-t 👢, b-oo-k 📖, f-oo-t 🦶, p-oo-l 🏊, b-r-oo-m 🧹'),
-    pair('ee', 'b-ee 🐝, t-r-ee 🌳, f-ee-t 🦶, g-r-ee-n 💚, sh-ee-p 🐑, d-ee-r 🦌'),
+    pair('ee', 'b-ee 🐝, t-r-ee 🌳, f-ee-t 👣, g-r-ee-n 💚, sh-ee-p 🐑, d-ee-r 🦌'),
     // ck is the new one: two letters for one /k/ sound, always at the end of a word
     pair('ck', 'd-u-ck 🦆, s-o-ck 🧦, c-l-o-ck ⏰, r-o-ck 🪨, k-i-ck ⚽'),
   ];
@@ -130,7 +130,7 @@ const DATA = (() => {
   // How the voice should say each pair, in the same spelling style as the letter sounds.
   const pairSounds = {
     sh: 'shh', ch: 'chah', th: 'thah', oo: 'ooh', ee: 'ee',
-    ck: 'kah', ng: 'ng', ai: 'ay', ar: 'ar', or: 'or',
+    ck: 'kah', ng: 'ung', ai: 'ay', ar: 'ar', or: 'or',   // "ng" alone has no vowel: voices read it as "en gee"
   };
 
   // Easy animal words, for the caterpillar.
@@ -172,7 +172,7 @@ const DATA = (() => {
 
   // Four-letter words with blends, for the later Build a Word levels.
   const cvcc = parse(
-    'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 🪔, swim 🏊, ' +
+    'frog 🐸, drum 🥁, crab 🦀, milk 🥛, tent ⛺, hand ✋, gift 🎁, flag 🚩, sled 🛷, clap 👏, lamp 💡, ' +
     'stop 🛑, drop 💧, mask 😷, swan 🦢, grin 😁'
   );
 
@@ -214,28 +214,27 @@ const DATA = (() => {
   // says what the word is, and nobody has to sound it out. Every picture inside one group is
   // different, because a game only ever shows one group at a time.
   const picSets = {
-    animals: parse(`bear 🐻, bee 🐝, bat 🦇, bird 🐦, bug 🐛, bunny 🐰, butterfly 🦋,
+    animals: parse(`bear 🐻, bee 🐝, bat 🦇, bird 🐦, bug 🐛, rabbit 🐰, butterfly 🦋,
       dog 🐶, duck 🦆, deer 🦌, dolphin 🐬, dinosaur 🦕,
-      cat 🐱, pig 🐷, fox 🦊, frog 🐸, fish 🐠, sheep 🐑, snail 🐌, shark 🦈, cow 🐮, lion 🦁,
+      cat 🐱, pig 🐷, fox 🦊, frog 🐸, fish 🐟, sheep 🐑, snail 🐌, shark 🦈, cow 🐮, lion 🦁,
       tiger 🐯, monkey 🐵, mouse 🐭, owl 🦉, horse 🐴, crab 🦀, hen 🐔, goat 🐐, snake 🐍,
       elephant 🐘, zebra 🦓, penguin 🐧`),
     food: parse(`banana 🍌, bread 🍞, burger 🍔, butter 🧈, biscuit 🍪, bacon 🥓, broccoli 🥦,
-      donut 🍩, dumpling 🥟, drink 🥤,
-      apple 🍎, avocado 🥑, egg 🥚, cake 🍰, pizza 🍕, milk 🥛, rice 🍚, grapes 🍇, pear 🍐,
-      lemon 🍋, melon 🍈, carrot 🥕, corn 🌽, cheese 🧀, soup 🍲, chips 🍟, honey 🍯, orange 🍊,
+      donut 🍩, dumpling 🥟,
+      apple 🍎, avocado 🥑, egg 🥚, cake 🎂, pizza 🍕, milk 🥛, rice 🍚, grapes 🍇, pear 🍐,
+      lemon 🍋, melon 🍈, carrot 🥕, corn 🌽, cheese 🧀, honey 🍯, orange 🍊,
       strawberry 🍓, mango 🥭, salad 🥗, cherry 🍒, coconut 🥥, cupcake 🧁, garlic 🧄, kiwi 🥝,
-      lollipop 🍭, noodles 🍜, nuts 🥜, onion 🧅, pancake 🥞, peach 🍑, pineapple 🍍, popcorn 🍿,
+      lollipop 🍭, noodles 🍜, onion 🧅, pancake 🥞, peach 🍑, pineapple 🍍, popcorn 🍿,
       sandwich 🥪, taco 🌮, tomato 🍅, watermelon 🍉`),
-    toys: parse(`ball ⚽, balloon 🎈, bike 🚲, boat ⛵, blocks 🧱,
+    toys: parse(`ball 🏀, balloon 🎈, bike 🚲, boat 🚤, blocks 🧱,
       doll 🪆, drum 🥁, dice 🎲,
-      car 🚗, kite 🪁, train 🚂, robot 🤖, plane ✈️, teddy 🧸, puzzle 🧩, yo-yo 🪀,
-      skateboard 🛹, rocket 🚀, guitar 🎸, paints 🎨, crayons 🖍️, tractor 🚜`),
+      car 🚗, kite 🪁, train 🚂, robot 🤖, plane 🛩️, teddy 🧸, puzzle 🧩, yo-yo 🪀,
+      skateboard 🛹, rocket 🚀, guitar 🎸, paints 🎨, crayons 🖍️`),
     things: parse(`bed 🛏️, book 📖, bag 👜, box 📦, bath 🛁, bin 🗑️, boot 👢, broom 🧹,
       bowl 🥣, bell 🔔,
       door 🚪, dish 🍽️, dress 👗,
-      cup ☕, sock 🧦, hat 🎩, lamp 💡, clock ⏰, key 🔑, chair 🪑, spoon 🥄,
-      phone 📱, shoe 👟, window 🪟, pen 🖊️, map 🗺️, candle 🕯️, glasses 👓, hammer 🔨,
-      ladder 🪜, mirror 🪞, scissors ✂️, torch 🔦, umbrella ☂️, watch ⌚`),
+      sock 🧦, hat 🎩, lamp 💡, clock ⏰, key 🔑, chair 🪑, spoon 🥄, phone 📱, shoe 👟, window 🪟, pen 🖊️, map 🗺️, candle 🕯️, glasses 👓, hammer 🔨,
+      ladder 🪜, mirror 🪞, torch 🔦, umbrella ☂️, watch ⌚`),
   };
 
   // Letter groups in a common phonics teaching order.

@@ -4,7 +4,7 @@ App.register({
   name: 'Sound Pairs',
   emoji: '🤝',
   color: '#1b7f79',
-  levels: ['sh, ch and th', 'oo and ee', 'All six pairs', 'Find it from three', 'More pairs: ng, ai, ar'],
+  levels: ['sh, ch and th', 'oo and ee', 'All six pairs', 'Find it from three', 'More pairs: ng, ai, ar, or'],
 
   create(stage, api) {
     const GOAL = 5;

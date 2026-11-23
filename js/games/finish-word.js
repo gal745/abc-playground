@@ -4,7 +4,7 @@ App.register({
   name: 'Finish the Word',
   emoji: '🧩',
   color: '#3d5a80',
-  levels: ['Two pairs to choose', 'Three pairs', 'All six pairs', 'More pairs: ng, ai, ar', 'Listen, no picture'],
+  levels: ['Two pairs to choose', 'Three pairs', 'All six pairs', 'More pairs: ng, ai, ar, or', 'Listen, no picture'],
 
   create(stage, api) {
     const GOAL = 5;
