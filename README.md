@@ -11,7 +11,7 @@ No reading is needed: every instruction is spoken.
 | 🎵 Rhyme Time | Hearing rhymes |
 | 🧱 Build a Word | Blending sounds into words (c‑a‑t → cat) |
 | 🔢 Number Words | Counting, and spelling number words (one to ten) from jumbled letters |
-| 🦖 Feed the Dino | Matching a sound to a picture that starts with it |
+| 🦖 Feed the Dino | Matching a sound to a picture that starts with it — then two at once, then listening only, then sh/ch/th, and last the sound a word **ends** with (8 levels) |
 | ✏️ Trace It | Forming letters by tracing them with a finger |
 | 🚂 Alphabet Train | Alphabet order and missing letters |
 | 📅 Days of the Week | Spelling the days (the *day* ending is filled in) |
@@ -40,7 +40,7 @@ No reading is needed: every instruction is spoken.
 | 🖼️ Match the Sentence | Reading a whole sentence and choosing the pictures it tells you about |
 | 🐸 Feed the Frog | Catching flies in the right order to build a sentence: *a cat up a tree* |
 
-Every game has **5 levels**, except Balloon Pop (7), Word Bubbles (6), Join the Sounds (6) and b and d Sort (6). Finishing a level unlocks the next one, and the dots on each game's button show progress.
+Every game has **5 levels**, except Feed the Dino (8), Balloon Pop (7), Word Bubbles (6), Join the Sounds (6) and b and d Sort (6). Finishing a level unlocks the next one, and the dots on each game's button show progress.
 
 **Printable sheets** (one paper activity per game) are in `printables/`, linked from the home screen and the Grown-ups corner.
 
