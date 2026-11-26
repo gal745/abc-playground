@@ -130,7 +130,7 @@ const DATA = (() => {
   // How the voice should say each pair, in the same spelling style as the letter sounds.
   const pairSounds = {
     sh: 'shh', ch: 'chah', th: 'thah', oo: 'ooh', ee: 'ee',
-    ck: 'kah', ng: 'ung', ai: 'ay', ar: 'ar', or: 'or',   // "ng" alone has no vowel: voices read it as "en gee"
+    ck: 'kah', ng: 'ung', ai: 'ay', ar: 'ar', or: 'or', gg: 'gah',   // "ng" alone has no vowel: voices read it as "en gee"
   };
 
   // Easy animal words, for the caterpillar.
@@ -202,6 +202,21 @@ const DATA = (() => {
     'r-o-ck-e-t 🚀, p-l-a-n-e-t 🪐, c-o-m-e-t ☄️, r-o-b-o-t 🤖'
   );
 
+  // Animals for the zoo and food for the fridge: every one can be sounded out with sounds they
+  // have met, and every picture is the one that word already has everywhere else on the site.
+  // Left out on purpose: lion, tiger, zebra and monkey (no child can sound those out yet), goat
+  // and snake (oa and magic e are not taught), bread, cheese and soup (ea, magic e, ou).
+  const zoo = chunked(
+    'c-a-t 🐱, d-o-g 🐶, p-i-g 🐷, f-o-x 🦊, r-a-t 🐀, h-e-n 🐔, b-a-t 🦇, b-u-g 🐛, b-ee 🐝, o-x 🐂, ' +
+    'f-r-o-g 🐸, c-r-a-b 🦀, d-u-ck 🦆, f-i-sh 🐟, d-ee-r 🦌, ' +
+    'sh-ee-p 🐑, ch-i-ck 🐤, s-n-ai-l 🐌, sh-ar-k 🦈'
+  );
+  const fridge = chunked(
+    'e-gg 🥚, n-u-t 🥜, ch-i-p 🍟, m-i-l-k 🥛, c-or-n 🌽, ' +
+    'm-e-l-o-n 🍈, l-e-m-o-n 🍋, s-a-l-a-d 🥗, d-o-n-u-t 🍩, ' +
+    'p-o-p-c-or-n 🍿, m-u-sh-r-oo-m 🍄, s-a-n-d-w-i-ch 🥪, d-u-m-p-l-i-ng 🥟'
+  );
+
   const sentences = [
     'a cat on a bed', 'a cat in a box', 'a cat up a tree', 'a dog on a bed',
     'a dog in a bath', 'a fox in a box', 'a frog on a log', 'a frog in a pool',
@@ -216,7 +231,7 @@ const DATA = (() => {
   // Every word that has a picture, looked up by the word itself.
   const pics = {};
   [...cvc, ...cvcc, ...soundPairs.flatMap(g => g.words), ...morePairs.flatMap(g => g.words),
-    ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words), ...space]
+    ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words), ...space, ...zoo, ...fridge]
     .forEach(w => { if (w.e && !pics[w.w]) pics[w.w] = w.e; });
 
   // Words a child already knows how to SAY, grouped the way they think about words rather than
@@ -268,7 +283,7 @@ const DATA = (() => {
 
   return {
     letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels, animals,
-    soundPairs, morePairs, pairSounds, sentences, pics, picSets, space,
+    soundPairs, morePairs, pairSounds, sentences, pics, picSets, space, zoo, fridge,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
 })();
