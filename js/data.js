@@ -192,6 +192,16 @@ const DATA = (() => {
   // (a, in, on, up) are the ones joined up in `joins`, and every one of them says something a
   // child can picture - a cat up a tree, a dog in a bath - rather than a rhyme that happens to
   // fit, like an ox in a box.
+  // Space words, for the lesson and for Space Words. Every one can be sounded out with sounds
+  // they have met - oo in moon, ar in star, ck in rock and rocket - and every picture is one a
+  // child names the same way: no "dark" (which is a black circle and might as well be a moon)
+  // and no "sky" (which is a picture of stars). The long ones are the point: rocket and planet
+  // look frightening whole and come apart neatly into sounds.
+  const space = chunked(
+    'm-oo-n 🌙, s-u-n ☀️, s-t-ar ⭐, r-o-ck 🪨, f-l-a-g 🚩, ' +
+    'r-o-ck-e-t 🚀, p-l-a-n-e-t 🪐, c-o-m-e-t ☄️, r-o-b-o-t 🤖'
+  );
+
   const sentences = [
     'a cat on a bed', 'a cat in a box', 'a cat up a tree', 'a dog on a bed',
     'a dog in a bath', 'a fox in a box', 'a frog on a log', 'a frog in a pool',
@@ -200,12 +210,13 @@ const DATA = (() => {
     'a cap on a kid', 'a bug on a leg', 'a bug in a web', 'a bug in a mug',
     'a rat in a bin', 'a pen in a bag', 'a pen in a cup', 'a book on a bed',
     'a book in a bag', 'a chip on a dish',
+    'a flag on the moon', 'a rock on the moon', 'a star and a moon',
   ];
 
   // Every word that has a picture, looked up by the word itself.
   const pics = {};
   [...cvc, ...cvcc, ...soundPairs.flatMap(g => g.words), ...morePairs.flatMap(g => g.words),
-    ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words)]
+    ...families.flatMap(f => f.words), ...rhymes.flatMap(r => r.words), ...space]
     .forEach(w => { if (w.e && !pics[w.w]) pics[w.w] = w.e; });
 
   // Words a child already knows how to SAY, grouped the way they think about words rather than
@@ -257,7 +268,7 @@ const DATA = (() => {
 
   return {
     letters, names, sounds, words, rhymes, cvc, cvcc, joins, shortVowels, animals,
-    soundPairs, morePairs, pairSounds, sentences, pics, picSets,
+    soundPairs, morePairs, pairSounds, sentences, pics, picSets, space,
     families, vowelSwaps, days, sets, soundAlikes, lookAlikes,
   };
 })();

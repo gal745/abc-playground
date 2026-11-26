@@ -34,22 +34,22 @@
     <section class="ty-card ty-intro" id="intro">
       <span class="emoji ty-start-pic">📖</span>
       <h2 class="ty-start-h">Reading, all by yourself</h2>
-      <p class="ty-start-p">More <b>b</b> and <b>d</b> — this time in animals, food and toys — with a <b>real book</b> in the middle.</p>
+      <p class="ty-start-p">Up in space: the <b>moon</b>, a <b>star</b>, a <b>rocket</b> and a <b>planet</b> — words you can build yourself. With a <b>real book</b> in the middle.</p>
       <button id="startBtn" class="say-all ty-go"><span class="emoji">▶️</span> Start</button>
       <p class="ty-note">Sound on, please!</p>
     </section>
 
-    <section class="ty-card" id="part1" data-game="bdhunt" data-game-name="🔍 b and d Hunt" data-no="1" data-title="b is blue, d is red"
-      data-how="Tap each one and say its sound."
-      data-say="Today is all about b and d. b is blue. d is red. Tap them and say their sounds."></section>
+    <section class="ty-card" id="part1" data-game="space" data-game-name="🚀 Space Words" data-no="1" data-title="Words up in space"
+      data-how="Tap each one to hear the sounds in it."
+      data-say="Today we are going up into space. Tap each picture, and listen to the sounds its name is made of."></section>
 
-    <section class="ty-card" id="part2" data-game="bwords" data-game-name="🐝 b Words" data-no="2" data-title="Animals: b or d?"
-      data-how="Say the animal. Does it start with b, or with d?"
-      data-say="Here are some animals. Say the name, listen to the very first sound, and tap b or d."></section>
+    <section class="ty-card" id="part2" data-game="space" data-game-name="🚀 Space Words" data-no="2" data-title="Which sound is missing?"
+      data-how="One sound has fallen out of each word."
+      data-say="One sound has fallen out of each word. Say the word, work out which bit is missing, and tap it."></section>
 
-    <section class="ty-card" id="part3" data-game="dwords" data-game-name="🦆 d Words" data-no="3" data-title="Food and toys"
-      data-how="Same again. Which sound does it start with?"
-      data-say="Now some food and some toys. Say each one, and tap the letter it starts with."></section>
+    <section class="ty-card" id="part3" data-game="space" data-game-name="🚀 Space Words" data-no="3" data-title="Build it from the letters"
+      data-how="The box has every letter you need. Build each word."
+      data-say="Here is a box of letters, with every sound you need for all three words. Build them one sound at a time. Tap a letter you have put down to take it back."></section>
 
     <section class="ty-card ty-break" id="book" data-no="4" data-nonudge="1" data-title="Now a real book"
       data-how="Put the screen down and get your book."
@@ -81,14 +81,15 @@
       </div>
     </section>
 
-    <p class="days-hint note">For grown-ups: today's lesson, as one sheet to scroll down — <b>b</b> and <b>d</b>
-      again, this time in words they already know: animals first, then food and toys, where the only question
-      is the sound the word starts with and the picture does the rest. <b>Part 4 leaves the screen for a real
-      book</b> read with you (ten minutes or so — the page goes quiet and waits, and the child taps when the
-      book is finished). After it, words with a letter missing, then <b>three- and four-letter words with a b or a d
-      in them, read whole with nothing said first</b>, then a long word taken a bit at a time, and a
-      sentence that grows. Every instruction is spoken as the child reaches it, nothing is typed, and each
-      part ticks itself off. The teacher-led worksheets are on the <a href="lesson.html">lesson sheets</a> page.</p>
+    <p class="days-hint note">For grown-ups: today's lesson, as one sheet to scroll down — <b>space words</b>
+      they can sound out: moon, star, rock, flag, and the long ones, rocket, planet, comet, robot. They hear
+      each one in its sounds, find the sound that has fallen out of a word, then <b>build three words from a
+      box of letters</b> that holds every sound for all three at once — the same job as the new 🚀 Space Words
+      game. <b>Part 4 leaves the screen for a real book</b> read with you (ten minutes or so — the page goes
+      quiet and waits, and the child taps when the book is finished). After it: a quick <b>b or d</b>, words
+      read whole with a picture to pick, a long word taken a bit at a time, and a sentence that grows. Every
+      instruction is spoken as the child reaches it, nothing is typed, and each part ticks itself off. The
+      teacher-led worksheets are on the <a href="lesson.html">lesson sheets</a> page.</p>
   </main>
 
   <canvas id="confetti" aria-hidden="true"></canvas>
@@ -173,27 +174,148 @@
         if (box) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
-      // ---------- 1. the two letters themselves ----------
-      function buildTwoLetters(body, me) {
-        const KEY = { b: (DATA.words.b || [])[0], d: (DATA.words.d || [])[0] };
-        me.total = 2;
-        body.replaceChildren(el('div', { class: 'ty-two' }, ...['b', 'd'].map(l => {
-          const kw = KEY[l];
-          const btn = el('button', { class: `ty-big-letter is-${l}`, 'aria-label': `the letter ${l}` },
-            word(l, `is-${l}`),
-            el('span', { class: 'emoji', text: l === 'b' ? '🔵' : '🔴' }),
-            kw ? el('span', { class: 'ty-kw' }, el('span', { class: 'emoji', text: kw.e }), el('span', { class: 'letter', text: kw.w })) : null);
+      // ---------- 1. the space words, in their sounds ----------
+      // Nothing to get wrong here: tap a picture, hear the word, then the sounds it is made of,
+      // then the word again. Long ones like rocket and planet come apart here, before they have
+      // to be built or read further down the sheet.
+      function buildSpaceSounds(body, me) {
+        const words = pick(DATA.space, 6);
+        me.total = words.length;
+        body.replaceChildren(el('div', { class: 'ty-space-row' }, ...words.map(w => {
+          const btn = el('button', { class: 'ty-space-card', 'aria-label': `say ${w.w}` },
+            el('span', { class: 'emoji', text: w.e }),
+            el('span', { class: 'letter', text: UI.showLetter(w.w) }));
           btn.addEventListener('click', () => {
-            say({ sound: l }, 250, { name: l }, 250, kw ? `for ${kw.w}` : null);
+            say(`${w.w}.`, 250, ...sounded(w.c, w.w));
             if (btn.classList.contains('got')) return;
             btn.classList.add('got');
+            wordsRead++;
             me.score();
           });
           return btn;
         })));
-        body.append(bedCard());
       }
 
+      // ---------- 2. one sound has fallen out ----------
+      // The word is there with a hole in it, the picture beside it, and three bits to choose from.
+      function missingChunk(body, me) {
+        const words = pick(DATA.space.filter(w => w.c.length >= 3), 5);
+        const everyBit = [...new Set(DATA.space.flatMap(w => w.c))];
+        me.total = words.length;
+
+        body.replaceChildren(...words.map(w => {
+          const row = el('div', { class: 'ty-item' });
+          const at = UI.pick(w.c.map((_, i) => i));
+          const answer = w.c[at];
+          const gap = el('span', { class: 'ty-gap' });
+          const line = el('div', { class: 'ty-bd-word' }, ...w.c.map((bit, i) => (i === at
+            ? gap : el('span', { class: 'letter ty-l', text: UI.showLetter(bit) }))));
+
+          const wrong = UI.shuffle(everyBit.filter(c => c !== answer)).slice(0, 2);
+          const picks = el('div', { class: 'ty-bd-picks' }, ...UI.shuffle([answer, ...wrong]).map(bit => {
+            const btn = el('button', { class: 'ty-bd-btn is-pair', 'aria-label': bit }, word(bit));
+            btn.addEventListener('click', () => {
+              if (row.classList.contains('right')) return;
+              if (bit !== answer) {
+                Sound.sfx('wrong');
+                UI.replayClass(btn, 'shake');
+                say('That one says', { sound: bit }, 300, 'Listen to the word again:', 200, `${w.w}.`);
+                return;
+              }
+              row.classList.add('right');
+              gap.replaceChildren(word(answer, 'is-pair'));
+              gap.classList.add('filled');
+              Sound.sfx('correct');
+              wordsRead++;
+              say(...sounded(w.c, w.w), 250, UI.pick(UI.PRAISE));
+              me.score();
+            });
+            return btn;
+          }));
+
+          row.append(el('span', { class: 'emoji ty-pic-small', text: w.e }), line, picks);
+          return row;
+        }));
+      }
+
+      // ---------- 3. a box of letters, and words to build out of it ----------
+      // The same job as the Space Words game, in the sheet: one box holds every sound of all three
+      // words at once, so finding the one you need is the work. A letter put down can be taken back.
+      function buildLetterBank(body, me) {
+        const words = pick(DATA.space.filter(w => w.c.length <= 5), 3);
+        me.total = words.length;
+        const rows = el('div', { class: 'ty-bank-rows' });
+        const bank = el('div', { class: 'ty-bank' });
+        body.replaceChildren(rows, bank);
+
+        const tiles = UI.shuffle(words.flatMap(w => w.c)).map(bit => {
+          const tile = el('button', { class: `ty-bank-tile${bit.length > 1 ? ' pair' : ''}`, 'aria-label': bit },
+            el('span', { class: 'letter', text: UI.showLetter(bit) }));
+          tile.addEventListener('click', () => take(bit, tile));
+          return tile;
+        });
+        bank.replaceChildren(...tiles);
+
+        const state = words.map(w => ({ w, slots: w.c.map(() => null), done: false }));
+        let at = 0;
+
+        const paint = () => rows.replaceChildren(...state.map((item, n) => el('div', {
+          class: `ty-bank-word${item.done ? ' right' : ''}${n === at ? ' now' : ''}`,
+        },
+        el('span', { class: 'emoji ty-pic-small', text: item.w.e }),
+        ...item.slots.map((bit, i) => {
+          const slot = el('button', {
+            class: `ty-bank-slot${bit ? ' filled' : ''}${!bit && n === at && item.slots.slice(0, i).every(Boolean) ? ' next' : ''}`,
+            'aria-label': bit ? `${bit}, tap to take it back` : 'empty',
+          }, bit ? el('span', { class: 'letter', text: UI.showLetter(bit) }) : null);
+          if (bit && !item.done) slot.addEventListener('click', () => putBack(n, i));
+          return slot;
+        }))));
+
+        function take(bit, tile) {
+          const item = state[at];
+          if (!item || item.done || tile.disabled) return;
+          const i = item.slots.findIndex(x => x === null);
+          if (i < 0) return;
+          tile.disabled = true;
+          tile.classList.add('used');
+          item.slots[i] = bit;
+          Sound.sfx('tap');
+          say({ sound: bit });
+          paint();
+          if (item.slots.every(Boolean)) check();
+        }
+
+        function putBack(n, i) {
+          const item = state[n];
+          if (!item || item.done) return;
+          const bit = item.slots[i];
+          item.slots[i] = null;
+          const tile = tiles.find(t => t.getAttribute('aria-label') === bit && t.disabled);
+          if (tile) { tile.disabled = false; tile.classList.remove('used'); }
+          Sound.sfx('tap');
+          paint();
+        }
+
+        function check() {
+          const item = state[at];
+          if (item.slots.join('') !== item.w.c.join('')) {
+            Sound.sfx('wrong');
+            say('Not quite.', 250, 'Listen:', 200, ...sounded(item.w.c, item.w.w), 250, 'Tap a letter to take it back.');
+            return;
+          }
+          item.done = true;
+          Sound.sfx('correct');
+          wordsRead++;
+          say(...sounded(item.w.c, item.w.w), 250, UI.pick(UI.PRAISE));
+          const nextOne = state.findIndex(x => !x.done);
+          at = nextOne < 0 ? state.length - 1 : nextOne;
+          paint();
+          me.score();
+        }
+
+        paint();
+      }
       const bedCard = () => {
         const bed = el('button', { class: 'ty-bed', 'aria-label': 'The bed trick' },
           el('span', { class: 'emoji', text: '🛏️' }),
@@ -253,56 +375,6 @@
         };
       }
 
-      // ---------- 2 and 3. first sounds, in words they already own ----------
-      // Nothing here has to be decoded: the picture says what the thing is, the word is under it to
-      // be looked at, and the only question is the sound it starts with. Animals first, because
-      // every child has plenty of those, then food and toys.
-      function firstSoundPics(sets) {
-        return (body, me) => {
-          const from = sets.flatMap(s2 => DATA.picSets[s2] || []);
-          const bs = pick(from.filter(w => w.w[0] === 'b'), 3);
-          const ds = pick(from.filter(w => w.w[0] === 'd'), 3);
-          const words = UI.shuffle([...bs, ...ds]);
-          me.total = words.length;
-
-          body.replaceChildren(...words.map(w => {
-            const row = el('div', { class: 'ty-item' });
-            const want = w.w[0];
-            const name = el('button', { class: 'ty-pic-word', 'aria-label': `say ${w.w}` },
-              el('span', { class: 'emoji', text: w.e }),
-              el('span', { class: 'letter', text: UI.showLetter(w.w) }));
-            name.addEventListener('click', () => say(`${w.w}.`, 200, 'Listen to the start:', 150, { sound: want }));
-
-            const picks = el('div', { class: 'ty-bd-picks' }, ...['b', 'd'].map(letter => {
-              const btn = el('button', { class: `ty-bd-btn is-${letter}`, 'aria-label': `the letter ${letter}` },
-                word(letter), el('span', { class: 'emoji', text: letter === 'b' ? '🔵' : '🔴' }));
-              btn.addEventListener('click', () => {
-                if (row.classList.contains('right')) return;
-                if (letter !== want) {
-                  Sound.sfx('wrong');
-                  UI.replayClass(btn, 'shake');
-                  say(`${w.w}.`, 250, 'Listen to the very first sound:', 200, { sound: want }, 250, `${w.w}.`);
-                  return;
-                }
-                row.classList.add('right');
-                name.querySelector('.letter').replaceChildren(
-                  el('span', { class: `is-${want}`, text: UI.showLetter(want) }),
-                  el('span', { text: UI.showLetter(w.w.slice(1)) }));
-                Sound.sfx('correct');
-                wordsRead++;
-                say({ sound: want }, 150, `${w.w}!`, 200, `${w.w} starts with ${Sound.letterName(want)}.`, 250, UI.pick(UI.PRAISE));
-                me.score();
-              });
-              return btn;
-            }));
-
-            row.append(name, picks);
-            return row;
-          }));
-          body.append(bedCard());
-        };
-      }
-
       // ---------- 6. three letters, then four: the whole word, read ----------
       // Nothing is said first and no letter is missing. The word is there, the pictures are there,
       // and the only way through is to read it. Three short ones to settle in, then three longer
@@ -311,8 +383,9 @@
       function buildReadWords(body, me) {
         const seen = new Set();
         const every = [...DATA.cvc, ...DATA.cvcc, ...pairWords].filter(w => w.e && !seen.has(w.w) && seen.add(w.w));
+        const spaceOnes = pick(DATA.space.filter(w => w.w.length <= 4), 3);
         const withBD = n => every.filter(w => w.w.length === n && /[bd]/.test(w.w));
-        const words = [...pick(withBD(3), 3), ...pick(withBD(4), 3)];
+        const words = [...spaceOnes, ...pick(withBD(4), 3)];
         me.total = words.length;
 
         body.replaceChildren(...words.map(w => {
@@ -352,8 +425,8 @@
       // tapping the bits in order; the next one to tap glows.
       function buildChunks(body, me) {
         const everyPair = [...DATA.soundPairs, ...DATA.morePairs].flatMap(g => g.words);
-        const bdOnes = everyPair.filter(w => w.w.includes('b') || w.w.includes('d'));
-        const words = pick(bdOnes.length >= 4 ? bdOnes : everyPair, 4);
+        const longOnes = DATA.space.filter(w => w.c.length >= 5);
+        const words = [...pick(longOnes, 3), ...pick(everyPair.filter(w => w.c.length >= 4), 1)];
         me.total = words.length;
 
         body.replaceChildren(...words.map(w => {
@@ -478,9 +551,9 @@
       function build() {
         $('finish').hidden = true;
         wordsRead = 0;
-        card('part1', buildTwoLetters);
-        card('part2', firstSoundPics(['animals']));
-        card('part3', firstSoundPics(['food', 'toys']));
+        card('part1', buildSpaceSounds);
+        card('part2', missingChunk);
+        card('part3', buildLetterBank);
         card('book', buildBookBreak);
         card('part5', missingLetter('either'));
         card('read', buildReadWords);
@@ -550,7 +623,7 @@
 
       $('startBtn').addEventListener('click', () => {
         Sound.unlock();
-        say('More b and d today.', 250, 'In animals, and food, and toys.');
+        say('Today we are going up into space.', 250, 'Moon. Star. Rocket. Planet.');
         watchParts();
         setTimeout(() => scrollTo('part1'), 600);
       });
